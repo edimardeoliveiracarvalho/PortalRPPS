@@ -1,0 +1,6 @@
+{
+  "name": "Maringá Previdência - Dashboard Executivo",
+  "description": "Dashboard executivo moderno, elegante e de alto desempenho para a Maringá Previdência (RPPS), destinado à Diretoria.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
