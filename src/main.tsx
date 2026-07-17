@@ -1,3 +1,4 @@
+// Entry point for the Maringá Previdência - Portal Executivo SGE
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
