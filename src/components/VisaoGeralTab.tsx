@@ -409,10 +409,10 @@ export const VisaoGeralTab: React.FC<VisaoGeralTabProps> = ({ competence }) => {
               <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
                 <span className="text-xs text-slate-500 font-semibold">Razão de Equivalência</span>
                 <span className="text-xs font-bold text-slate-800">
-                  {totalBeneficiarios ? `${((totalAtivos / totalBeneficiarios) * 100).toFixed(1)}%` : "0%"}
+                  {totalBeneficiarios ? `${((totalAtivos / totalBeneficiarios) || 0).toFixed(2)} ativos / inativo` : "0,00"}
                 </span>
               </div>
-              <p className="text-[9px] text-slate-400">Representa {((totalAtivos / totalBeneficiarios) || 0).toFixed(2)} ativos para cada 1 beneficiário inativo ou pensionista.</p>
+              <p className="text-[9px] text-slate-400">Representa a quantidade de servidores ativos em atividade para cada 1 beneficiário inativo ou pensionista.</p>
             </div>
           </div>
 
