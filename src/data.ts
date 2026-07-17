@@ -97,6 +97,12 @@ export interface AgendaReuniao {
   horario: string;
 }
 
+export const ultimaAtualizacao = {
+  data: "16/07/2026",
+  hora: "07:36",
+  textoExtenso: "16 de Julho de 2026"
+};
+
 export const seguradosAtivos: SeguradoAtivo[] = [
   {"competencia":"2022-01","quantidadeAtivos":11329,"quantidadeInativos":3845},
   {"competencia":"2022-02","quantidadeAtivos":11296,"quantidadeInativos":3885},

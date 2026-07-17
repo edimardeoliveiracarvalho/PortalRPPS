@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { agendaReunioes, AgendaReuniao } from "../data";
+import { agendaReunioes, AgendaReuniao, ultimaAtualizacao } from "../data";
 import { getMonthName } from "../utils";
 import { 
   Calendar, 
@@ -43,7 +43,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
           badgeBg: "bg-blue-600 text-white",
           iconColor: "text-blue-500",
           members: "Membros do Comitê de Investimentos",
-          description: "Análise técnica de alocações de recursos, cenário macroeconômico e acompanhamento das metas de rentabilidade."
+          description: "Responsável pela formulação e execução da política de investimentos"
         };
       case "conselhoDeliberativo":
         return {
@@ -53,7 +53,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
           badgeBg: "bg-emerald-600 text-white",
           iconColor: "text-emerald-500",
           members: "Conselheiros Titulares e Diretoria Executiva",
-          description: "Órgão supremo de deliberação. Aprovação de políticas de longo prazo, plano de benefícios e orçamentos."
+          description: "Órgão superior de deliberação"
         };
       case "conselhoFiscal":
         return {
@@ -63,7 +63,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
           badgeBg: "bg-purple-600 text-white",
           iconColor: "text-purple-500",
           members: "Conselheiros Fiscais e Auditores",
-          description: "Fiscalização financeira, contábil e patrimonial. Revisão de balancetes mensais e cumprimento legal."
+          description: "Órgão fiscalizador da gestão"
         };
       case "conselhoPrevidenciaComplementar":
         return {
@@ -73,7 +73,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
           badgeBg: "bg-amber-600 text-white",
           iconColor: "text-amber-500",
           members: "Conselheiros do Plano de Previdência Complementar",
-          description: "Acompanhamento, fiscalização e deliberação sobre o plano de previdência complementar."
+          description: "Órgão de acompanhamento do regime de previdência complementar"
         };
       default:
         return {
@@ -253,7 +253,8 @@ export function AgendaTab({ competence }: AgendaTabProps) {
     return {
       total: yearMeetings.length,
       comite: yearMeetings.filter(m => m.colegiado === "comiteInvestimentos").length,
-      conselhos: yearMeetings.filter(m => m.colegiado === "conselhoDeliberativo" || m.colegiado === "conselhoFiscal").length,
+      deliberativo: yearMeetings.filter(m => m.colegiado === "conselhoDeliberativo").length,
+      fiscal: yearMeetings.filter(m => m.colegiado === "conselhoFiscal").length,
       previdenciaComplementar: yearMeetings.filter(m => m.colegiado === "conselhoPrevidenciaComplementar").length
     };
   }, [competence]);
@@ -286,7 +287,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
     <div id="agenda_tab_dashboard" className="space-y-4">
       
       {/* Quick Statistics Counter widgets */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {/* Total Planejado */}
         <div className="bg-white rounded shadow-sm border-l-4 border-blue-600 p-4 flex flex-col justify-between">
           <div className="flex items-center justify-between">
@@ -304,33 +305,49 @@ export function AgendaTab({ competence }: AgendaTabProps) {
         </div>
 
         {/* Comitê Investimentos */}
-        <div className="bg-white rounded shadow-sm border-l-4 border-emerald-500 p-4 flex flex-col justify-between">
+        <div className="bg-white rounded shadow-sm border-l-4 border-blue-500 p-4 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Comitê Investimentos</span>
-            <div className="p-1.5 bg-emerald-50 text-emerald-600 rounded shrink-0">
+            <div className="p-1.5 bg-blue-50 text-blue-500 rounded shrink-0">
               <Users className="h-3.5 w-3.5" />
             </div>
           </div>
           <div className="mt-2">
             <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.comite} sessões</h3>
             <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
-              Acompanhamento de rentabilidade no ano (exercício)
+              Responsável pela formulação e execução da política de investimentos
             </span>
           </div>
         </div>
 
-        {/* Conselhos Fiscais/Delib. */}
-        <div className="bg-white rounded shadow-sm border-l-4 border-purple-500 p-4 flex flex-col justify-between">
+        {/* Conselho Deliberativo */}
+        <div className="bg-white rounded shadow-sm border-l-4 border-emerald-500 p-4 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Conselhos Fiscais/Delib.</span>
-            <div className="p-1.5 bg-purple-50 text-purple-600 rounded shrink-0">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Conselho Deliberativo</span>
+            <div className="p-1.5 bg-emerald-50 text-emerald-500 rounded shrink-0">
               <FileText className="h-3.5 w-3.5" />
             </div>
           </div>
           <div className="mt-2">
-            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.conselhos} sessões</h3>
+            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.deliberativo} sessões</h3>
             <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
-              Fiscalização e deliberações no ano (exercício)
+              Órgão superior de deliberação
+            </span>
+          </div>
+        </div>
+
+        {/* Conselho Fiscal */}
+        <div className="bg-white rounded shadow-sm border-l-4 border-purple-500 p-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Conselho Fiscal</span>
+            <div className="p-1.5 bg-purple-50 text-purple-500 rounded shrink-0">
+              <FileText className="h-3.5 w-3.5" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.fiscal} sessões</h3>
+            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
+              Órgão fiscalizador da gestão
             </span>
           </div>
         </div>
@@ -346,7 +363,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
           <div className="mt-2">
             <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.previdenciaComplementar} sessões</h3>
             <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
-              Previdência e planos municipais no ano (exercício)
+              Órgão de acompanhamento do regime de previdência complementar
             </span>
           </div>
         </div>
@@ -364,11 +381,11 @@ export function AgendaTab({ competence }: AgendaTabProps) {
               Próximos Compromissos por Órgão Colegiado
             </h3>
             <p className="text-[11px] text-slate-500">
-              Exibindo as próximas 2 reuniões ordinárias programadas a partir de <strong className="text-slate-700">15 de Julho de 2026</strong> (data de referência/última atualização).
+              Exibindo as próximas 2 reuniões ordinárias programadas a partir de <strong className="text-slate-700">{ultimaAtualizacao.textoExtenso}</strong> (data de referência/última atualização).
             </p>
           </div>
           <span className="text-[10px] font-semibold text-slate-400 self-start sm:self-auto bg-slate-100/80 px-2 py-0.5 rounded border border-slate-200">
-            Última Atualização: 15/07/2026 - 20:26
+            Última Atualização: {ultimaAtualizacao.data} - {ultimaAtualizacao.hora}
           </span>
         </div>
 

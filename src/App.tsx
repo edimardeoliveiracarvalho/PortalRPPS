@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { getMonthName } from "./utils";
+import { ultimaAtualizacao } from "./data";
 import maringaLogo from "./assets/images/maringa_prev_logo_v2_1784241792118.jpg";
 import { 
   VisaoGeralTab 
@@ -153,7 +154,7 @@ export default function App() {
           <div className="hidden md:block h-8 w-[1px] bg-white/20"></div>
           <div className="hidden md:block text-right text-[11px] leading-tight">
             <p className="opacity-70 font-semibold uppercase tracking-wider text-[9px]">Última Atualização</p>
-            <p className="font-mono font-bold mt-0.5">16/07/2026 - 07:36</p>
+            <p className="font-mono font-bold mt-0.5">{ultimaAtualizacao.data} - {ultimaAtualizacao.hora}</p>
           </div>
         </div>
       </header>
