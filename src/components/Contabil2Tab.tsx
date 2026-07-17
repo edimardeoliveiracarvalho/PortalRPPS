@@ -9,7 +9,8 @@ import {
   ArrowDownRight, 
   Building, 
   TrendingUp, 
-  Wallet
+  Wallet,
+  Coins
 } from "lucide-react";
 import { 
   ResponsiveContainer, 
@@ -19,7 +20,10 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  Legend 
+  Legend,
+  PieChart,
+  Pie,
+  Cell
 } from "recharts";
 
 interface Contabil2TabProps {
@@ -30,6 +34,7 @@ type FundoType = "consolidado" | "capitalizacao" | "reparticao" | "orgaoGerencia
 
 export const Contabil2Tab: React.FC<Contabil2TabProps> = ({ competence }) => {
   const [activeFundo, setActiveFundo] = useState<FundoType>("consolidado");
+  const [compositionPeriod, setCompositionPeriod] = useState<"mes" | "ytd">("mes");
 
   const fundosInfo = {
     consolidado: {
@@ -148,6 +153,59 @@ export const Contabil2Tab: React.FC<Contabil2TabProps> = ({ competence }) => {
       };
     });
   }, [activeYTDCompetencies, activeFundo]);
+
+  const revenueComposition = useMemo(() => {
+    const groups = {
+      rendimento: { name: "Rendimento", valorMes: 0, valorYTD: 0, color: "#3b82f6" },
+      contribuicao: { name: "Contribuição", valorMes: 0, valorYTD: 0, color: "#10b981" },
+      compensacao: { name: "Compensação", valorMes: 0, valorYTD: 0, color: "#f59e0b" },
+      taxaAdmin: { name: "Taxa de Administração", valorMes: 0, valorYTD: 0, color: "#8b5cf6" },
+      outras: { name: "Outras", valorMes: 0, valorYTD: 0, color: "#64748b" },
+    };
+
+    refMovsFundo.filter(m => m.tipo === "receita").forEach(m => {
+      const cat = m.categoria;
+      if (cat === "Rendimento de Aplicação" || cat === "Juros de Empréstimos Consignados") {
+        groups.rendimento.valorMes += m.valor;
+      } else if (cat === "Contribuição Patronal" || cat === "Contribuição do Servidor" || cat === "Contribuição de Inativos e Pensionistas") {
+        groups.contribuicao.valorMes += m.valor;
+      } else if (cat === "Compensação Previdenciária") {
+        groups.compensacao.valorMes += m.valor;
+      } else if (cat === "Taxa de Administração") {
+        groups.taxaAdmin.valorMes += m.valor;
+      } else {
+        groups.outras.valorMes += m.valor;
+      }
+    });
+
+    ytdMovsFundo.filter(m => m.tipo === "receita").forEach(m => {
+      const cat = m.categoria;
+      if (cat === "Rendimento de Aplicação" || cat === "Juros de Empréstimos Consignados") {
+        groups.rendimento.valorYTD += m.valor;
+      } else if (cat === "Contribuição Patronal" || cat === "Contribuição do Servidor" || cat === "Contribuição de Inativos e Pensionistas") {
+        groups.contribuicao.valorYTD += m.valor;
+      } else if (cat === "Compensação Previdenciária") {
+        groups.compensacao.valorYTD += m.valor;
+      } else if (cat === "Taxa de Administração") {
+        groups.taxaAdmin.valorYTD += m.valor;
+      } else {
+        groups.outras.valorYTD += m.valor;
+      }
+    });
+
+    return Object.values(groups);
+  }, [refMovsFundo, ytdMovsFundo]);
+
+  const totalCompMes = useMemo(() => revenueComposition.reduce((acc, curr) => acc + curr.valorMes, 0), [revenueComposition]);
+  const totalCompYTD = useMemo(() => revenueComposition.reduce((acc, curr) => acc + curr.valorYTD, 0), [revenueComposition]);
+
+  const activeCompData = useMemo(() => {
+    return revenueComposition.map(g => ({
+      name: g.name,
+      value: compositionPeriod === "mes" ? g.valorMes : g.valorYTD,
+      color: g.color
+    })).filter(item => item.value > 0);
+  }, [revenueComposition, compositionPeriod]);
 
   return (
     <div className="space-y-4">
@@ -368,41 +426,147 @@ export const Contabil2Tab: React.FC<Contabil2TabProps> = ({ competence }) => {
           )}
         </div>
 
-        {/* Visual Chart - Monthly Flow */}
-        <div className="bg-white rounded-xl border border-slate-100 shadow-xs p-5 flex flex-col justify-between space-y-4">
-          <div>
-            <h3 className="text-xs uppercase font-black tracking-wider text-slate-700 flex items-center gap-1.5">
-              <TrendingUp className="h-4.5 w-4.5 text-[#1e3a8a]" />
-              Evolução Mensal (Receitas vs Despesas)
-            </h3>
-            <p className="text-[10px] text-slate-400 mt-0.5">
-              Gráfico comparativo mensal acumulado do exercício (Valores expressos em Milhões de Reais).
-            </p>
+        {/* Charts Column */}
+        <div className="space-y-6">
+          
+          {/* Visual Chart - Monthly Flow */}
+          <div className="bg-white rounded-xl border border-slate-100 shadow-xs p-5 flex flex-col justify-between space-y-4">
+            <div>
+              <h3 className="text-xs uppercase font-black tracking-wider text-slate-700 flex items-center gap-1.5">
+                <TrendingUp className="h-4.5 w-4.5 text-[#1e3a8a]" />
+                Evolução Mensal (Receitas vs Despesas)
+              </h3>
+              <p className="text-[10px] text-slate-400 mt-0.5">
+                Gráfico comparativo mensal acumulado do exercício (Valores expressos em Milhões de Reais).
+              </p>
+            </div>
+
+            <div className="h-64 mt-3">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} margin={{ top: 10, right: 5, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} />
+                  <YAxis 
+                    stroke="#94a3b8" 
+                    fontSize={10} 
+                    tickLine={false} 
+                    axisLine={false}
+                    tickFormatter={(val) => `${val}M`}
+                  />
+                  <Tooltip 
+                    formatter={(value: any, name: any) => [`R$ ${value}M`, name]}
+                    labelStyle={{ fontWeight: "bold", color: "#1e293b" }}
+                    contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0" }}
+                  />
+                  <Legend verticalAlign="top" height={32} iconSize={8} iconType="circle" wrapperStyle={{ fontSize: "10px", fontWeight: 700 }} />
+                  <Bar dataKey="Receitas" fill="#10b981" radius={[4, 4, 0, 0]} name="Receitas" />
+                  {(activeFundo === "reparticao" || activeFundo === "orgaoGerenciador") && <Bar dataKey="Aportes/Transf." fill="#0284c7" radius={[4, 4, 0, 0]} name="Aportes" />}
+                  <Bar dataKey="Despesas" fill="#ef4444" radius={[4, 4, 0, 0]} name="Despesas" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
-          <div className="h-64 mt-3">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} margin={{ top: 10, right: 5, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} />
-                <YAxis 
-                  stroke="#94a3b8" 
-                  fontSize={10} 
-                  tickLine={false} 
-                  axisLine={false}
-                  tickFormatter={(val) => `${val}M`}
-                />
-                <Tooltip 
-                  formatter={(value: any, name: any) => [`R$ ${value}M`, name]}
-                  labelStyle={{ fontWeight: "bold", color: "#1e293b" }}
-                  contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0" }}
-                />
-                <Legend verticalAlign="top" height={32} iconSize={8} iconType="circle" wrapperStyle={{ fontSize: "10px", fontWeight: 700 }} />
-                <Bar dataKey="Receitas" fill="#10b981" radius={[4, 4, 0, 0]} name="Receitas" />
-                {(activeFundo === "reparticao" || activeFundo === "orgaoGerenciador") && <Bar dataKey="Aportes/Transf." fill="#0284c7" radius={[4, 4, 0, 0]} name="Aportes" />}
-                <Bar dataKey="Despesas" fill="#ef4444" radius={[4, 4, 0, 0]} name="Despesas" />
-              </BarChart>
-            </ResponsiveContainer>
+          {/* New Chart - Revenue Composition */}
+          <div className="bg-white rounded-xl border border-slate-100 shadow-xs p-5 flex flex-col justify-between space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xs uppercase font-black tracking-wider text-slate-700 flex items-center gap-1.5">
+                  <Coins className="h-4.5 w-4.5 text-[#1e3a8a]" />
+                  Composição da Receita
+                </h3>
+                <p className="text-[10px] text-slate-400 mt-0.5">
+                  Proporção das fontes de receita do fundo selecionado.
+                </p>
+              </div>
+              
+              {/* Period Selector Toggle */}
+              <div className="flex bg-slate-100 p-1 rounded-lg">
+                <button
+                  onClick={() => setCompositionPeriod("mes")}
+                  className={`px-2 py-1 rounded text-[9px] font-bold transition-all cursor-pointer ${
+                    compositionPeriod === "mes"
+                      ? "bg-white text-slate-800 shadow-2xs"
+                      : "text-slate-400 hover:text-slate-600"
+                  }`}
+                >
+                  Mês
+                </button>
+                <button
+                  onClick={() => setCompositionPeriod("ytd")}
+                  className={`px-2 py-1 rounded text-[9px] font-bold transition-all cursor-pointer ${
+                    compositionPeriod === "ytd"
+                      ? "bg-white text-slate-800 shadow-2xs"
+                      : "text-slate-400 hover:text-slate-600"
+                  }`}
+                >
+                  Acumulado
+                </button>
+              </div>
+            </div>
+
+            {activeCompData.length > 0 ? (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+                <div className="h-36 w-36 flex-shrink-0 relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={activeCompData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={42}
+                        outerRadius={58}
+                        paddingAngle={2}
+                        dataKey="value"
+                      >
+                        {activeCompData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        formatter={(value: any) => formatCurrency(value)}
+                        contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0", fontSize: "11px" }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  {/* Center Text */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className="text-[8px] uppercase font-bold text-slate-400">Total</span>
+                    <span className="text-[10px] font-black text-slate-700 text-center px-1 truncate max-w-full">
+                      {formatCurrency(compositionPeriod === "mes" ? totalCompMes : totalCompYTD)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Legend list */}
+                <div className="flex-1 w-full space-y-1">
+                  {revenueComposition.map((item, index) => {
+                    const val = compositionPeriod === "mes" ? item.valorMes : item.valorYTD;
+                    const total = compositionPeriod === "mes" ? totalCompMes : totalCompYTD;
+                    const pct = total > 0 ? ((val / total) * 100).toFixed(1) : "0.0";
+                    
+                    return (
+                      <div key={index} className="flex items-center justify-between text-[10px] p-0.5 rounded hover:bg-slate-50 transition-colors">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
+                          <span className="font-semibold text-slate-500 truncate">{item.name}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 flex-shrink-0 font-mono">
+                          <span className="text-slate-700 font-bold">{formatCurrency(val)}</span>
+                          <span className="text-slate-400 font-medium">({pct}%)</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div className="h-36 flex flex-col items-center justify-center text-center p-4 border border-dashed border-slate-100 rounded-xl">
+                <Coins className="h-8 w-8 text-slate-300 stroke-1 mb-1.5" />
+                <p className="text-xs font-bold text-slate-400">Nenhuma receita registrada</p>
+                <p className="text-[10px] text-slate-300 mt-0.5">Não há valores correspondentes ao período selecionado.</p>
+              </div>
+            )}
           </div>
 
         </div>

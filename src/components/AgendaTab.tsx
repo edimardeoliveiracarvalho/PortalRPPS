@@ -31,7 +31,6 @@ export function AgendaTab({ competence }: AgendaTabProps) {
   const [selectedMonth, setSelectedMonth] = useState<string>("todos");
   const [viewMode, setViewMode] = useState<"cards" | "timeline">("cards");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedMeeting, setSelectedMeeting] = useState<AgendaReuniao | null>(null);
 
   // Helper to map Colegiado to pretty Portuguese labels, colors and metadata
   const getColegiadoDetails = (colegiado: string) => {
@@ -404,17 +403,16 @@ export function AgendaTab({ competence }: AgendaTabProps) {
                         return (
                           <div 
                             key={`upcoming-meet-${colegiado}-${idx}`} 
-                            onClick={() => setSelectedMeeting(meeting)}
-                            className="p-2 rounded-lg bg-slate-50/60 hover:bg-indigo-50/40 border border-slate-100 hover:border-indigo-100 transition-all flex items-start gap-2.5 cursor-pointer group"
+                            className="p-2 rounded-lg bg-slate-50/60 border border-slate-100 flex items-start gap-2.5"
                           >
                             {/* Calendar Block */}
-                            <div className="w-8 h-9 bg-white border border-slate-200 rounded flex flex-col items-center justify-center text-center shadow-2xs flex-shrink-0 group-hover:border-indigo-300">
+                            <div className="w-8 h-9 bg-white border border-slate-200 rounded flex flex-col items-center justify-center text-center shadow-2xs flex-shrink-0">
                               <span className="text-[7.5px] font-extrabold text-indigo-600 uppercase leading-none">{dateInfo.monthShort}</span>
                               <span className="text-xs font-black text-slate-800 leading-none mt-0.5">{dateInfo.day}</span>
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between">
-                                <span className="text-[10px] font-bold text-slate-700 truncate block group-hover:text-indigo-900">
+                                <span className="text-[10px] font-bold text-slate-700 truncate block">
                                   {dateInfo.weekday}
                                 </span>
                                 <span className="text-[9px] font-semibold text-slate-500 flex items-center gap-0.5 flex-shrink-0">
@@ -601,7 +599,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
       ) : viewMode === "cards" ? (
         
         /* CARD VIEW: Modern Grid Layout grouped by month or displayed directly as cards */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredMeetings.map((meeting, index) => {
             const dateDetails = formatMeetingDate(meeting.data);
             const colegiadoDetails = getColegiadoDetails(meeting.colegiado);
@@ -611,65 +609,57 @@ export function AgendaTab({ competence }: AgendaTabProps) {
             return (
               <div 
                 key={`meeting-card-${index}`}
-                onClick={() => setSelectedMeeting(meeting)}
-                className="bg-white rounded-2xl border border-slate-100 shadow-xs hover:shadow-md hover:border-slate-200 transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer group"
+                className="bg-white rounded-xl border border-slate-200/60 shadow-2xs hover:shadow-xs transition-all duration-300 flex flex-col justify-between overflow-hidden"
               >
                 {/* Card Top Branding Header */}
-                <div className={`p-4 border-b border-slate-50 flex items-center justify-between bg-slate-50/50 group-hover:bg-slate-50/100 transition-colors`}>
-                  <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${colegiadoDetails.bg}`}>
-                    {colegiadoDetails.shortLabel} • {colegiadoDetails.label}
+                <div className="p-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                  <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${colegiadoDetails.bg}`}>
+                    {colegiadoDetails.shortLabel}
                   </span>
                   
                   {isCurrentMonth ? (
-                    <span className="text-[9px] font-extrabold uppercase tracking-widest text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                    <span className="text-[8px] font-extrabold uppercase tracking-widest text-amber-700 bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="w-1 h-1 bg-amber-500 rounded-full animate-pulse"></span>
                       Mês Corrente
                     </span>
                   ) : (
-                    <span className="text-[9px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+                    <span className="text-[8px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-full">
                       {meeting.competencia}
                     </span>
                   )}
                 </div>
 
                 {/* Card Main Body */}
-                <div className="p-5 space-y-4 flex-1">
+                <div className="p-3.5 space-y-3 flex-1">
                   
                   {/* Date presentation */}
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-12 h-12 bg-blue-50 text-blue-700 font-extrabold rounded-xl flex flex-col items-center justify-center border border-blue-100">
-                      <span className="text-base font-black leading-none">{dateDetails.day}</span>
-                      <span className="text-[9px] mt-0.5 tracking-wider">{dateDetails.monthShort}</span>
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex-shrink-0 w-10 h-10 bg-blue-50 text-blue-700 font-extrabold rounded-lg flex flex-col items-center justify-center border border-blue-100">
+                      <span className="text-sm font-black leading-none">{dateDetails.day}</span>
+                      <span className="text-[8px] mt-0.5 tracking-wider">{dateDetails.monthShort}</span>
                     </div>
-                    <div className="space-y-0.5">
-                      <h4 className="text-sm font-bold text-slate-800 tracking-tight leading-tight">
+                    <div className="space-y-0.5 min-w-0">
+                      <h4 className="text-xs font-bold text-slate-800 truncate leading-tight">
                         {dateDetails.weekday}
                       </h4>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-[10px] text-slate-400 truncate">
                         {dateDetails.day} de {dateDetails.monthLong}
                       </p>
                     </div>
                   </div>
 
                   {/* Hour & Location with sleek icons */}
-                  <div className="space-y-1.5 text-xs text-slate-500 font-medium bg-slate-50 rounded-xl p-3">
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-3.5 w-3.5 text-slate-400 flex-shrink-0" />
-                      <span>{meeting.horario} Horas</span>
+                  <div className="space-y-1 text-[11px] text-slate-500 font-medium bg-slate-50 rounded-lg p-2.5">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="h-3 w-3 text-slate-400 flex-shrink-0" />
+                      <span>{meeting.horario}h</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-3.5 w-3.5 text-slate-400 flex-shrink-0" />
-                      <span className="truncate">{meeting.local}</span>
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="h-3 w-3 text-slate-400 flex-shrink-0" />
+                      <span className="truncate">{meeting.local.replace("Sala de Reunião da ", "").replace("Sala de Reunião do ", "")}</span>
                     </div>
                   </div>
 
-                </div>
-
-                {/* Card Footer Actions */}
-                <div className="p-4 border-t border-slate-50 bg-slate-50/20 flex items-center justify-end">
-                  <span className="text-[10px] text-slate-400 font-bold group-hover:text-slate-600 flex items-center gap-0.5 transition-colors">
-                    Detalhes <ChevronRight className="h-3.5 w-3.5" />
-                  </span>
                 </div>
               </div>
             );
@@ -690,19 +680,18 @@ export function AgendaTab({ competence }: AgendaTabProps) {
               return (
                 <div 
                   key={`timeline-row-${index}`}
-                  onClick={() => setSelectedMeeting(meeting)}
-                  className="relative group cursor-pointer"
+                  className="relative"
                 >
                   {/* Glowing vertical node marker representing state */}
                   <span 
-                    className={`absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white transition-all duration-300 group-hover:scale-125 ${
+                    className={`absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white ${
                       isCurrent
                         ? "border-amber-500 bg-amber-500 ring-4 ring-amber-50"
                         : "border-blue-600 bg-blue-600 ring-4 ring-blue-50"
                     }`}
                   />
 
-                  <div className="bg-slate-50/50 hover:bg-slate-50 rounded-xl p-4 border border-slate-100 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="bg-slate-50/50 rounded-xl p-4 border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     
                     {/* Left details */}
                     <div className="space-y-2 flex-1">
@@ -721,7 +710,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
                       </div>
 
                       <div className="space-y-1">
-                        <h4 className="text-sm font-bold text-slate-800 group-hover:text-blue-700 transition-colors leading-tight">
+                        <h4 className="text-sm font-bold text-slate-800 leading-tight">
                           {dateDetails.full}
                         </h4>
                         
@@ -743,138 +732,6 @@ export function AgendaTab({ competence }: AgendaTabProps) {
               );
             })}
           </div>
-        </div>
-      )}
-
-      {/* INTERACTIVE DOSSIER MODAL (Selected Meeting Details) */}
-      {selectedMeeting && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity animate-fade-in">
-          
-          <div 
-            className="bg-white rounded-2xl shadow-xl border border-slate-100 max-w-lg w-full overflow-hidden transform transition-all animate-scale-in"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className={`p-5 text-white flex items-center justify-between bg-gradient-to-r ${
-              selectedMeeting.colegiado === "comiteInvestimentos" 
-                ? "from-blue-600 to-indigo-700" 
-                : selectedMeeting.colegiado === "conselhoDeliberativo"
-                ? "from-emerald-600 to-teal-700"
-                : "from-purple-600 to-indigo-700"
-            }`}>
-              <div className="space-y-1">
-                <span className="text-[9px] font-bold tracking-widest uppercase bg-white/20 px-2 py-0.5 rounded">
-                  {getColegiadoDetails(selectedMeeting.colegiado).shortLabel} • Sessão Ordinária
-                </span>
-                <h3 className="text-lg font-black tracking-tight leading-snug">
-                  {getColegiadoDetails(selectedMeeting.colegiado).label}
-                </h3>
-              </div>
-              <button 
-                onClick={() => setSelectedMeeting(null)}
-                className="p-1.5 rounded-full hover:bg-white/20 text-white transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-6 space-y-6 max-h-[460px] overflow-y-auto no-scrollbar">
-              
-              {/* Collegiate Description */}
-              <div className="text-xs text-slate-500 bg-slate-50 p-3 rounded-xl leading-relaxed italic border border-slate-100">
-                {getColegiadoDetails(selectedMeeting.colegiado).description}
-              </div>
-
-              {/* Date & Location Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1 bg-slate-50/50 p-3 rounded-xl border border-slate-100/50">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                    <Calendar className="h-3.5 w-3.5 text-blue-500" />
-                    Data e Horário
-                  </p>
-                  <p className="text-xs font-bold text-slate-700">
-                    {formatMeetingDate(selectedMeeting.data).day}/{formatMeetingDate(selectedMeeting.data).monthShort} • {selectedMeeting.horario}h
-                  </p>
-                  <p className="text-[10px] text-slate-400">
-                    {formatMeetingDate(selectedMeeting.data).weekday}
-                  </p>
-                </div>
-
-                <div className="space-y-1 bg-slate-50/50 p-3 rounded-xl border border-slate-100/50">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                    <MapPin className="h-3.5 w-3.5 text-blue-500" />
-                    Localização
-                  </p>
-                  <p className="text-xs font-bold text-slate-700 leading-snug truncate">
-                    {selectedMeeting.local.split(" da ")[0]}
-                  </p>
-                  <p className="text-[10px] text-slate-400">
-                    Sede Institucional
-                  </p>
-                </div>
-              </div>
-
-              {/* Participants */}
-              <div className="space-y-2">
-                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Users className="h-4 w-4 text-blue-500" />
-                  Presenças Convocadas
-                </p>
-                <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 flex items-center gap-3">
-                  <div className="w-1.5 h-7 bg-blue-500 rounded-full" />
-                  <div className="space-y-0.5">
-                    <p className="text-xs font-bold text-slate-700">
-                      {getColegiadoDetails(selectedMeeting.colegiado).members}
-                    </p>
-                    <p className="text-[10px] text-slate-400">
-                      Quórum mínimo regulamentar: Maioria Simples (50% + 1)
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Agenda Topics List */}
-              <div className="space-y-3">
-                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <FileText className="h-4 w-4 text-blue-500" />
-                  Pauta e Ordem do Dia
-                </p>
-                <div className="space-y-2.5">
-                  {getMeetingAgendaTopics(selectedMeeting.colegiado).map((topic, tIdx) => (
-                    <div key={tIdx} className="flex items-start gap-3 bg-white border border-slate-100 p-3 rounded-xl hover:border-slate-200 transition-colors shadow-xs">
-                      <div className="bg-blue-50 text-blue-700 text-xs font-extrabold w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                        {tIdx + 1}
-                      </div>
-                      <p className="text-xs text-slate-700 font-medium leading-relaxed">
-                        {topic}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-            </div>
-
-            {/* Modal Footer */}
-            <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
-              <button 
-                onClick={(e) => downloadIcsFile(selectedMeeting, e)}
-                className="flex items-center gap-1.5 text-xs text-blue-600 font-bold hover:text-blue-800 bg-white hover:bg-blue-100/50 px-4 py-2.5 rounded-xl border border-slate-200 transition-colors shadow-xs"
-              >
-                <Download className="h-4 w-4" />
-                Adicionar à minha Agenda (.ics)
-              </button>
-              <button 
-                onClick={() => setSelectedMeeting(null)}
-                className="text-xs font-bold text-slate-500 hover:text-slate-800 px-4 py-2.5 transition-colors"
-              >
-                Fechar
-              </button>
-            </div>
-
-          </div>
-
         </div>
       )}
 

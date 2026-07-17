@@ -592,7 +592,7 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
         <div className="bg-white rounded border border-slate-200 p-4 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-2.5 mb-3">
             <div>
-              <h4 className="text-sm font-bold text-slate-800">Evolução Histórica do Saldo da Carteira (CONSG)</h4>
+              <h4 className="text-sm font-bold text-slate-800">Evolução Histórica do Saldo da Carteira</h4>
               <p className="text-[11px] text-slate-400">Acompanhamento da evolução da Carteira de Empréstimo Consignado.</p>
             </div>
             <div className="mt-2 sm:mt-0 flex bg-slate-100 p-1 rounded-lg self-start">
