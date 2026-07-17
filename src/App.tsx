@@ -96,8 +96,13 @@ export default function App() {
         
         {/* Logo / Brand identity */}
         <div className="flex items-center space-x-4">
-          <div className="w-10 h-10 bg-white rounded flex items-center justify-center shadow-xs">
-            <Layers className="h-6 w-6 text-[#1e3a8a]" />
+          <div className="w-10 h-10 bg-white rounded-full p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200">
+            <img 
+              src="/src/assets/images/maringa_prev_logo_v2_1784241792118.jpg" 
+              alt="Maringá Previdência" 
+              className="w-full h-full object-contain rounded-full"
+              referrerPolicy="no-referrer"
+            />
           </div>
           <div>
             <h1 className="text-sm sm:text-lg font-bold tracking-tight uppercase leading-tight">Maringá Previdência</h1>
