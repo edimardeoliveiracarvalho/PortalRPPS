@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { getMonthName } from "./utils";
+import maringaLogo from "./assets/images/maringa_prev_logo_v2_1784241792118.jpg";
 import { 
   VisaoGeralTab 
 } from "./components/VisaoGeralTab";
@@ -98,7 +99,7 @@ export default function App() {
         <div className="flex items-center space-x-4">
           <div className="w-10 h-10 bg-white rounded-full p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200">
             <img 
-              src="/src/assets/images/maringa_prev_logo_v2_1784241792118.jpg" 
+              src={maringaLogo} 
               alt="Maringá Previdência" 
               className="w-full h-full object-contain rounded-full"
               referrerPolicy="no-referrer"
