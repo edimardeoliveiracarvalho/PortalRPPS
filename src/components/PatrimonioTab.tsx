@@ -256,17 +256,6 @@ export const PatrimonioTab: React.FC<PatrimonioTabProps> = ({ competence }) => {
           </ResponsiveContainer>
         </div>
       </div>
-
-      {/* Compliance / Transparency Disclaimer */}
-      <div className="bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-xs text-slate-600">
-        <p className="font-semibold text-slate-700 flex items-center">
-          <ShieldCheck className="h-4 w-4 mr-1 text-emerald-600" />
-          Transparência e Governança Previdenciária
-        </p>
-        <p className="mt-1 text-slate-500 leading-relaxed text-[11px]">
-          Os valores patrimoniais consolidados apresentados representam os recursos alocados na carteira de investimentos da Maringá Previdência. Estes dados são auditados e validados em conformidade com as exigências da Secretaria de Regimes Próprios de Previdência Social do Ministério da Previdência Social (MPS), refletindo a solidez e rigor de gestão atuarial da autarquia.
-        </p>
-      </div>
     </div>
   );
 };
