@@ -98,9 +98,9 @@ export interface AgendaReuniao {
 }
 
 export const ultimaAtualizacao = {
-  data: "16/07/2026",
-  hora: "07:36",
-  textoExtenso: "16 de Julho de 2026"
+  data: "17/07/2026",
+  hora: "23:15",
+  textoExtenso: "17 de Julho de 2026"
 };
 
 export const seguradosAtivos: SeguradoAtivo[] = [
