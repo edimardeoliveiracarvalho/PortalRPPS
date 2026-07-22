@@ -98,9 +98,9 @@ export interface AgendaReuniao {
 }
 
 export const ultimaAtualizacao = {
-  data: "17/07/2026",
-  hora: "23:15",
-  textoExtenso: "17 de Julho de 2026"
+  data: "22/07/2026",
+  hora: "19:11",
+  textoExtenso: "22 de Julho de 2026"
 };
 
 export const seguradosAtivos: SeguradoAtivo[] = [
@@ -161,24 +161,24 @@ export const seguradosAtivos: SeguradoAtivo[] = [
 ];
 
 export const retornoMetaAtuarial: RetornoMetaAtuarial[] = [
-  {"competencia":"2025-01","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":10472951.96,"retornoPercentual":0.0094,"metaAtuarialPercentual":0.00594,"retornoAcumulado":0.0094,"metaAcumulada":0.0059,"atingiuMeta":true},
-  {"competencia":"2025-02","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":8566941.0,"retornoPercentual":0.0084,"metaAtuarialPercentual":0.01744,"retornoAcumulado":0.0178,"metaAcumulada":0.0235,"atingiuMeta":false},
-  {"competencia":"2025-03","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":10935216.33,"retornoPercentual":0.009,"metaAtuarialPercentual":0.00994,"retornoAcumulado":0.027,"metaAcumulada":0.0337,"atingiuMeta":false},
-  {"competencia":"2025-04","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":11571299.94,"retornoPercentual":0.0103,"metaAtuarialPercentual":0.00864,"retornoAcumulado":0.0375,"metaAcumulada":0.0427,"atingiuMeta":true},
-  {"competencia":"2025-05","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":14473868.34,"retornoPercentual":0.0129,"metaAtuarialPercentual":0.00694,"retornoAcumulado":0.0509,"metaAcumulada":0.0499,"atingiuMeta":true},
-  {"competencia":"2025-06","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":10454977.15,"retornoPercentual":0.0084,"metaAtuarialPercentual":0.00674,"retornoAcumulado":0.0597,"metaAcumulada":0.057,"atingiuMeta":true},
-  {"competencia":"2025-07","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":10230559.82,"retornoPercentual":0.0084,"metaAtuarialPercentual":0.00694,"retornoAcumulado":0.0687,"metaAcumulada":0.0643,"atingiuMeta":true},
-  {"competencia":"2025-08","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":9195733.74,"retornoPercentual":0.0082,"metaAtuarialPercentual":0.00324,"retornoAcumulado":0.0775,"metaAcumulada":0.0677,"atingiuMeta":true},
-  {"competencia":"2025-09","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":12352515.35,"retornoPercentual":0.0092,"metaAtuarialPercentual":0.00914,"retornoAcumulado":0.0874,"metaAcumulada":0.0775,"atingiuMeta":true},
-  {"competencia":"2025-10","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":13375621.4,"retornoPercentual":0.0105,"metaAtuarialPercentual":0.0052,"retornoAcumulado":0.0988,"metaAcumulada":0.0831,"atingiuMeta":true},
-  {"competencia":"2025-11","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":8307416.34,"retornoPercentual":0.0071,"metaAtuarialPercentual":0.0061,"retornoAcumulado":0.1066,"metaAcumulada":0.0898,"atingiuMeta":true},
-  {"competencia":"2025-12","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":11904429.61,"retornoPercentual":0.0085,"metaAtuarialPercentual":0.0076,"retornoAcumulado":0.1161,"metaAcumulada":0.0981,"atingiuMeta":true},
-  {"competencia":"2026-01","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":13125852.02,"retornoPercentual":0.01,"metaAtuarialPercentual":0.0081,"retornoAcumulado":0.01,"metaAcumulada":0.0081,"atingiuMeta":true},
-  {"competencia":"2026-02","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":9892577.75,"retornoPercentual":0.0082,"metaAtuarialPercentual":0.0118,"retornoAcumulado":0.0183,"metaAcumulada":0.0201,"atingiuMeta":false},
-  {"competencia":"2026-03","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":13441057.69,"retornoPercentual":0.0095,"metaAtuarialPercentual":0.0136,"retornoAcumulado":0.0279,"metaAcumulada":0.034,"atingiuMeta":false},
-  {"competencia":"2026-04","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":21825608.81,"retornoPercentual":0.0161,"metaAtuarialPercentual":0.01154,"retornoAcumulado":0.0445,"metaAcumulada":0.0459,"atingiuMeta":true},
-  {"competencia":"2026-05","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":14087352.06,"retornoPercentual":0.011,"metaAtuarialPercentual":0.0106,"retornoAcumulado":0.056,"metaAcumulada":0.057,"atingiuMeta":true},
-  {"competencia":"2026-06","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":13858350.44,"retornoPercentual":0.0095,"metaAtuarialPercentual":0.0064,"retornoAcumulado":0.0661,"metaAcumulada":0.0638,"atingiuMeta":true}
+  {"competencia":"2025-01","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":10324486.86,"retornoPercentual":0.0094,"metaAtuarialPercentual":0.0059,"retornoAcumulado":0.0094,"metaAcumulada":0.0059,"atingiuMeta":true},
+  {"competencia":"2025-02","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":8402893.50,"retornoPercentual":0.0084,"metaAtuarialPercentual":0.0174,"retornoAcumulado":0.0178,"metaAcumulada":0.0235,"atingiuMeta":false},
+  {"competencia":"2025-03","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":10767597.19,"retornoPercentual":0.0090,"metaAtuarialPercentual":0.0099,"retornoAcumulado":0.0269,"metaAcumulada":0.0337,"atingiuMeta":false},
+  {"competencia":"2025-04","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":11347278.61,"retornoPercentual":0.0103,"metaAtuarialPercentual":0.0086,"retornoAcumulado":0.0375,"metaAcumulada":0.0427,"atingiuMeta":true},
+  {"competencia":"2025-05","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":14197600.83,"retornoPercentual":0.0129,"metaAtuarialPercentual":0.0069,"retornoAcumulado":0.0509,"metaAcumulada":0.0499,"atingiuMeta":true},
+  {"competencia":"2025-06","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":10209734.12,"retornoPercentual":0.0084,"metaAtuarialPercentual":0.0067,"retornoAcumulado":0.0597,"metaAcumulada":0.0570,"atingiuMeta":true},
+  {"competencia":"2025-07","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":9906466.85,"retornoPercentual":0.0083,"metaAtuarialPercentual":0.0069,"retornoAcumulado":0.0685,"metaAcumulada":0.0643,"atingiuMeta":true},
+  {"competencia":"2025-08","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":8876103.56,"retornoPercentual":0.0082,"metaAtuarialPercentual":0.0032,"retornoAcumulado":0.0773,"metaAcumulada":0.0677,"atingiuMeta":true},
+  {"competencia":"2025-09","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":11995533.87,"retornoPercentual":0.0092,"metaAtuarialPercentual":0.0091,"retornoAcumulado":0.0871,"metaAcumulada":0.0775,"atingiuMeta":true},
+  {"competencia":"2025-10","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":13002893.68,"retornoPercentual":0.0105,"metaAtuarialPercentual":0.0052,"retornoAcumulado":0.0986,"metaAcumulada":0.0831,"atingiuMeta":true},
+  {"competencia":"2025-11","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":8008403.23,"retornoPercentual":0.0085,"metaAtuarialPercentual":0.0061,"retornoAcumulado":0.1080,"metaAcumulada":0.0898,"atingiuMeta":true},
+  {"competencia":"2025-12","metaAtuarialFormula":"IPCA + 5.32%","retornoValor":11639133.68,"retornoPercentual":0.0092,"metaAtuarialPercentual":0.0076,"retornoAcumulado":0.1182,"metaAcumulada":0.0981,"atingiuMeta":true},
+  {"competencia":"2026-01","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":13125943.54,"retornoPercentual":0.0107,"metaAtuarialPercentual":0.0081,"retornoAcumulado":0.0107,"metaAcumulada":0.0081,"atingiuMeta":true},
+  {"competencia":"2026-02","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":9918060.33,"retornoPercentual":0.0093,"metaAtuarialPercentual":0.0118,"retornoAcumulado":0.0200,"metaAcumulada":0.0201,"atingiuMeta":false},
+  {"competencia":"2026-03","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":13456653.28,"retornoPercentual":0.0099,"metaAtuarialPercentual":0.0136,"retornoAcumulado":0.0301,"metaAcumulada":0.0340,"atingiuMeta":false},
+  {"competencia":"2026-04","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":21833448.34,"retornoPercentual":0.0176,"metaAtuarialPercentual":0.0115,"retornoAcumulado":0.0483,"metaAcumulada":0.0459,"atingiuMeta":true},
+  {"competencia":"2026-05","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":14192289.28,"retornoPercentual":0.0122,"metaAtuarialPercentual":0.0106,"retornoAcumulado":0.0611,"metaAcumulada":0.0570,"atingiuMeta":true},
+  {"competencia":"2026-06","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":13858350.44,"retornoPercentual":0.0105,"metaAtuarialPercentual":0.0064,"retornoAcumulado":0.0722,"metaAcumulada":0.0638,"atingiuMeta":true}
 ];
 
 export const movimentacoesFinanceiras: MovimentacaoFinanceira[] = [
@@ -1032,5 +1032,5 @@ export const evolucaoCarteiraConsolidada: EvolucaoCarteira[] = [
   {"competencia":"2026-03","valorCarteiraConsolidada":1368617518.94},
   {"competencia":"2026-04","valorCarteiraConsolidada":1394270157.21},
   {"competencia":"2026-05","valorCarteiraConsolidada":1408263937.19},
-  {"competencia":"2026-06","valorCarteiraConsolidada":1414618402.85}
+  {"competencia":"2026-06","valorCarteiraConsolidada":1414618405.85}
 ];

@@ -564,7 +564,7 @@ export const InvestimentosTab: React.FC<InvestimentosTabProps> = ({ competence }
       </div>
 
       {/* Segment & Fund Breakdowns Column on the Left, Ledger on the Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
         <div className="lg:col-span-1 space-y-4 flex flex-col">
           {/* Segment Breakdown Donut */}
           <div className="bg-white rounded-xl border border-slate-100 p-4 flex flex-col justify-between">
@@ -704,7 +704,7 @@ export const InvestimentosTab: React.FC<InvestimentosTabProps> = ({ competence }
         </div>
 
         {/* Detailed Investments Ledger */}
-        <div className="bg-white rounded-xl border border-slate-100 p-4 lg:col-span-2 space-y-3">
+        <div className="bg-white rounded-xl border border-slate-100 p-4 lg:col-span-2 flex flex-col space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <h4 className="text-sm font-bold text-slate-800">Composição da Carteira de Investimentos</h4>
@@ -758,7 +758,7 @@ export const InvestimentosTab: React.FC<InvestimentosTabProps> = ({ competence }
           </div>
 
           {/* Results table */}
-          <div className="overflow-x-auto border border-slate-100 rounded-xl max-h-80 overflow-y-auto no-scrollbar">
+          <div className="overflow-x-auto border border-slate-100 rounded-xl lg:max-h-[580px] max-h-[400px] overflow-y-auto no-scrollbar flex-1">
             <table className="w-full text-left border-collapse text-[11px]">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-100 font-bold text-slate-500 uppercase tracking-wider">

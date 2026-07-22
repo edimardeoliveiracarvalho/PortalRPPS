@@ -298,7 +298,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
           </div>
           <div className="mt-2">
             <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.total} reuniões</h3>
-            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
+            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold min-h-[30px] leading-tight">
               Compromissos agendados no ano (exercício)
             </span>
           </div>
@@ -313,8 +313,8 @@ export function AgendaTab({ competence }: AgendaTabProps) {
             </div>
           </div>
           <div className="mt-2">
-            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.comite} sessões</h3>
-            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
+            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.comite} reuniões</h3>
+            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold min-h-[30px] leading-tight">
               Responsável pela formulação e execução da política de investimentos
             </span>
           </div>
@@ -329,8 +329,8 @@ export function AgendaTab({ competence }: AgendaTabProps) {
             </div>
           </div>
           <div className="mt-2">
-            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.deliberativo} sessões</h3>
-            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
+            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.deliberativo} reuniões</h3>
+            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold min-h-[30px] leading-tight">
               Órgão superior de deliberação
             </span>
           </div>
@@ -345,8 +345,8 @@ export function AgendaTab({ competence }: AgendaTabProps) {
             </div>
           </div>
           <div className="mt-2">
-            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.fiscal} sessões</h3>
-            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
+            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.fiscal} reuniões</h3>
+            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold min-h-[30px] leading-tight">
               Órgão fiscalizador da gestão
             </span>
           </div>
@@ -361,8 +361,8 @@ export function AgendaTab({ competence }: AgendaTabProps) {
             </div>
           </div>
           <div className="mt-2">
-            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.previdenciaComplementar} sessões</h3>
-            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
+            <h3 className="text-xl font-black text-slate-800 tracking-tight">{stats.previdenciaComplementar} reuniões</h3>
+            <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold min-h-[30px] leading-tight">
               Órgão de acompanhamento do regime de previdência complementar
             </span>
           </div>

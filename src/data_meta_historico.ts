@@ -130,8 +130,8 @@ export const retornoMetaAtuarialHistorico: HistoricoMetaAtuarial[] = [
     "exercicio": 2025,
     "metaAtuarialFormula": "IPCA + 5,32% a.a.",
     "metaAtuarialPercentual": 9.81,
-    "retornoPercentual": 11.55,
-    "gap": 1.74,
+    "retornoPercentual": 11.82,
+    "gap": 2.01,
     "atingiuMeta": true,
     "resultado": "superavit"
   }
