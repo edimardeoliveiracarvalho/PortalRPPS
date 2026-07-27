@@ -35,6 +35,9 @@ import {
 import { 
   ConsgTab 
 } from "./components/ConsgTab";
+import { 
+  ImpressaoTab 
+} from "./components/ImpressaoTab";
 
 import { 
   Compass, 
@@ -50,10 +53,11 @@ import {
   Calendar,
   Layers,
   ArrowRightLeft,
-  ShieldCheck
+  ShieldCheck,
+  Printer
 } from "lucide-react";
 
-type TabId = "visao_geral" | "beneficios" | "contabil" | "compensacao" | "carteira_investimentos" | "titulos" | "meta_x_retorno" | "patrimonio" | "servidores" | "consg" | "agenda";
+type TabId = "visao_geral" | "beneficios" | "contabil" | "compensacao" | "carteira_investimentos" | "titulos" | "meta_x_retorno" | "patrimonio" | "servidores" | "consg" | "agenda" | "impressao";
 
 export default function App() {
   const [competence, setCompetence] = useState<string>("2026-06"); // Default to the latest complete month
@@ -81,6 +85,7 @@ export default function App() {
     { id: "servidores", label: "Servidores", icon: Users, component: ServidoresTab },
     { id: "consg", label: "CONSIGNADO", icon: Coins, component: ConsgTab },
     { id: "agenda", label: "Agenda", icon: Calendar, component: AgendaTab },
+    { id: "impressao", label: "IMPRESSÃO", icon: Printer, component: ImpressaoTab },
   ] as const;
 
   const handleCompetenceChange = (comp: string) => {
