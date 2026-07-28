@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { getMonthName } from "./utils";
 import { ultimaAtualizacao } from "./data";
-import maringaLogo from "./assets/images/maringa_prev_logo_new_1784335339502.jpg";
+import maringaLogo from "./assets/images/maringa_official_logo.svg";
 import { 
   VisaoGeralTab 
 } from "./components/VisaoGeralTab";

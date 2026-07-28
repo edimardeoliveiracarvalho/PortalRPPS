@@ -22,7 +22,7 @@ import {
   TrendingUp,
   Info
 } from "lucide-react";
-import maringaLogo from "../assets/images/maringa_prev_logo_new_1784335339502.jpg";
+import maringaLogo from "../assets/images/maringa_official_logo.svg";
 import { 
   seguradosAtivos, 
   retornoMetaAtuarial, 
@@ -222,6 +222,42 @@ export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialC
 
   const getTotalDespConsolidado = (c: string) => 
     getSubtotalRepDesp(c) + getSubtotalCapDesp(c) + getSubtotalOrgDesp(c);
+
+  // Segment allocation calculation for active competence comp
+  const segmentoMap: Record<string, number> = {};
+  let totalInvestimentosSaldo = 0;
+  ativosMes.forEach(({ inv, hist }) => {
+    const seg = inv.segmento || "Outros";
+    const saldo = hist.saldoFinal || 0;
+    segmentoMap[seg] = (segmentoMap[seg] || 0) + saldo;
+    totalInvestimentosSaldo += saldo;
+  });
+
+  const comprevReceitaComp = getVal("reparticao", "receita", comp, "Compensação Previdenciária") +
+                             getVal("capitalizacao", "receita", comp, "Compensação Previdenciária");
+  const comprevDespesaComp = getVal("reparticao", "despesa", comp, "Compensação Previdenciária") +
+                             getVal("capitalizacao", "despesa", comp, "Compensação Previdenciária");
+
+  const aporteInsuficienciaComp = getVal("reparticao", "transferenciaRecebida", comp, "Aporte por Insuficiência Financeira");
+  const interferenciaOrgaoComp = getVal("orgaoGerenciador", "transferenciaRecebida", comp, "Interferência Financeira");
+  const totalAportesTransfComp = aporteInsuficienciaComp + interferenciaOrgaoComp;
+
+  const qtdAtivosComp = segObj?.quantidadeAtivos || 0;
+  const qtdAposentadosComp = benObj?.aposentados || 0;
+  const qtdPensionistasComp = benObj?.pensionistas || 0;
+  const totalBeneficiariosComp = benObj?.totalBeneficiarios || (qtdAposentadosComp + qtdPensionistasComp);
+  const totalMassaComp = qtdAtivosComp + totalBeneficiariosComp;
+
+  const consgSaldoComp = consgObj?.saldoCarteira || 0;
+  const consgConcessoesComp = consgObj?.concessoesMes || 0;
+  const consgAmortizacoesComp = consgObj?.amortizacoesMes || 0;
+  const consgJurosComp = consgObj?.jurosMes || 0;
+  const consgInadimplenciaComp = consgObj?.inadimplencia || 0;
+  const consgContratosComp = consgObj?.contratosAtivos || 0;
+
+  const retornoMesComp = metaObj?.retornoPercentual || 0;
+  const metaMesComp = metaObj?.metaAtuarialPercentual || 0;
+  const atingiuMetaComp = metaObj?.atingiuMeta || false;
 
   // Handlers
   const handlePrint = () => {
@@ -656,6 +692,269 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
           {reportType === "receitas_despesas" && (
             <div className="space-y-8 text-xs">
               
+              {/* ===================================================================================== */}
+              {/* PRIMEIRA PÁGINA: PAINEL DE INFORMAÇÕES RÁPIDAS E ESSENCIAIS DA COMPETÊNCIA SELECIONADA */}
+              {/* ===================================================================================== */}
+              <div className="break-inside-avoid space-y-5 bg-slate-50 p-4 border border-slate-300 rounded-lg shadow-sm print:bg-white print:p-0 print:border-none">
+                
+                {/* Cabeçalho do Painel da Competência */}
+                <div className="flex items-center justify-between border-b-2 border-slate-900 pb-2">
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800">SÍNTESE EXECUTIVA ESTRATÉGICA</span>
+                    <h3 className="text-sm font-black uppercase text-slate-900 flex items-center space-x-2">
+                      <ShieldCheck className="w-5 h-5 text-emerald-700" />
+                      <span>Informações Essenciais da Competência: {getMonthName(comp)} ({comp})</span>
+                    </h3>
+                  </div>
+                  <span className="text-[10px] font-bold px-2.5 py-1 bg-emerald-100 text-emerald-950 border border-emerald-300 rounded uppercase font-mono">
+                    Posição Homologada
+                  </span>
+                </div>
+
+                {/* GRID DE CARDS RÁPIDOS (8 INDICADORES CHAVE) */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-slate-800">
+                  
+                  {/* CARD 1: RECEITAS */}
+                  <div className="p-3 bg-white border border-slate-300 rounded shadow-xs space-y-1">
+                    <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase font-bold">
+                      <span>1. Receitas do Mês</span>
+                      <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
+                    </div>
+                    <div className="text-base font-black text-emerald-800 font-mono">
+                      {formatCurrency(totalReceitas)}
+                    </div>
+                    <div className="text-[9px] text-slate-600 border-t border-slate-100 pt-1 flex justify-between">
+                      <span>Rep: {formatCurrency(receitasReparticao)}</span>
+                      <span>Cap: {formatCurrency(receitasCapitalizacao)}</span>
+                    </div>
+                  </div>
+
+                  {/* CARD 2: DESPESAS */}
+                  <div className="p-3 bg-white border border-slate-300 rounded shadow-xs space-y-1">
+                    <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase font-bold">
+                      <span>2. Despesas do Mês</span>
+                      <Coins className="w-3.5 h-3.5 text-red-600" />
+                    </div>
+                    <div className="text-base font-black text-red-800 font-mono">
+                      {formatCurrency(totalDespesas)}
+                    </div>
+                    <div className="text-[9px] text-slate-600 border-t border-slate-100 pt-1 flex justify-between">
+                      <span>Rep: {formatCurrency(despesasReparticao)}</span>
+                      <span>Cap: {formatCurrency(despesasCapitalizacao)}</span>
+                    </div>
+                  </div>
+
+                  {/* CARD 3: APORTES / TRANSFERÊNCIAS */}
+                  <div className="p-3 bg-white border border-slate-300 rounded shadow-xs space-y-1">
+                    <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase font-bold">
+                      <span>3. Aportes / Transf.</span>
+                      <ArrowRightLeft className="w-3.5 h-3.5 text-amber-600" />
+                    </div>
+                    <div className="text-base font-black text-amber-900 font-mono">
+                      {formatCurrency(totalAportesTransfComp)}
+                    </div>
+                    <div className="text-[9px] text-slate-600 border-t border-slate-100 pt-1 truncate">
+                      Insuficiência: {formatCurrency(aporteInsuficienciaComp)}
+                    </div>
+                  </div>
+
+                  {/* CARD 4: COMPENSAÇÃO PREVIDENCIÁRIA */}
+                  <div className="p-3 bg-white border border-slate-300 rounded shadow-xs space-y-1">
+                    <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase font-bold">
+                      <span>4. Compensação (COMPREV)</span>
+                      <Scale className="w-3.5 h-3.5 text-blue-600" />
+                    </div>
+                    <div className="text-base font-black text-blue-900 font-mono">
+                      {formatCurrency(comprevReceitaComp)}
+                    </div>
+                    <div className="text-[9px] text-slate-600 border-t border-slate-100 pt-1 flex justify-between">
+                      <span>Despesa: {formatCurrency(comprevDespesaComp)}</span>
+                      <span className="font-bold text-slate-800">Líq: {formatCurrency(comprevReceitaComp - comprevDespesaComp)}</span>
+                    </div>
+                  </div>
+
+                  {/* CARD 5: META ATUARIAL */}
+                  <div className="p-3 bg-white border border-slate-300 rounded shadow-xs space-y-1">
+                    <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase font-bold">
+                      <span>5. Meta Atuarial</span>
+                      <Target className="w-3.5 h-3.5 text-purple-600" />
+                    </div>
+                    <div className="text-base font-black text-purple-900 font-mono">
+                      {formatPercent(retornoMesComp)} <span className="text-[10px] font-normal text-slate-500">vs {formatPercent(metaMesComp)}</span>
+                    </div>
+                    <div className="text-[9px] border-t border-slate-100 pt-1 font-bold">
+                      {atingiuMetaComp ? (
+                        <span className="text-emerald-700">✓ Meta Atingida</span>
+                      ) : (
+                        <span className="text-red-600">⚠️ Abaixo da Meta</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* CARD 6: SERVIDORES / BENEFICIÁRIOS */}
+                  <div className="p-3 bg-white border border-slate-300 rounded shadow-xs space-y-1">
+                    <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase font-bold">
+                      <span>6. Massa de Segurados</span>
+                      <Users className="w-3.5 h-3.5 text-indigo-600" />
+                    </div>
+                    <div className="text-base font-black text-indigo-950 font-mono">
+                      {formatNumber(totalMassaComp)} <span className="text-[10px] text-slate-500 font-normal">Pessoas</span>
+                    </div>
+                    <div className="text-[9px] text-slate-600 border-t border-slate-100 pt-1 flex justify-between">
+                      <span>Ativos: {formatNumber(qtdAtivosComp)}</span>
+                      <span>Benef: {formatNumber(totalBeneficiariosComp)}</span>
+                    </div>
+                  </div>
+
+                  {/* CARD 7: EMPRÉSTIMO CONSIGNADO */}
+                  <div className="p-3 bg-white border border-slate-300 rounded shadow-xs space-y-1">
+                    <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase font-bold">
+                      <span>7. Carteira Consignado</span>
+                      <Briefcase className="w-3.5 h-3.5 text-emerald-700" />
+                    </div>
+                    <div className="text-base font-black text-slate-900 font-mono">
+                      {formatCurrency(consgSaldoComp)}
+                    </div>
+                    <div className="text-[9px] text-slate-600 border-t border-slate-100 pt-1 flex justify-between">
+                      <span>{formatNumber(consgContratosComp)} Contratos</span>
+                      <span className="font-bold text-amber-700">Inad: {formatPercent(consgInadimplenciaComp)}</span>
+                    </div>
+                  </div>
+
+                  {/* CARD 8: ALOCAÇÃO POR SEGMENTO */}
+                  <div className="p-3 bg-white border border-slate-300 rounded shadow-xs space-y-1">
+                    <div className="flex items-center justify-between text-slate-500 text-[10px] uppercase font-bold">
+                      <span>8. Carteira Investimentos</span>
+                      <Compass className="w-3.5 h-3.5 text-slate-700" />
+                    </div>
+                    <div className="text-base font-black text-slate-900 font-mono">
+                      {formatCurrency(currentPatrimonio)}
+                    </div>
+                    <div className="text-[9px] text-slate-600 border-t border-slate-100 pt-1 flex justify-between">
+                      <span>RF: {formatPercent(((segmentoMap["Renda Fixa"] || 0) / (totalInvestimentosSaldo || 1)) * 100)}</span>
+                      <span>RV: {formatPercent(((segmentoMap["Renda Variável"] || 0) / (totalInvestimentosSaldo || 1)) * 100)}</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* QUADROS SINTÉTICOS COMPLEMENTARES DA COMPETÊNCIA */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  
+                  {/* QUADRO A: ALOCAÇÃO POR SEGMENTOS NA COMPETÊNCIA */}
+                  <div className="border border-slate-300 bg-white rounded overflow-hidden">
+                    <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-300 font-black uppercase text-[10px] text-slate-900 flex justify-between items-center">
+                      <span className="flex items-center space-x-1.5">
+                        <Compass className="w-3.5 h-3.5 text-slate-700" />
+                        <span>Alocação por Segmentos ({getMonthName(comp)})</span>
+                      </span>
+                      <span className="text-slate-500 font-mono font-normal">Patrimônio Carteira</span>
+                    </div>
+                    <table className="w-full text-left border-collapse text-[9px]">
+                      <thead>
+                        <tr className="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+                          <th className="p-1.5 border-r border-slate-200">Segmento</th>
+                          <th className="p-1.5 border-r border-slate-200 text-right">Saldo (R$)</th>
+                          <th className="p-1.5 text-right">% Carteira</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Object.entries(segmentoMap).map(([seg, saldo], i) => {
+                          const part = totalInvestimentosSaldo ? (saldo / totalInvestimentosSaldo) * 100 : 0;
+                          return (
+                            <tr key={i} className="border-b border-slate-100 hover:bg-slate-50">
+                              <td className="p-1.5 border-r border-slate-200 font-medium text-slate-800">{seg}</td>
+                              <td className="p-1.5 border-r border-slate-200 text-right font-mono text-slate-700">{formatCurrency(saldo)}</td>
+                              <td className="p-1.5 text-right font-mono font-bold text-slate-900">{formatPercent(part)}</td>
+                            </tr>
+                          );
+                        })}
+                        <tr className="bg-slate-100 font-black text-slate-900">
+                          <td className="p-1.5 border-r border-slate-200">Total Carteira</td>
+                          <td className="p-1.5 border-r border-slate-200 text-right font-mono text-emerald-800">{formatCurrency(totalInvestimentosSaldo)}</td>
+                          <td className="p-1.5 text-right font-mono">100,00%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* QUADRO B: EMPRÉSTIMO CONSIGNADO E MASSA DE SEGURADOS */}
+                  <div className="space-y-4">
+                    
+                    {/* SUB-QUADRO CONSIGNADOS */}
+                    <div className="border border-slate-300 bg-white rounded overflow-hidden">
+                      <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-300 font-black uppercase text-[10px] text-slate-900 flex justify-between items-center">
+                        <span className="flex items-center space-x-1.5">
+                          <Briefcase className="w-3.5 h-3.5 text-emerald-700" />
+                          <span>Resumo do Empréstimo Consignado ({getMonthName(comp)})</span>
+                        </span>
+                        <span className="text-emerald-800 font-mono font-bold">{formatCurrency(consgSaldoComp)}</span>
+                      </div>
+                      <table className="w-full text-left border-collapse text-[9px]">
+                        <tbody>
+                          <tr className="border-b border-slate-100">
+                            <td className="p-1.5 font-medium text-slate-700 border-r border-slate-200 w-1/2">Saldo Total da Carteira</td>
+                            <td className="p-1.5 font-mono font-bold text-slate-900 text-right">{formatCurrency(consgSaldoComp)}</td>
+                          </tr>
+                          <tr className="border-b border-slate-100">
+                            <td className="p-1.5 font-medium text-slate-700 border-r border-slate-200">Novas Concessões no Mês</td>
+                            <td className="p-1.5 font-mono text-emerald-700 font-bold text-right">{formatCurrency(consgConcessoesComp)}</td>
+                          </tr>
+                          <tr className="border-b border-slate-100">
+                            <td className="p-1.5 font-medium text-slate-700 border-r border-slate-200">Amortizações / Recolhimentos</td>
+                            <td className="p-1.5 font-mono text-slate-800 text-right">{formatCurrency(consgAmortizacoesComp)}</td>
+                          </tr>
+                          <tr className="border-b border-slate-100">
+                            <td className="p-1.5 font-medium text-slate-700 border-r border-slate-200">Juros / Rendimentos do Mês</td>
+                            <td className="p-1.5 font-mono text-purple-800 font-bold text-right">{formatCurrency(consgJurosComp)}</td>
+                          </tr>
+                          <tr className="border-b border-slate-100">
+                            <td className="p-1.5 font-medium text-slate-700 border-r border-slate-200">Taxa de Inadimplência (&gt;60 dias)</td>
+                            <td className="p-1.5 font-mono font-bold text-amber-700 text-right">{formatPercent(consgInadimplenciaComp)}</td>
+                          </tr>
+                          <tr>
+                            <td className="p-1.5 font-medium text-slate-700 border-r border-slate-200">Contratos Ativos / Tomadores</td>
+                            <td className="p-1.5 font-mono font-bold text-slate-900 text-right">{formatNumber(consgContratosComp)} contratos</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* SUB-QUADRO MASSA DE SEGURADOS */}
+                    <div className="border border-slate-300 bg-white rounded overflow-hidden">
+                      <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-300 font-black uppercase text-[10px] text-slate-900 flex justify-between items-center">
+                        <span className="flex items-center space-x-1.5">
+                          <Users className="w-3.5 h-3.5 text-indigo-700" />
+                          <span>Massa Previdenciária ({getMonthName(comp)})</span>
+                        </span>
+                        <span className="text-indigo-900 font-mono font-bold">{formatNumber(totalMassaComp)} Segurados</span>
+                      </div>
+                      <div className="p-2 grid grid-cols-4 gap-2 text-center text-[9px]">
+                        <div className="bg-slate-50 p-1.5 rounded border border-slate-200">
+                          <span className="block text-slate-500 font-bold uppercase text-[8px]">Ativos</span>
+                          <span className="font-mono font-black text-slate-900">{formatNumber(qtdAtivosComp)}</span>
+                        </div>
+                        <div className="bg-slate-50 p-1.5 rounded border border-slate-200">
+                          <span className="block text-slate-500 font-bold uppercase text-[8px]">Aposentados</span>
+                          <span className="font-mono font-black text-slate-900">{formatNumber(qtdAposentadosComp)}</span>
+                        </div>
+                        <div className="bg-slate-50 p-1.5 rounded border border-slate-200">
+                          <span className="block text-slate-500 font-bold uppercase text-[8px]">Pensionistas</span>
+                          <span className="font-mono font-black text-slate-900">{formatNumber(qtdPensionistasComp)}</span>
+                        </div>
+                        <div className="bg-indigo-50 p-1.5 rounded border border-indigo-200 text-indigo-950">
+                          <span className="block text-indigo-800 font-black uppercase text-[8px]">Total Geral</span>
+                          <span className="font-mono font-black">{formatNumber(totalMassaComp)}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
               {/* Quadro 1: Receitas e Transferências Recebidas */}
               <div className="break-inside-avoid">
                 <div className="flex items-center justify-between border-b-2 border-slate-900 pb-1 mb-2">
