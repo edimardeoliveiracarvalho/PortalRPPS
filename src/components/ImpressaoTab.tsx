@@ -223,6 +223,51 @@ export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialC
   const getTotalDespConsolidado = (c: string) => 
     getSubtotalRepDesp(c) + getSubtotalCapDesp(c) + getSubtotalOrgDesp(c);
 
+  const getSaldoBancarioFundo = (fundo: "reparticao" | "capitalizacao" | "orgaoGerenciador", c: string) => {
+    return investimentos
+      .filter(inv => inv.fundo === fundo)
+      .reduce((acc, inv) => {
+        const h = inv.historico.find(x => x.competencia === c);
+        return acc + (h?.saldoFinal || 0);
+      }, 0);
+  };
+
+  const getDemograficosFundo = (c: string) => {
+    const seg = seguradosAtivos.find(s => s.competencia === c);
+    const totalAtivos = seg?.quantidadeAtivos || 0;
+
+    const benRep = beneficios.find(b => b.competencia === c && b.fundo === "reparticao");
+    const benCap = beneficios.find(b => b.competencia === c && b.fundo === "capitalizacao");
+    const benCons = beneficios.find(b => b.competencia === c && b.fundo === "consolidado");
+
+    const inativosRep = benRep?.totalBeneficiarios || 0;
+    const inativosCap = benCap?.totalBeneficiarios || 0;
+    const inativosCons = benCons?.totalBeneficiarios || 0;
+
+    const repServContrib = getVal("reparticao", "receita", c, "Contribuição do Servidor");
+    const capServContrib = getVal("capitalizacao", "receita", c, "Contribuição do Servidor");
+    const totalServContrib = (repServContrib + capServContrib) || 1;
+
+    const ativosRep = Math.round(totalAtivos * (repServContrib / totalServContrib));
+    const ativosCap = totalAtivos - ativosRep;
+
+    const ratioRep = inativosRep > 0 ? (ativosRep / inativosRep) : 0;
+    const ratioCap = inativosCap > 0 ? (ativosCap / inativosCap) : 0;
+    const ratioCons = inativosCons > 0 ? (totalAtivos / inativosCons) : 0;
+
+    return {
+      totalAtivos,
+      inativosCons,
+      inativosRep,
+      inativosCap,
+      ativosRep,
+      ativosCap,
+      ratioRep,
+      ratioCap,
+      ratioCons
+    };
+  };
+
   // Segment allocation calculation for active competence comp
   const segmentoMap: Record<string, number> = {};
   let totalInvestimentosSaldo = 0;
@@ -248,12 +293,13 @@ export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialC
   const totalBeneficiariosComp = benObj?.totalBeneficiarios || (qtdAposentadosComp + qtdPensionistasComp);
   const totalMassaComp = qtdAtivosComp + totalBeneficiariosComp;
 
+  const jurosConsigReceita = getVal("capitalizacao", "receita", comp, "Juros de Empréstimos Consignados");
   const consgSaldoComp = consgObj?.saldoCarteira || 0;
-  const consgConcessoesComp = consgObj?.concessoesMes || 0;
-  const consgAmortizacoesComp = consgObj?.amortizacoesMes || 0;
-  const consgJurosComp = consgObj?.jurosMes || 0;
+  const consgConcessoesComp = consgObj?.concessoesMes ?? consgObj?.valorEmprestado ?? 0;
+  const consgAmortizacoesComp = consgObj?.amortizacoesMes ?? consgObj?.valorAmortizado ?? 0;
+  const consgJurosComp = consgObj?.jurosMes || jurosConsigReceita || 0;
   const consgInadimplenciaComp = consgObj?.inadimplencia || 0;
-  const consgContratosComp = consgObj?.contratosAtivos || 0;
+  const consgContratosComp = consgObj?.contratosAtivos || consgObj?.quantidadeContratos || 0;
 
   const retornoMesComp = metaObj?.retornoPercentual || 0;
   const metaMesComp = metaObj?.metaAtuarialPercentual || 0;
@@ -280,39 +326,53 @@ export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialC
       const totRecSemestre = monthsList.reduce((acc, c) => acc + getTotalRecConsolidado(c), 0);
       const totDespSemestre = monthsList.reduce((acc, c) => acc + getTotalDespConsolidado(c), 0);
       const resultadoSemestre = totRecSemestre - totDespSemestre;
+      const demoComp = getDemograficosFundo(comp);
 
       return `
 ========================================================================
 MARINGÁ PREVIDÊNCIA - PORTAL EXECUTIVO SGE
 ${titleMap[reportType]}
 Período Analisado: Janeiro/2026 a Junho/2026 (Mês a Mês)
+Competência de Referência: ${getMonthName(comp)}
 Data de Emissão: ${new Date().toLocaleDateString("pt-BR")} às ${new Date().toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
 ========================================================================
 
-1. RESUMO CONSOLIDADO ACUMULADO NO SEMESTRE:
-- Total das Receitas e Transferências Recebidas: ${formatCurrency(totRecSemestre)}
-- Total das Despesas Realizadas: ${formatCurrency(totDespSemestre)}
-- Resultado Financeiro Consolidado (Superávit/Déficit): ${formatCurrency(resultadoSemestre)}
+1. QUADRO 1: FUNDO EM REPARTIÇÃO (FUNDO FINANCEIRO)
+- Servidores Ativos (Repartição): ${formatNumber(demoComp.ativosRep)}
+- Servidores Inativos (Repartição): ${formatNumber(demoComp.inativosRep)}
+- Razão Ativos / Inativos: ${demoComp.ratioRep.toFixed(2)} ativos p/ inativo
+- Receitas + Transferências (Semestre): ${formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalRepRec(c), 0))}
+- Despesas Previdenciárias (Semestre): ${formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalRepDesp(c), 0))}
+- Resultado Financeiro Acumulado: ${formatCurrency(monthsList.reduce((acc, c) => acc + (getSubtotalRepRec(c) - getSubtotalRepDesp(c)), 0))}
+- Saldo Bancário / Disponibilidade (${monthShortLabels[monthsList.indexOf(comp)]}): ${formatCurrency(getSaldoBancarioFundo("reparticao", comp))}
+- Aportes por Insuficiência Recebidos (Semestre): ${formatCurrency(monthsList.reduce((acc, c) => acc + getVal("reparticao", "transferenciaRecebida", c, "Aporte por Insuficiência Financeira"), 0))}
 
-2. RECEITAS E TRANSFERÊNCIAS POR FUNDO (EVOLUÇÃO MENSAL):
-${monthsList.map((m, idx) => `
-[${monthShortLabels[idx]}]
-- Repartição Simples (Receitas + Transferências): ${formatCurrency(getSubtotalRepRec(m))}
-- Capitalização (Receitas): ${formatCurrency(getSubtotalCapRec(m))}
-- Órgão Gerenciador (Receitas + Transferências): ${formatCurrency(getSubtotalOrgRec(m))}
-- Total do Mês: ${formatCurrency(getTotalRecConsolidado(m))}
-`).join("")}
+2. QUADRO 2: FUNDO EM CAPITALIZAÇÃO (FUNDO PREVIDENCIÁRIO)
+- Servidores Ativos (Capitalização): ${formatNumber(demoComp.ativosCap)}
+- Servidores Inativos (Capitalização): ${formatNumber(demoComp.inativosCap)}
+- Razão Ativos / Inativos: ${demoComp.ratioCap.toFixed(2)} ativos p/ inativo
+- Receitas Próprias (Semestre): ${formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalCapRec(c), 0))}
+- Despesas Previdenciárias (Semestre): ${formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalCapDesp(c), 0))}
+- Superávit Financeiro Acumulado: ${formatCurrency(monthsList.reduce((acc, c) => acc + (getSubtotalCapRec(c) - getSubtotalCapDesp(c)), 0))}
+- Saldo Bancário / Patrimônio Líquido (${monthShortLabels[monthsList.indexOf(comp)]}): ${formatCurrency(getSaldoBancarioFundo("capitalizacao", comp))}
 
-3. DESPESAS POR FUNDO (EVOLUÇÃO MENSAL):
-${monthsList.map((m, idx) => `
-[${monthShortLabels[idx]}]
-- Repartição Simples (Benefícios): ${formatCurrency(getSubtotalRepDesp(m))}
-- Capitalização (Benefícios): ${formatCurrency(getSubtotalCapDesp(m))}
-- Órgão Gerenciador (ADM): ${formatCurrency(getSubtotalOrgDesp(m))}
-- Total do Mês: ${formatCurrency(getTotalDespConsolidado(m))}
-`).join("")}
+3. QUADRO 3: ÓRGÃO GERENCIADOR (TAXA DE ADMINISTRAÇÃO)
+- Segurados Gerenciados: ${formatNumber(demoComp.totalAtivos + demoComp.inativosCons)}
+- Receitas + Transferências (Semestre): ${formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalOrgRec(c), 0))}
+- Despesas Administrativas (Semestre): ${formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalOrgDesp(c), 0))}
+- Resultado Acumulado da Taxa de ADM: ${formatCurrency(monthsList.reduce((acc, c) => acc + (getSubtotalOrgRec(c) - getSubtotalOrgDesp(c)), 0))}
+- Saldo Bancário / Disponibilidade ADM (${monthShortLabels[monthsList.indexOf(comp)]}): ${formatCurrency(getSaldoBancarioFundo("orgaoGerenciador", comp))}
 
-4. OBSERVAÇÕES E PARECER TÉCNICO:
+4. QUADRO CONSOLIDADO: SÍNTESE EXECUTIVA DO RPPS
+- Servidores Ativos Totais: ${formatNumber(demoComp.totalAtivos)}
+- Inativos Totais: ${formatNumber(demoComp.inativosCons)}
+- Razão Ativos/Inativos Consolidada: ${demoComp.ratioCons.toFixed(2)} ativos p/ inativo
+- Receitas e Transferências Totais: ${formatCurrency(totRecSemestre)}
+- Despesas Totais Realizadas: ${formatCurrency(totDespSemestre)}
+- Resultado Líquido Consolidado: ${formatCurrency(resultadoSemestre)}
+- Patrimônio / Disponibilidade Total do RPPS: ${formatCurrency(getSaldoBancarioFundo("capitalizacao", comp) + getSaldoBancarioFundo("reparticao", comp) + getSaldoBancarioFundo("orgaoGerenciador", comp))}
+
+5. OBSERVAÇÕES E PARECER TÉCNICO:
 ${customNotes}
 
 ========================================================================
@@ -652,7 +712,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
               </div>
               <div>
                 <h1 className="text-base sm:text-lg font-black uppercase text-slate-900 tracking-tight">Maringá Previdência</h1>
-                <p className="text-xs font-bold text-slate-700 uppercase tracking-wide">Instituto de Previdência dos Servidores Públicos do Município de Maringá</p>
+                <p className="text-xs font-bold text-slate-700 uppercase tracking-wide">Previdência dos Servidores Públicos Municipais de Maringá</p>
                 <p className="text-[10px] text-slate-500">Sistema de Gestão Estratégica (SGE) • CNPJ: 78.074.804/0001-22</p>
               </div>
             </div>
@@ -955,415 +1015,767 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
 
               </div>
 
-              {/* Quadro 1: Receitas e Transferências Recebidas */}
-              <div className="break-inside-avoid">
-                <div className="flex items-center justify-between border-b-2 border-slate-900 pb-1 mb-2">
-                  <h3 className="text-xs font-black uppercase text-slate-900 flex items-center space-x-1.5">
-                    <TrendingUp className="w-4 h-4 text-emerald-700" />
-                    <span>Quadro 1: Demonstrativo de Receitas e Transferências Recebidas (Mês a Mês)</span>
-                  </h3>
-                  <span className="text-[10px] text-slate-500 font-mono">Valores em Reais (R$)</span>
+              {/* ================================================================================= */}
+              {/* QUADRO 1, 2, 3 & CONSOLIDADO: RECEITAS E DESPESAS SEGREGADO POR FUNDO              */}
+              {/* ================================================================================= */}
+              <div className="space-y-6">
+
+                {/* Banner Informativo Superior */}
+                <div className="bg-slate-900 text-white p-3.5 rounded-lg shadow-xs border border-slate-800 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <div>
+                    <div className="flex items-center space-x-2 mb-1">
+                      <span className="bg-emerald-500 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded">
+                        Relatório Executivo Detalhado
+                      </span>
+                      <span className="text-slate-400 text-[11px] font-medium">
+                        Demonstrativo por Fundo • Competência {getMonthName(comp)}
+                      </span>
+                    </div>
+                    <h2 className="text-sm font-bold text-slate-100">
+                      Segregação de Massas, Movimentação Financeira e Razão Demográfica
+                    </h2>
+                  </div>
+                  <div className="flex items-center space-x-4 bg-slate-800/80 px-3 py-1.5 rounded border border-slate-700/60 text-right">
+                    <div>
+                      <span className="block text-[9px] uppercase font-bold text-slate-400">Total Vidas RPPS</span>
+                      <span className="text-sm font-black text-amber-300">
+                        {formatNumber(getDemograficosFundo(comp).totalAtivos + getDemograficosFundo(comp).inativosCons)}
+                      </span>
+                    </div>
+                    <div className="border-l border-slate-700 pl-4">
+                      <span className="block text-[9px] uppercase font-bold text-slate-400">Razão Ativos/Inativos</span>
+                      <span className="text-sm font-black text-emerald-400">
+                        {getDemograficosFundo(comp).ratioCons.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse border border-slate-300 text-[9px]">
-                    <thead>
-                      <tr className="bg-slate-200 text-slate-900 font-bold uppercase tracking-wider">
-                        <th className="p-1.5 border border-slate-300 min-w-[180px]">Fundo / Categoria de Receita</th>
-                        {monthShortLabels.map((lbl, i) => (
-                          <th key={i} className="p-1.5 border border-slate-300 text-right w-[85px]">{lbl}</th>
-                        ))}
-                        <th className="p-1.5 border border-slate-300 text-right bg-slate-300 text-slate-950 font-black w-[100px]">Total Semestre</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                {/* ================================================================================= */}
+                {/* QUADRO 1: FUNDO EM REPARTIÇÃO (FUNDO FINANCEIRO)                                 */}
+                {/* ================================================================================= */}
+                <div className="break-inside-avoid border border-amber-300 bg-amber-50/20 rounded-xl p-4 shadow-xs space-y-4">
+                  
+                  {/* Cabeçalho do Quadro 1 */}
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between pb-2 border-b-2 border-amber-800 gap-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="p-2 bg-amber-800 text-white rounded-lg shadow-xs">
+                        <Scale className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-black uppercase text-amber-950 tracking-tight">
+                          QUADRO 1: FUNDO EM REPARTIÇÃO (FUNDO FINANCEIRO)
+                        </h3>
+                        <p className="text-[11px] text-amber-800 font-medium">
+                          Regime Financeiro • Cobertura de Benefícios com Aporte de Insuficiência do Ente
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2 text-[10px] font-bold">
+                      <span className="bg-amber-100 text-amber-900 px-2.5 py-1 rounded border border-amber-300">
+                        Aporte Semestral: {formatCurrency(monthsList.reduce((acc, c) => acc + getVal("reparticao", "transferenciaRecebida", c, "Aporte por Insuficiência Financeira"), 0))}
+                      </span>
+                    </div>
+                  </div>
 
-                      {/* --- REPARTIÇÃO SIMPLES --- */}
-                      <tr className="bg-slate-100 font-black text-slate-900 uppercase">
-                        <td colSpan={8} className="p-1.5 border border-slate-300 bg-amber-50/80 text-amber-950">
-                          1. FUNDO FINANCEIRO (REPARTIÇÃO SIMPLES)
-                        </td>
-                      </tr>
-                      {repReceitaCats.map((cat, idx) => {
-                        const totalCat = monthsList.reduce((acc, c) => acc + getVal("reparticao", "receita", c, cat), 0);
-                        return (
-                          <tr key={`rep_rec_${idx}`} className="hover:bg-slate-50 border-b border-slate-200">
-                            <td className="p-1.5 border border-slate-300 pl-4 font-medium text-slate-800">{cat}</td>
-                            {monthsList.map((c, i) => (
-                              <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-slate-700">
-                                {formatCurrency(getVal("reparticao", "receita", c, cat))}
-                              </td>
-                            ))}
-                            <td className="p-1.5 border border-slate-300 text-right font-mono font-bold text-slate-900 bg-slate-50">
-                              {formatCurrency(totalCat)}
+                  {/* Cards Rápidos de Indicadores - Quadro 1 */}
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5">
+                    <div className="bg-white p-2.5 rounded-lg border border-amber-200 shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-amber-800">Servidores Ativos</span>
+                      <span className="text-base font-black text-amber-950">
+                        {formatNumber(getDemograficosFundo(comp).ativosRep)}
+                      </span>
+                      <span className="text-[9px] text-slate-500 block">Contribuintes em Repartição</span>
+                    </div>
+
+                    <div className="bg-white p-2.5 rounded-lg border border-amber-200 shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-amber-800">Servidores Inativos</span>
+                      <span className="text-base font-black text-amber-950">
+                        {formatNumber(getDemograficosFundo(comp).inativosRep)}
+                      </span>
+                      <span className="text-[9px] text-slate-500 block">Aposentados e Pensionistas</span>
+                    </div>
+
+                    <div className="bg-amber-900 text-white p-2.5 rounded-lg shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-amber-200">Razão Ativos / Inativos</span>
+                      <span className="text-base font-black text-amber-300">
+                        {getDemograficosFundo(comp).ratioRep.toFixed(2)}
+                      </span>
+                      <span className="text-[9px] text-amber-100 block">Ativos por Beneficiário</span>
+                    </div>
+
+                    <div className="bg-white p-2.5 rounded-lg border border-amber-200 shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-amber-800">Saldo Bancário do Fundo</span>
+                      <span className="text-base font-black text-amber-950">
+                        {formatCurrency(getSaldoBancarioFundo("reparticao", comp))}
+                      </span>
+                      <span className="text-[9px] text-slate-500 block">Disponibilidade ({monthShortLabels[monthsList.indexOf(comp)]})</span>
+                    </div>
+
+                    <div className="bg-white p-2.5 rounded-lg border border-amber-200 shadow-xs col-span-2 md:col-span-1">
+                      <span className="block text-[9px] font-bold uppercase text-amber-800">Aporte Insuficiência ({monthShortLabels[monthsList.indexOf(comp)]})</span>
+                      <span className="text-base font-black text-amber-900">
+                        {formatCurrency(getVal("reparticao", "transferenciaRecebida", comp, "Aporte por Insuficiência Financeira"))}
+                      </span>
+                      <span className="text-[9px] text-slate-500 block">Transferência do Ente</span>
+                    </div>
+                  </div>
+
+                  {/* Tabela Financeira e Demográfica Completa - Quadro 1 */}
+                  <div className="overflow-x-auto bg-white rounded-lg border border-amber-300 shadow-xs">
+                    <table className="w-full text-left border-collapse text-[9px]">
+                      <thead>
+                        <tr className="bg-amber-900 text-white font-bold uppercase tracking-wider">
+                          <th className="p-2 border border-amber-800 min-w-[200px]">Discriminação / Competência</th>
+                          {monthShortLabels.map((lbl, i) => (
+                            <th key={i} className="p-2 border border-amber-800 text-right w-[85px]">{lbl}</th>
+                          ))}
+                          <th className="p-2 border border-amber-800 text-right bg-amber-950 text-amber-300 font-black w-[105px]">Acumulado Semestre</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* DADOS DEMOGRÁFICOS */}
+                        <tr className="bg-amber-100/70 font-black text-amber-950 uppercase border-b border-amber-300">
+                          <td colSpan={8} className="p-1.5 pl-3">1. QUADRO DEMOGRÁFICO DO FUNDO EM REPARTIÇÃO</td>
+                        </tr>
+                        <tr className="hover:bg-amber-50/50 border-b border-slate-200">
+                          <td className="p-1.5 pl-4 font-semibold text-slate-800">Servidores Ativos (Contribuintes)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-slate-700">{formatNumber(getDemograficosFundo(c).ativosRep)}</td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-bold text-slate-900 bg-amber-50">{formatNumber(getDemograficosFundo(comp).ativosRep)}</td>
+                        </tr>
+                        <tr className="hover:bg-amber-50/50 border-b border-slate-200">
+                          <td className="p-1.5 pl-4 font-semibold text-slate-800">Servidores Inativos e Pensionistas</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-slate-700">{formatNumber(getDemograficosFundo(c).inativosRep)}</td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-bold text-slate-900 bg-amber-50">{formatNumber(getDemograficosFundo(comp).inativosRep)}</td>
+                        </tr>
+                        <tr className="bg-amber-50 font-bold border-b border-amber-200 text-amber-950">
+                          <td className="p-1.5 pl-4 uppercase">Razão Ativos / Inativos (Ativos por Inativo)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-amber-900 font-extrabold">
+                              {getDemograficosFundo(c).ratioRep.toFixed(2)}
                             </td>
-                          </tr>
-                        );
-                      })}
-                      {/* Transferência Repartição */}
-                      <tr className="hover:bg-slate-50 border-b border-slate-200 bg-amber-50/30">
-                        <td className="p-1.5 border border-slate-300 pl-4 font-medium text-amber-900 italic">
-                          Aporte por Insuficiência Financeira (Transferência)
-                        </td>
-                        {monthsList.map((c, i) => (
-                          <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-amber-900">
-                            {formatCurrency(getVal("reparticao", "transferenciaRecebida", c, "Aporte por Insuficiência Financeira"))}
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-black text-amber-950 bg-amber-200/60">
+                            {getDemograficosFundo(comp).ratioRep.toFixed(2)}
                           </td>
-                        ))}
-                        <td className="p-1.5 border border-slate-300 text-right font-mono font-bold text-amber-950 bg-amber-100/50">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + getVal("reparticao", "transferenciaRecebida", c, "Aporte por Insuficiência Financeira"), 0))}
-                        </td>
-                      </tr>
-                      {/* Subtotal Repartição */}
-                      <tr className="bg-slate-200 font-bold text-slate-900">
-                        <td className="p-1.5 border border-slate-300 uppercase">Subtotal Receitas - Repartição Simples</td>
-                        {monthsList.map((c, i) => (
-                          <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-emerald-800 font-extrabold">
-                            {formatCurrency(getSubtotalRepRec(c))}
-                          </td>
-                        ))}
-                        <td className="p-1.5 border border-slate-300 text-right font-mono font-black text-emerald-900 bg-slate-300">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalRepRec(c), 0))}
-                        </td>
-                      </tr>
+                        </tr>
 
-                      {/* --- CAPITALIZAÇÃO --- */}
-                      <tr className="bg-slate-100 font-black text-slate-900 uppercase">
-                        <td colSpan={8} className="p-1.5 border border-slate-300 bg-blue-50/80 text-blue-950">
-                          2. FUNDO PREVIDENCIÁRIO (CAPITALIZAÇÃO)
-                        </td>
-                      </tr>
-                      {capReceitaCats.map((cat, idx) => {
-                        const totalCat = monthsList.reduce((acc, c) => acc + getVal("capitalizacao", "receita", c, cat), 0);
-                        return (
-                          <tr key={`cap_rec_${idx}`} className="hover:bg-slate-50 border-b border-slate-200">
-                            <td className="p-1.5 border border-slate-300 pl-4 font-medium text-slate-800">{cat}</td>
-                            {monthsList.map((c, i) => (
-                              <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-slate-700">
-                                {formatCurrency(getVal("capitalizacao", "receita", c, cat))}
-                              </td>
-                            ))}
-                            <td className="p-1.5 border border-slate-300 text-right font-mono font-bold text-slate-900 bg-slate-50">
-                              {formatCurrency(totalCat)}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                      {/* Subtotal Capitalização */}
-                      <tr className="bg-slate-200 font-bold text-slate-900">
-                        <td className="p-1.5 border border-slate-300 uppercase">Subtotal Receitas - Capitalização</td>
-                        {monthsList.map((c, i) => (
-                          <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-emerald-800 font-extrabold">
-                            {formatCurrency(getSubtotalCapRec(c))}
-                          </td>
-                        ))}
-                        <td className="p-1.5 border border-slate-300 text-right font-mono font-black text-emerald-900 bg-slate-300">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalCapRec(c), 0))}
-                        </td>
-                      </tr>
-
-                      {/* --- ÓRGÃO GERENCIADOR --- */}
-                      <tr className="bg-slate-100 font-black text-slate-900 uppercase">
-                        <td colSpan={8} className="p-1.5 border border-slate-300 bg-indigo-50/80 text-indigo-950">
-                          3. ÓRGÃO GERENCIADOR (TAXA DE ADMINISTRAÇÃO)
-                        </td>
-                      </tr>
-                      {orgReceitaCats.map((cat, idx) => {
-                        const totalCat = monthsList.reduce((acc, c) => acc + getVal("orgaoGerenciador", "receita", c, cat), 0);
-                        return (
-                          <tr key={`org_rec_${idx}`} className="hover:bg-slate-50 border-b border-slate-200">
-                            <td className="p-1.5 border border-slate-300 pl-4 font-medium text-slate-800">{cat}</td>
-                            {monthsList.map((c, i) => (
-                              <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-slate-700">
-                                {formatCurrency(getVal("orgaoGerenciador", "receita", c, cat))}
-                              </td>
-                            ))}
-                            <td className="p-1.5 border border-slate-300 text-right font-mono font-bold text-slate-900 bg-slate-50">
-                              {formatCurrency(totalCat)}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                      {/* Transferência Órgão Gerenciador */}
-                      <tr className="hover:bg-slate-50 border-b border-slate-200 bg-indigo-50/30">
-                        <td className="p-1.5 border border-slate-300 pl-4 font-medium text-indigo-900 italic">
-                          Interferência Financeira (Transferência)
-                        </td>
-                        {monthsList.map((c, i) => (
-                          <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-indigo-900">
-                            {formatCurrency(getVal("orgaoGerenciador", "transferenciaRecebida", c, "Interferência Financeira"))}
-                          </td>
-                        ))}
-                        <td className="p-1.5 border border-slate-300 text-right font-mono font-bold text-indigo-950 bg-indigo-100/50">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + getVal("orgaoGerenciador", "transferenciaRecebida", c, "Interferência Financeira"), 0))}
-                        </td>
-                      </tr>
-                      {/* Subtotal Órgão Gerenciador */}
-                      <tr className="bg-slate-200 font-bold text-slate-900">
-                        <td className="p-1.5 border border-slate-300 uppercase">Subtotal Receitas - Órgão Gerenciador</td>
-                        {monthsList.map((c, i) => (
-                          <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-emerald-800 font-extrabold">
-                            {formatCurrency(getSubtotalOrgRec(c))}
-                          </td>
-                        ))}
-                        <td className="p-1.5 border border-slate-300 text-right font-mono font-black text-emerald-900 bg-slate-300">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalOrgRec(c), 0))}
-                        </td>
-                      </tr>
-
-                      {/* --- TOTAL CONSOLIDADO DE RECEITAS --- */}
-                      <tr className="bg-blue-900 text-white font-black text-[10px] uppercase">
-                        <td className="p-2 border border-slate-900">TOTAL CONSOLIDADO DE RECEITAS E TRANSFERÊNCIAS</td>
-                        {monthsList.map((c, i) => (
-                          <td key={i} className="p-2 border border-slate-900 text-right font-mono text-emerald-300">
-                            {formatCurrency(getTotalRecConsolidado(c))}
-                          </td>
-                        ))}
-                        <td className="p-2 border border-slate-900 text-right font-mono text-yellow-300 bg-blue-950 font-black">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + getTotalRecConsolidado(c), 0))}
-                        </td>
-                      </tr>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Quadro 2: Despesas Previdenciárias e Administrativas */}
-              <div className="break-inside-avoid">
-                <div className="flex items-center justify-between border-b-2 border-slate-900 pb-1 mb-2">
-                  <h3 className="text-xs font-black uppercase text-slate-900 flex items-center space-x-1.5">
-                    <Coins className="w-4 h-4 text-red-700" />
-                    <span>Quadro 2: Demonstrativo de Despesas Previdenciárias e Administrativas (Mês a Mês)</span>
-                  </h3>
-                  <span className="text-[10px] text-slate-500 font-mono">Valores em Reais (R$)</span>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse border border-slate-300 text-[9px]">
-                    <thead>
-                      <tr className="bg-slate-200 text-slate-900 font-bold uppercase tracking-wider">
-                        <th className="p-1.5 border border-slate-300 min-w-[180px]">Fundo / Categoria de Despesa</th>
-                        {monthShortLabels.map((lbl, i) => (
-                          <th key={i} className="p-1.5 border border-slate-300 text-right w-[85px]">{lbl}</th>
-                        ))}
-                        <th className="p-1.5 border border-slate-300 text-right bg-slate-300 text-slate-950 font-black w-[100px]">Total Semestre</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-
-                      {/* --- REPARTIÇÃO SIMPLES DESPESAS --- */}
-                      <tr className="bg-slate-100 font-black text-slate-900 uppercase">
-                        <td colSpan={8} className="p-1.5 border border-slate-300 bg-amber-50/80 text-amber-950">
-                          1. FUNDO FINANCEIRO (REPARTIÇÃO SIMPLES)
-                        </td>
-                      </tr>
-                      {repDespesaCats.map((cat, idx) => {
-                        const totalCat = monthsList.reduce((acc, c) => acc + getVal("reparticao", "despesa", c, cat), 0);
-                        return (
-                          <tr key={`rep_desp_${idx}`} className="hover:bg-slate-50 border-b border-slate-200">
-                            <td className="p-1.5 border border-slate-300 pl-4 font-medium text-slate-800">{cat}</td>
-                            {monthsList.map((c, i) => (
-                              <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-slate-700">
-                                {formatCurrency(getVal("reparticao", "despesa", c, cat))}
-                              </td>
-                            ))}
-                            <td className="p-1.5 border border-slate-300 text-right font-mono font-bold text-slate-900 bg-slate-50">
-                              {formatCurrency(totalCat)}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                      {/* Subtotal Repartição Despesas */}
-                      <tr className="bg-slate-200 font-bold text-slate-900">
-                        <td className="p-1.5 border border-slate-300 uppercase">Subtotal Despesas - Repartição Simples</td>
-                        {monthsList.map((c, i) => (
-                          <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-red-800 font-extrabold">
-                            {formatCurrency(getSubtotalRepDesp(c))}
-                          </td>
-                        ))}
-                        <td className="p-1.5 border border-slate-300 text-right font-mono font-black text-red-900 bg-slate-300">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalRepDesp(c), 0))}
-                        </td>
-                      </tr>
-
-                      {/* --- CAPITALIZAÇÃO DESPESAS --- */}
-                      <tr className="bg-slate-100 font-black text-slate-900 uppercase">
-                        <td colSpan={8} className="p-1.5 border border-slate-300 bg-blue-50/80 text-blue-950">
-                          2. FUNDO PREVIDENCIÁRIO (CAPITALIZAÇÃO)
-                        </td>
-                      </tr>
-                      {capDespesaCats.map((cat, idx) => {
-                        const totalCat = monthsList.reduce((acc, c) => acc + getVal("capitalizacao", "despesa", c, cat), 0);
-                        return (
-                          <tr key={`cap_desp_${idx}`} className="hover:bg-slate-50 border-b border-slate-200">
-                            <td className="p-1.5 border border-slate-300 pl-4 font-medium text-slate-800">{cat}</td>
-                            {monthsList.map((c, i) => (
-                              <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-slate-700">
-                                {formatCurrency(getVal("capitalizacao", "despesa", c, cat))}
-                              </td>
-                            ))}
-                            <td className="p-1.5 border border-slate-300 text-right font-mono font-bold text-slate-900 bg-slate-50">
-                              {formatCurrency(totalCat)}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                      {/* Subtotal Capitalização Despesas */}
-                      <tr className="bg-slate-200 font-bold text-slate-900">
-                        <td className="p-1.5 border border-slate-300 uppercase">Subtotal Despesas - Capitalização</td>
-                        {monthsList.map((c, i) => (
-                          <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-red-800 font-extrabold">
-                            {formatCurrency(getSubtotalCapDesp(c))}
-                          </td>
-                        ))}
-                        <td className="p-1.5 border border-slate-300 text-right font-mono font-black text-red-900 bg-slate-300">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalCapDesp(c), 0))}
-                        </td>
-                      </tr>
-
-                      {/* --- ÓRGÃO GERENCIADOR DESPESAS --- */}
-                      <tr className="bg-slate-100 font-black text-slate-900 uppercase">
-                        <td colSpan={8} className="p-1.5 border border-slate-300 bg-indigo-50/80 text-indigo-950">
-                          3. ÓRGÃO GERENCIADOR (TAXA DE ADMINISTRAÇÃO)
-                        </td>
-                      </tr>
-                      {orgDespesaCats.map((cat, idx) => {
-                        const totalCat = monthsList.reduce((acc, c) => acc + getVal("orgaoGerenciador", "despesa", c, cat), 0);
-                        return (
-                          <tr key={`org_desp_${idx}`} className="hover:bg-slate-50 border-b border-slate-200">
-                            <td className="p-1.5 border border-slate-300 pl-4 font-medium text-slate-800">{cat}</td>
-                            {monthsList.map((c, i) => (
-                              <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-slate-700">
-                                {formatCurrency(getVal("orgaoGerenciador", "despesa", c, cat))}
-                              </td>
-                            ))}
-                            <td className="p-1.5 border border-slate-300 text-right font-mono font-bold text-slate-900 bg-slate-50">
-                              {formatCurrency(totalCat)}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                      {/* Subtotal Órgão Gerenciador Despesas */}
-                      <tr className="bg-slate-200 font-bold text-slate-900">
-                        <td className="p-1.5 border border-slate-300 uppercase">Subtotal Despesas - Órgão Gerenciador</td>
-                        {monthsList.map((c, i) => (
-                          <td key={i} className="p-1.5 border border-slate-300 text-right font-mono text-red-800 font-extrabold">
-                            {formatCurrency(getSubtotalOrgDesp(c))}
-                          </td>
-                        ))}
-                        <td className="p-1.5 border border-slate-300 text-right font-mono font-black text-red-900 bg-slate-300">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalOrgDesp(c), 0))}
-                        </td>
-                      </tr>
-
-                      {/* --- TOTAL CONSOLIDADO DE DESPESAS --- */}
-                      <tr className="bg-slate-900 text-white font-black text-[10px] uppercase">
-                        <td className="p-2 border border-slate-900">TOTAL CONSOLIDADO DE DESPESAS</td>
-                        {monthsList.map((c, i) => (
-                          <td key={i} className="p-2 border border-slate-900 text-right font-mono text-red-300">
-                            {formatCurrency(getTotalDespConsolidado(c))}
-                          </td>
-                        ))}
-                        <td className="p-2 border border-slate-900 text-right font-mono text-red-200 bg-slate-950 font-black">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + getTotalDespConsolidado(c), 0))}
-                        </td>
-                      </tr>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Quadro 3: Resultado Financeiro (Superávit / Déficit) */}
-              <div className="break-inside-avoid">
-                <div className="flex items-center justify-between border-b-2 border-slate-900 pb-1 mb-2">
-                  <h3 className="text-xs font-black uppercase text-slate-900 flex items-center space-x-1.5">
-                    <Scale className="w-4 h-4 text-blue-900" />
-                    <span>Quadro 3: Resultado Financeiro por Fundo e Consolidado (Mês a Mês)</span>
-                  </h3>
-                  <span className="text-[10px] text-slate-500 font-mono">(Receitas + Transferências) - Despesas</span>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse border border-slate-300 text-[9.5px]">
-                    <thead>
-                      <tr className="bg-slate-200 text-slate-900 font-bold uppercase tracking-wider">
-                        <th className="p-2 border border-slate-300 min-w-[180px]">Fundo Previdenciário / Administrativo</th>
-                        {monthShortLabels.map((lbl, i) => (
-                          <th key={i} className="p-2 border border-slate-300 text-right w-[85px]">{lbl}</th>
-                        ))}
-                        <th className="p-2 border border-slate-300 text-right bg-slate-300 text-slate-950 font-black w-[100px]">Resultado Semestre</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {/* Repartição */}
-                      <tr className="hover:bg-slate-50 border-b border-slate-200">
-                        <td className="p-2 border border-slate-300 font-bold text-slate-800">1. Fundo Financeiro (Repartição Simples)</td>
-                        {monthsList.map((c, i) => {
-                          const res = getSubtotalRepRec(c) - getSubtotalRepDesp(c);
+                        {/* RECEITAS PRÓPRIAS */}
+                        <tr className="bg-amber-100/70 font-black text-amber-950 uppercase border-b border-amber-300">
+                          <td colSpan={8} className="p-1.5 pl-3">2. RECEITAS PRÓPRIAS E TRANSFERÊNCIAS RECEBIDAS</td>
+                        </tr>
+                        {repReceitaCats.map((cat, idx) => {
+                          const totalCat = monthsList.reduce((acc, c) => acc + getVal("reparticao", "receita", c, cat), 0);
                           return (
-                            <td key={i} className={`p-2 border border-slate-300 text-right font-mono font-bold ${res >= 0 ? "text-emerald-800" : "text-red-800"}`}>
-                              {formatCurrency(res)}
-                            </td>
+                            <tr key={`rep_rec_${idx}`} className="hover:bg-amber-50/50 border-b border-slate-200">
+                              <td className="p-1.5 pl-4 font-medium text-slate-800">{cat}</td>
+                              {monthsList.map((c, i) => (
+                                <td key={i} className="p-1.5 text-right font-mono text-slate-700">
+                                  {formatCurrency(getVal("reparticao", "receita", c, cat))}
+                                </td>
+                              ))}
+                              <td className="p-1.5 text-right font-mono font-bold text-slate-900 bg-amber-50/50">
+                                {formatCurrency(totalCat)}
+                              </td>
+                            </tr>
                           );
                         })}
-                        <td className="p-2 border border-slate-300 text-right font-mono font-black bg-slate-100 text-slate-900">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + (getSubtotalRepRec(c) - getSubtotalRepDesp(c)), 0))}
-                        </td>
-                      </tr>
-
-                      {/* Capitalização */}
-                      <tr className="hover:bg-slate-50 border-b border-slate-200">
-                        <td className="p-2 border border-slate-300 font-bold text-slate-800">2. Fundo Previdenciário (Capitalização)</td>
-                        {monthsList.map((c, i) => {
-                          const res = getSubtotalCapRec(c) - getSubtotalCapDesp(c);
-                          return (
-                            <td key={i} className={`p-2 border border-slate-300 text-right font-mono font-bold ${res >= 0 ? "text-emerald-800" : "text-red-800"}`}>
-                              {formatCurrency(res)}
+                        {/* Transferência Repartição */}
+                        <tr className="bg-amber-100/40 font-bold border-b border-amber-200 text-amber-900">
+                          <td className="p-1.5 pl-4 italic">Aporte por Insuficiência Financeira (Transferência do Ente)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-amber-900">
+                              {formatCurrency(getVal("reparticao", "transferenciaRecebida", c, "Aporte por Insuficiência Financeira"))}
                             </td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-bold text-amber-950 bg-amber-200/50">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + getVal("reparticao", "transferenciaRecebida", c, "Aporte por Insuficiência Financeira"), 0))}
+                          </td>
+                        </tr>
+                        {/* Subtotal Repartição */}
+                        <tr className="bg-amber-200/80 font-black text-amber-950 border-b border-amber-400">
+                          <td className="p-1.5 uppercase">TOTAL DE RECEITAS E TRANSFERÊNCIAS (REPARTIÇÃO)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-emerald-900 font-black">
+                              {formatCurrency(getSubtotalRepRec(c))}
+                            </td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-black text-emerald-950 bg-amber-300">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalRepRec(c), 0))}
+                          </td>
+                        </tr>
+
+                        {/* DESPESAS */}
+                        <tr className="bg-amber-100/70 font-black text-amber-950 uppercase border-b border-amber-300">
+                          <td colSpan={8} className="p-1.5 pl-3">3. DESPESAS PREVIDENCIÁRIAS REALIZADAS</td>
+                        </tr>
+                        {repDespesaCats.map((cat, idx) => {
+                          const totalCat = monthsList.reduce((acc, c) => acc + getVal("reparticao", "despesa", c, cat), 0);
+                          return (
+                            <tr key={`rep_desp_${idx}`} className="hover:bg-amber-50/50 border-b border-slate-200">
+                              <td className="p-1.5 pl-4 font-medium text-slate-800">{cat}</td>
+                              {monthsList.map((c, i) => (
+                                <td key={i} className="p-1.5 text-right font-mono text-slate-700">
+                                  {formatCurrency(getVal("reparticao", "despesa", c, cat))}
+                                </td>
+                              ))}
+                              <td className="p-1.5 text-right font-mono font-bold text-slate-900 bg-amber-50/50">
+                                {formatCurrency(totalCat)}
+                              </td>
+                            </tr>
                           );
                         })}
-                        <td className="p-2 border border-slate-300 text-right font-mono font-black bg-slate-100 text-emerald-900">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + (getSubtotalCapRec(c) - getSubtotalCapDesp(c)), 0))}
-                        </td>
-                      </tr>
-
-                      {/* Órgão Gerenciador */}
-                      <tr className="hover:bg-slate-50 border-b border-slate-200">
-                        <td className="p-2 border border-slate-300 font-bold text-slate-800">3. Órgão Gerenciador (Taxa de Administração)</td>
-                        {monthsList.map((c, i) => {
-                          const res = getSubtotalOrgRec(c) - getSubtotalOrgDesp(c);
-                          return (
-                            <td key={i} className={`p-2 border border-slate-300 text-right font-mono font-bold ${res >= 0 ? "text-emerald-800" : "text-red-800"}`}>
-                              {formatCurrency(res)}
+                        {/* Subtotal Despesas Repartição */}
+                        <tr className="bg-red-100/70 font-black text-red-950 border-b border-red-300">
+                          <td className="p-1.5 uppercase">TOTAL DAS DESPESAS PREVIDENCIÁRIAS (REPARTIÇÃO)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-red-900 font-black">
+                              {formatCurrency(getSubtotalRepDesp(c))}
                             </td>
-                          );
-                        })}
-                        <td className="p-2 border border-slate-300 text-right font-mono font-black bg-slate-100 text-slate-900">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + (getSubtotalOrgRec(c) - getSubtotalOrgDesp(c)), 0))}
-                        </td>
-                      </tr>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-black text-red-950 bg-red-200">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalRepDesp(c), 0))}
+                          </td>
+                        </tr>
 
-                      {/* RESULTADO CONSOLIDADO */}
-                      <tr className="bg-slate-900 text-white font-black text-[10.5px] uppercase">
-                        <td className="p-2 border border-slate-900">RESULTADO LIQUIDO CONSOLIDADO DO RPPS</td>
-                        {monthsList.map((c, i) => {
-                          const resCons = getTotalRecConsolidado(c) - getTotalDespConsolidado(c);
-                          return (
-                            <td key={i} className={`p-2 border border-slate-900 text-right font-mono ${resCons >= 0 ? "text-emerald-300" : "text-red-300"}`}>
-                              {formatCurrency(resCons)}
+                        {/* RESULTADO E SALDO BANCÁRIO */}
+                        <tr className="bg-amber-100/70 font-black text-amber-950 uppercase border-b border-amber-300">
+                          <td colSpan={8} className="p-1.5 pl-3">4. RESULTADO FINANCEIRO E SALDO BANCÁRIO</td>
+                        </tr>
+                        <tr className="bg-white font-bold border-b border-slate-300">
+                          <td className="p-1.5 pl-4 text-slate-900 uppercase">Resultado Financeiro Líquido do Mês</td>
+                          {monthsList.map((c, i) => {
+                            const res = getSubtotalRepRec(c) - getSubtotalRepDesp(c);
+                            return (
+                              <td key={i} className={`p-1.5 text-right font-mono font-extrabold ${res >= 0 ? "text-emerald-700" : "text-red-700"}`}>
+                                {formatCurrency(res)}
+                              </td>
+                            );
+                          })}
+                          <td className="p-1.5 text-right font-mono font-black bg-amber-100 text-slate-900">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + (getSubtotalRepRec(c) - getSubtotalRepDesp(c)), 0))}
+                          </td>
+                        </tr>
+                        <tr className="bg-slate-900 text-white font-black">
+                          <td className="p-2 uppercase text-amber-300">Saldo Bancário / Disponibilidade Financeira</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-2 text-right font-mono text-emerald-300">
+                              {formatCurrency(getSaldoBancarioFundo("reparticao", c))}
                             </td>
-                          );
-                        })}
-                        <td className="p-2 border border-slate-900 text-right font-mono text-amber-300 bg-slate-950 font-black">
-                          {formatCurrency(monthsList.reduce((acc, c) => acc + (getTotalRecConsolidado(c) - getTotalDespConsolidado(c)), 0))}
-                        </td>
-                      </tr>
-
-                    </tbody>
-                  </table>
+                          ))}
+                          <td className="p-2 text-right font-mono text-amber-300 bg-slate-950 font-black">
+                            {formatCurrency(getSaldoBancarioFundo("reparticao", comp))}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
+
+                {/* ================================================================================= */}
+                {/* QUADRO 2: FUNDO EM CAPITALIZAÇÃO (FUNDO PREVIDENCIÁRIO)                          */}
+                {/* ================================================================================= */}
+                <div className="break-inside-avoid border border-blue-300 bg-blue-50/20 rounded-xl p-4 shadow-xs space-y-4">
+                  
+                  {/* Cabeçalho do Quadro 2 */}
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between pb-2 border-b-2 border-blue-800 gap-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="p-2 bg-blue-800 text-white rounded-lg shadow-xs">
+                        <TrendingUp className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-black uppercase text-blue-950 tracking-tight">
+                          QUADRO 2: FUNDO EM CAPITALIZAÇÃO (FUNDO PREVIDENCIÁRIO)
+                        </h3>
+                        <p className="text-[11px] text-blue-800 font-medium">
+                          Regime de Capitalização • Patrimônio Acumulado e Rentabilidade dos Investimentos
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2 text-[10px] font-bold">
+                      <span className="bg-blue-100 text-blue-900 px-2.5 py-1 rounded border border-blue-300">
+                        Superávit Semestral: {formatCurrency(monthsList.reduce((acc, c) => acc + (getSubtotalCapRec(c) - getSubtotalCapDesp(c)), 0))}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Cards Rápidos de Indicadores - Quadro 2 */}
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5">
+                    <div className="bg-white p-2.5 rounded-lg border border-blue-200 shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-blue-800">Servidores Ativos</span>
+                      <span className="text-base font-black text-blue-950">
+                        {formatNumber(getDemograficosFundo(comp).ativosCap)}
+                      </span>
+                      <span className="text-[9px] text-slate-500 block">Contribuintes em Capitalização</span>
+                    </div>
+
+                    <div className="bg-white p-2.5 rounded-lg border border-blue-200 shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-blue-800">Servidores Inativos</span>
+                      <span className="text-base font-black text-blue-950">
+                        {formatNumber(getDemograficosFundo(comp).inativosCap)}
+                      </span>
+                      <span className="text-[9px] text-slate-500 block">Aposentados e Pensionistas</span>
+                    </div>
+
+                    <div className="bg-blue-900 text-white p-2.5 rounded-lg shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-blue-200">Razão Ativos / Inativos</span>
+                      <span className="text-base font-black text-emerald-300">
+                        {getDemograficosFundo(comp).ratioCap.toFixed(2)}
+                      </span>
+                      <span className="text-[9px] text-blue-100 block">Ativos por Beneficiário</span>
+                    </div>
+
+                    <div className="bg-white p-2.5 rounded-lg border border-blue-200 shadow-xs col-span-2 md:col-span-2">
+                      <span className="block text-[9px] font-bold uppercase text-blue-800">Saldo Bancário e Investimentos</span>
+                      <span className="text-base font-black text-blue-900">
+                        {formatCurrency(getSaldoBancarioFundo("capitalizacao", comp))}
+                      </span>
+                      <span className="text-[9px] text-slate-500 block">Patrimônio Líquido Acumulado ({monthShortLabels[monthsList.indexOf(comp)]})</span>
+                    </div>
+                  </div>
+
+                  {/* Tabela Financeira e Demográfica Completa - Quadro 2 */}
+                  <div className="overflow-x-auto bg-white rounded-lg border border-blue-300 shadow-xs">
+                    <table className="w-full text-left border-collapse text-[9px]">
+                      <thead>
+                        <tr className="bg-blue-900 text-white font-bold uppercase tracking-wider">
+                          <th className="p-2 border border-blue-800 min-w-[200px]">Discriminação / Competência</th>
+                          {monthShortLabels.map((lbl, i) => (
+                            <th key={i} className="p-2 border border-blue-800 text-right w-[85px]">{lbl}</th>
+                          ))}
+                          <th className="p-2 border border-blue-800 text-right bg-blue-950 text-emerald-300 font-black w-[105px]">Acumulado Semestre</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* DADOS DEMOGRÁFICOS */}
+                        <tr className="bg-blue-100/70 font-black text-blue-950 uppercase border-b border-blue-300">
+                          <td colSpan={8} className="p-1.5 pl-3">1. QUADRO DEMOGRÁFICO DO FUNDO EM CAPITALIZAÇÃO</td>
+                        </tr>
+                        <tr className="hover:bg-blue-50/50 border-b border-slate-200">
+                          <td className="p-1.5 pl-4 font-semibold text-slate-800">Servidores Ativos (Contribuintes)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-slate-700">{formatNumber(getDemograficosFundo(c).ativosCap)}</td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-bold text-slate-900 bg-blue-50">{formatNumber(getDemograficosFundo(comp).ativosCap)}</td>
+                        </tr>
+                        <tr className="hover:bg-blue-50/50 border-b border-slate-200">
+                          <td className="p-1.5 pl-4 font-semibold text-slate-800">Servidores Inativos e Pensionistas</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-slate-700">{formatNumber(getDemograficosFundo(c).inativosCap)}</td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-bold text-slate-900 bg-blue-50">{formatNumber(getDemograficosFundo(comp).inativosCap)}</td>
+                        </tr>
+                        <tr className="bg-blue-50 font-bold border-b border-blue-200 text-blue-950">
+                          <td className="p-1.5 pl-4 uppercase">Razão Ativos / Inativos (Ativos por Inativo)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-blue-900 font-extrabold">
+                              {getDemograficosFundo(c).ratioCap.toFixed(2)}
+                            </td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-black text-blue-950 bg-blue-200/60">
+                            {getDemograficosFundo(comp).ratioCap.toFixed(2)}
+                          </td>
+                        </tr>
+
+                        {/* RECEITAS */}
+                        <tr className="bg-blue-100/70 font-black text-blue-950 uppercase border-b border-blue-300">
+                          <td colSpan={8} className="p-1.5 pl-3">2. RECEITAS DO FUNDO EM CAPITALIZAÇÃO</td>
+                        </tr>
+                        {capReceitaCats.map((cat, idx) => {
+                          const totalCat = monthsList.reduce((acc, c) => acc + getVal("capitalizacao", "receita", c, cat), 0);
+                          return (
+                            <tr key={`cap_rec_${idx}`} className="hover:bg-blue-50/50 border-b border-slate-200">
+                              <td className="p-1.5 pl-4 font-medium text-slate-800">{cat}</td>
+                              {monthsList.map((c, i) => (
+                                <td key={i} className="p-1.5 text-right font-mono text-slate-700">
+                                  {formatCurrency(getVal("capitalizacao", "receita", c, cat))}
+                                </td>
+                              ))}
+                              <td className="p-1.5 text-right font-mono font-bold text-slate-900 bg-blue-50/50">
+                                {formatCurrency(totalCat)}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                        {/* Subtotal Capitalização */}
+                        <tr className="bg-blue-200/80 font-black text-blue-950 border-b border-blue-400">
+                          <td className="p-1.5 uppercase">TOTAL DE RECEITAS (CAPITALIZAÇÃO)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-emerald-900 font-black">
+                              {formatCurrency(getSubtotalCapRec(c))}
+                            </td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-black text-emerald-950 bg-blue-300">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalCapRec(c), 0))}
+                          </td>
+                        </tr>
+
+                        {/* DESPESAS */}
+                        <tr className="bg-blue-100/70 font-black text-blue-950 uppercase border-b border-blue-300">
+                          <td colSpan={8} className="p-1.5 pl-3">3. DESPESAS PREVIDENCIÁRIAS REALIZADAS</td>
+                        </tr>
+                        {capDespesaCats.map((cat, idx) => {
+                          const totalCat = monthsList.reduce((acc, c) => acc + getVal("capitalizacao", "despesa", c, cat), 0);
+                          return (
+                            <tr key={`cap_desp_${idx}`} className="hover:bg-blue-50/50 border-b border-slate-200">
+                              <td className="p-1.5 pl-4 font-medium text-slate-800">{cat}</td>
+                              {monthsList.map((c, i) => (
+                                <td key={i} className="p-1.5 text-right font-mono text-slate-700">
+                                  {formatCurrency(getVal("capitalizacao", "despesa", c, cat))}
+                                </td>
+                              ))}
+                              <td className="p-1.5 text-right font-mono font-bold text-slate-900 bg-blue-50/50">
+                                {formatCurrency(totalCat)}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                        {/* Subtotal Despesas Capitalização */}
+                        <tr className="bg-red-100/70 font-black text-red-950 border-b border-red-300">
+                          <td className="p-1.5 uppercase">TOTAL DAS DESPESAS PREVIDENCIÁRIAS (CAPITALIZAÇÃO)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-red-900 font-black">
+                              {formatCurrency(getSubtotalCapDesp(c))}
+                            </td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-black text-red-950 bg-red-200">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalCapDesp(c), 0))}
+                          </td>
+                        </tr>
+
+                        {/* RESULTADO E SALDO BANCÁRIO */}
+                        <tr className="bg-blue-100/70 font-black text-blue-950 uppercase border-b border-blue-300">
+                          <td colSpan={8} className="p-1.5 pl-3">4. RESULTADO FINANCEIRO E PATRIMÔNIO ACUMULADO</td>
+                        </tr>
+                        <tr className="bg-white font-bold border-b border-slate-300">
+                          <td className="p-1.5 pl-4 text-slate-900 uppercase">Superávit Financeiro do Mês</td>
+                          {monthsList.map((c, i) => {
+                            const res = getSubtotalCapRec(c) - getSubtotalCapDesp(c);
+                            return (
+                              <td key={i} className={`p-1.5 text-right font-mono font-extrabold ${res >= 0 ? "text-emerald-700" : "text-red-700"}`}>
+                                {formatCurrency(res)}
+                              </td>
+                            );
+                          })}
+                          <td className="p-1.5 text-right font-mono font-black bg-blue-100 text-emerald-900">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + (getSubtotalCapRec(c) - getSubtotalCapDesp(c)), 0))}
+                          </td>
+                        </tr>
+                        <tr className="bg-slate-900 text-white font-black">
+                          <td className="p-2 uppercase text-blue-300">Saldo Bancário / Patrimônio Líquido Acumulado</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-2 text-right font-mono text-emerald-300">
+                              {formatCurrency(getSaldoBancarioFundo("capitalizacao", c))}
+                            </td>
+                          ))}
+                          <td className="p-2 text-right font-mono text-amber-300 bg-slate-950 font-black">
+                            {formatCurrency(getSaldoBancarioFundo("capitalizacao", comp))}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* ================================================================================= */}
+                {/* QUADRO 3: ÓRGÃO GERENCIADOR (TAXA DE ADMINISTRAÇÃO)                              */}
+                {/* ================================================================================= */}
+                <div className="break-inside-avoid border border-indigo-300 bg-indigo-50/20 rounded-xl p-4 shadow-xs space-y-4">
+                  
+                  {/* Cabeçalho do Quadro 3 */}
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between pb-2 border-b-2 border-indigo-800 gap-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="p-2 bg-indigo-800 text-white rounded-lg shadow-xs">
+                        <Coins className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-black uppercase text-indigo-950 tracking-tight">
+                          QUADRO 3: ÓRGÃO GERENCIADOR (TAXA DE ADMINISTRAÇÃO)
+                        </h3>
+                        <p className="text-[11px] text-indigo-800 font-medium">
+                          Unidade Gestora • Custos Administrativos e Operacionais de Gestão do RPPS
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2 text-[10px] font-bold">
+                      <span className="bg-indigo-100 text-indigo-900 px-2.5 py-1 rounded border border-indigo-300">
+                        Custo ADM/Segurado: {formatCurrency(getSubtotalOrgDesp(comp) / ((getDemograficosFundo(comp).totalAtivos + getDemograficosFundo(comp).inativosCons) || 1))}/mês
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Cards Rápidos de Indicadores - Quadro 3 */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+                    <div className="bg-white p-2.5 rounded-lg border border-indigo-200 shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-indigo-800">Segurados Gerenciados</span>
+                      <span className="text-base font-black text-indigo-950">
+                        {formatNumber(getDemograficosFundo(comp).totalAtivos + getDemograficosFundo(comp).inativosCons)}
+                      </span>
+                      <span className="text-[9px] text-slate-500 block">Ativos + Inativos Totais</span>
+                    </div>
+
+                    <div className="bg-white p-2.5 rounded-lg border border-indigo-200 shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-indigo-800">Custo Per Capita Mensal</span>
+                      <span className="text-base font-black text-indigo-950">
+                        {formatCurrency(getSubtotalOrgDesp(comp) / ((getDemograficosFundo(comp).totalAtivos + getDemograficosFundo(comp).inativosCons) || 1))}
+                      </span>
+                      <span className="text-[9px] text-slate-500 block">Despesa ADM / Segurado</span>
+                    </div>
+
+                    <div className="bg-white p-2.5 rounded-lg border border-indigo-200 shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-indigo-800">Despesas ADM Acumuladas</span>
+                      <span className="text-base font-black text-red-700">
+                        {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalOrgDesp(c), 0))}
+                      </span>
+                      <span className="text-[9px] text-slate-500 block">Total do Semestre</span>
+                    </div>
+
+                    <div className="bg-indigo-900 text-white p-2.5 rounded-lg shadow-xs">
+                      <span className="block text-[9px] font-bold uppercase text-indigo-200">Saldo Bancário da Taxa ADM</span>
+                      <span className="text-base font-black text-emerald-300">
+                        {formatCurrency(getSaldoBancarioFundo("orgaoGerenciador", comp))}
+                      </span>
+                      <span className="text-[9px] text-indigo-100 block">Disponibilidade ({monthShortLabels[monthsList.indexOf(comp)]})</span>
+                    </div>
+                  </div>
+
+                  {/* Tabela Financeira e Operacional Completa - Quadro 3 */}
+                  <div className="overflow-x-auto bg-white rounded-lg border border-indigo-300 shadow-xs">
+                    <table className="w-full text-left border-collapse text-[9px]">
+                      <thead>
+                        <tr className="bg-indigo-900 text-white font-bold uppercase tracking-wider">
+                          <th className="p-2 border border-indigo-800 min-w-[200px]">Discriminação / Competência</th>
+                          {monthShortLabels.map((lbl, i) => (
+                            <th key={i} className="p-2 border border-indigo-800 text-right w-[85px]">{lbl}</th>
+                          ))}
+                          <th className="p-2 border border-indigo-800 text-right bg-indigo-950 text-indigo-200 font-black w-[105px]">Acumulado Semestre</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* RECEITAS */}
+                        <tr className="bg-indigo-100/70 font-black text-indigo-950 uppercase border-b border-indigo-300">
+                          <td colSpan={8} className="p-1.5 pl-3">1. RECEITAS DA TAXA DE ADMINISTRAÇÃO E TRANSFERÊNCIAS</td>
+                        </tr>
+                        {orgReceitaCats.map((cat, idx) => {
+                          const totalCat = monthsList.reduce((acc, c) => acc + getVal("orgaoGerenciador", "receita", c, cat), 0);
+                          return (
+                            <tr key={`org_rec_${idx}`} className="hover:bg-indigo-50/50 border-b border-slate-200">
+                              <td className="p-1.5 pl-4 font-medium text-slate-800">{cat}</td>
+                              {monthsList.map((c, i) => (
+                                <td key={i} className="p-1.5 text-right font-mono text-slate-700">
+                                  {formatCurrency(getVal("orgaoGerenciador", "receita", c, cat))}
+                                </td>
+                              ))}
+                              <td className="p-1.5 text-right font-mono font-bold text-slate-900 bg-indigo-50/50">
+                                {formatCurrency(totalCat)}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                        {/* Transferência Órgão Gerenciador */}
+                        <tr className="bg-indigo-100/40 font-bold border-b border-indigo-200 text-indigo-900">
+                          <td className="p-1.5 pl-4 italic">Interferência Financeira (Suplementação Administrativa)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-indigo-900">
+                              {formatCurrency(getVal("orgaoGerenciador", "transferenciaRecebida", c, "Interferência Financeira"))}
+                            </td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-bold text-indigo-950 bg-indigo-200/50">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + getVal("orgaoGerenciador", "transferenciaRecebida", c, "Interferência Financeira"), 0))}
+                          </td>
+                        </tr>
+                        {/* Subtotal Órgão Gerenciador */}
+                        <tr className="bg-indigo-200/80 font-black text-indigo-950 border-b border-indigo-400">
+                          <td className="p-1.5 uppercase">TOTAL DE RECEITAS E TRANSFERÊNCIAS (ÓRGÃO GESTOR)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-emerald-900 font-black">
+                              {formatCurrency(getSubtotalOrgRec(c))}
+                            </td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-black text-emerald-950 bg-indigo-300">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalOrgRec(c), 0))}
+                          </td>
+                        </tr>
+
+                        {/* DESPESAS ADMINISTRATIVAS */}
+                        <tr className="bg-indigo-100/70 font-black text-indigo-950 uppercase border-b border-indigo-300">
+                          <td colSpan={8} className="p-1.5 pl-3">2. DESPESAS ADMINISTRATIVAS REALIZADAS</td>
+                        </tr>
+                        {orgDespesaCats.map((cat, idx) => {
+                          const totalCat = monthsList.reduce((acc, c) => acc + getVal("orgaoGerenciador", "despesa", c, cat), 0);
+                          return (
+                            <tr key={`org_desp_${idx}`} className="hover:bg-indigo-50/50 border-b border-slate-200">
+                              <td className="p-1.5 pl-4 font-medium text-slate-800">{cat}</td>
+                              {monthsList.map((c, i) => (
+                                <td key={i} className="p-1.5 text-right font-mono text-slate-700">
+                                  {formatCurrency(getVal("orgaoGerenciador", "despesa", c, cat))}
+                                </td>
+                              ))}
+                              <td className="p-1.5 text-right font-mono font-bold text-slate-900 bg-indigo-50/50">
+                                {formatCurrency(totalCat)}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                        {/* Subtotal Despesas Órgão Gerenciador */}
+                        <tr className="bg-red-100/70 font-black text-red-950 border-b border-red-300">
+                          <td className="p-1.5 uppercase">TOTAL DAS DESPESAS ADMINISTRATIVAS (ÓRGÃO GESTOR)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-1.5 text-right font-mono text-red-900 font-black">
+                              {formatCurrency(getSubtotalOrgDesp(c))}
+                            </td>
+                          ))}
+                          <td className="p-1.5 text-right font-mono font-black text-red-950 bg-red-200">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + getSubtotalOrgDesp(c), 0))}
+                          </td>
+                        </tr>
+
+                        {/* RESULTADO E SALDO BANCÁRIO */}
+                        <tr className="bg-indigo-100/70 font-black text-indigo-950 uppercase border-b border-indigo-300">
+                          <td colSpan={8} className="p-1.5 pl-3">3. RESULTADO OPERACIONAL E DISPONIBILIDADE BANCÁRIA</td>
+                        </tr>
+                        <tr className="bg-white font-bold border-b border-slate-300">
+                          <td className="p-1.5 pl-4 text-slate-900 uppercase">Resultado Financeiro da Taxa ADM no Mês</td>
+                          {monthsList.map((c, i) => {
+                            const res = getSubtotalOrgRec(c) - getSubtotalOrgDesp(c);
+                            return (
+                              <td key={i} className={`p-1.5 text-right font-mono font-extrabold ${res >= 0 ? "text-emerald-700" : "text-red-700"}`}>
+                                {formatCurrency(res)}
+                              </td>
+                            );
+                          })}
+                          <td className="p-1.5 text-right font-mono font-black bg-indigo-100 text-slate-900">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + (getSubtotalOrgRec(c) - getSubtotalOrgDesp(c)), 0))}
+                          </td>
+                        </tr>
+                        <tr className="bg-slate-900 text-white font-black">
+                          <td className="p-2 uppercase text-indigo-300">Saldo Bancário / Disponibilidade da Taxa de ADM</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-2 text-right font-mono text-emerald-300">
+                              {formatCurrency(getSaldoBancarioFundo("orgaoGerenciador", c))}
+                            </td>
+                          ))}
+                          <td className="p-2 text-right font-mono text-amber-300 bg-slate-950 font-black">
+                            {formatCurrency(getSaldoBancarioFundo("orgaoGerenciador", comp))}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* ================================================================================= */}
+                {/* QUADRO CONSOLIDADO: SÍNTESE EXECUTIVA INTEGRADA DO RPPS                            */}
+                {/* ================================================================================= */}
+                <div className="break-inside-avoid border-2 border-slate-900 bg-slate-900 text-white rounded-xl p-4 shadow-md space-y-4">
+                  
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between pb-2 border-b border-slate-700 gap-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="p-2 bg-emerald-500 text-slate-950 rounded-lg font-black">
+                        <ShieldCheck className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-black uppercase tracking-wider text-amber-300">
+                          QUADRO CONSOLIDADO: SÍNTESE EXECUTIVA DO RPPS (VISÃO INTEGRADA)
+                        </h3>
+                        <p className="text-[11px] text-slate-300 font-medium">
+                          Consolidação de Repartição Simples, Capitalização e Órgão Gerenciador
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-mono text-emerald-400 font-bold bg-slate-800 px-3 py-1 rounded border border-slate-700">
+                      Posição Global em {getMonthName(comp)}
+                    </span>
+                  </div>
+
+                  <div className="overflow-x-auto bg-slate-950 rounded-lg border border-slate-800">
+                    <table className="w-full text-left border-collapse text-[9.5px]">
+                      <thead>
+                        <tr className="bg-slate-800 text-slate-200 font-bold uppercase tracking-wider border-b border-slate-700">
+                          <th className="p-2 border border-slate-700 min-w-[200px]">Indicador Consolidado / Fundo</th>
+                          {monthShortLabels.map((lbl, i) => (
+                            <th key={i} className="p-2 border border-slate-700 text-right w-[85px]">{lbl}</th>
+                          ))}
+                          <th className="p-2 border border-slate-700 text-right bg-slate-900 text-amber-300 font-black w-[105px]">Total Semestre</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-800/60">
+                        <tr>
+                          <td className="p-2 font-semibold text-slate-300">Total Servidores Ativos do RPPS</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-2 text-right font-mono text-slate-300">{formatNumber(getDemograficosFundo(c).totalAtivos)}</td>
+                          ))}
+                          <td className="p-2 text-right font-mono font-bold text-white bg-slate-900">{formatNumber(getDemograficosFundo(comp).totalAtivos)}</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2 font-semibold text-slate-300">Total Inativos e Pensionistas do RPPS</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-2 text-right font-mono text-slate-300">{formatNumber(getDemograficosFundo(c).inativosCons)}</td>
+                          ))}
+                          <td className="p-2 text-right font-mono font-bold text-white bg-slate-900">{formatNumber(getDemograficosFundo(comp).inativosCons)}</td>
+                        </tr>
+                        <tr className="bg-slate-800/80 font-bold text-amber-300">
+                          <td className="p-2 uppercase">Razão Demográfica Consolidada (Ativos / Inativos)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-2 text-right font-mono font-black text-emerald-400">
+                              {getDemograficosFundo(c).ratioCons.toFixed(2)}
+                            </td>
+                          ))}
+                          <td className="p-2 text-right font-mono font-black text-amber-300 bg-slate-800">
+                            {getDemograficosFundo(comp).ratioCons.toFixed(2)}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="p-2 font-semibold text-emerald-400">Total de Receitas e Transferências Recebidas</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-2 text-right font-mono text-emerald-400">{formatCurrency(getTotalRecConsolidado(c))}</td>
+                          ))}
+                          <td className="p-2 text-right font-mono font-bold text-emerald-300 bg-slate-900">{formatCurrency(monthsList.reduce((acc, c) => acc + getTotalRecConsolidado(c), 0))}</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2 font-semibold text-red-400">Total de Despesas Executadas (Previdência + ADM)</td>
+                          {monthsList.map((c, i) => (
+                            <td key={i} className="p-2 text-right font-mono text-red-400">{formatCurrency(getTotalDespConsolidado(c))}</td>
+                          ))}
+                          <td className="p-2 text-right font-mono font-bold text-red-300 bg-slate-900">{formatCurrency(monthsList.reduce((acc, c) => acc + getTotalDespConsolidado(c), 0))}</td>
+                        </tr>
+                        <tr className="bg-slate-800/90 font-black">
+                          <td className="p-2 uppercase text-white">Resultado Financeiro Consolidado do Mês</td>
+                          {monthsList.map((c, i) => {
+                            const resCons = getTotalRecConsolidado(c) - getTotalDespConsolidado(c);
+                            return (
+                              <td key={i} className={`p-2 text-right font-mono ${resCons >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                                {formatCurrency(resCons)}
+                              </td>
+                            );
+                          })}
+                          <td className="p-2 text-right font-mono text-amber-300 bg-slate-800 font-black">
+                            {formatCurrency(monthsList.reduce((acc, c) => acc + (getTotalRecConsolidado(c) - getTotalDespConsolidado(c)), 0))}
+                          </td>
+                        </tr>
+                        <tr className="bg-amber-400 text-slate-950 font-black text-[10px]">
+                          <td className="p-2.5 uppercase tracking-wide">SALDO BANCÁRIO / DISPONIBILIDADES TOTAIS DO RPPS</td>
+                          {monthsList.map((c, i) => {
+                            const saldoTot = getSaldoBancarioFundo("capitalizacao", c) + getSaldoBancarioFundo("reparticao", c) + getSaldoBancarioFundo("orgaoGerenciador", c);
+                            return (
+                              <td key={i} className="p-2.5 text-right font-mono font-black">
+                                {formatCurrency(saldoTot)}
+                              </td>
+                            );
+                          })}
+                          <td className="p-2.5 text-right font-mono font-black bg-amber-300 text-slate-950">
+                            {formatCurrency(getSaldoBancarioFundo("capitalizacao", comp) + getSaldoBancarioFundo("reparticao", comp) + getSaldoBancarioFundo("orgaoGerenciador", comp))}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
               </div>
 
             </div>

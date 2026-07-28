@@ -65,6 +65,11 @@ export interface EmprestimoConsignado {
   valorEmprestado: number;
   valorAmortizado: number;
   saldoCarteira: number;
+  concessoesMes?: number;
+  amortizacoesMes?: number;
+  jurosMes?: number;
+  inadimplencia?: number;
+  contratosAtivos?: number;
 }
 
 export interface CRP {
@@ -98,9 +103,9 @@ export interface AgendaReuniao {
 }
 
 export const ultimaAtualizacao = {
-  data: "22/07/2026",
-  hora: "19:11",
-  textoExtenso: "22 de Julho de 2026"
+  data: "27/07/2026",
+  hora: "23:25",
+  textoExtenso: "27 de Julho de 2026"
 };
 
 export const seguradosAtivos: SeguradoAtivo[] = [
@@ -407,15 +412,16 @@ export const crp: CRP[] = [
 ];
 
 export const emprestimosConsignados: EmprestimoConsignado[] = [
-  {"competencia":"2025-09","quantidadeContratos":9,"prazoMedio":44,"saldoInicial":0.0,"valorEmprestado":134052.23,"valorAmortizado":0.0,"saldoCarteira":134052.23},
-  {"competencia":"2025-10","quantidadeContratos":90,"prazoMedio":63,"saldoInicial":134052.23,"valorEmprestado":1912609.99,"valorAmortizado":3706.79,"saldoCarteira":2042955.43},
-  {"competencia":"2025-11","quantidadeContratos":58,"prazoMedio":62,"saldoInicial":2042955.43,"valorEmprestado":1038005.5,"valorAmortizado":2499.88,"saldoCarteira":3078461.05},
-  {"competencia":"2025-12","quantidadeContratos":47,"prazoMedio":69,"saldoInicial":3078461.05,"valorEmprestado":913634.79,"valorAmortizado":66690.34,"saldoCarteira":3925405.5},
-  {"competencia":"2026-01","quantidadeContratos":71,"prazoMedio":60,"saldoInicial":3925405.5,"valorEmprestado":1489942.54,"valorAmortizado":127845.33,"saldoCarteira":5287502.71},
-  {"competencia":"2026-02","quantidadeContratos":51,"prazoMedio":62,"saldoInicial":5287502.71,"valorEmprestado":796177.22,"valorAmortizado":124548.76,"saldoCarteira":5959131.17},
-  {"competencia":"2026-03","quantidadeContratos":144,"prazoMedio":77,"saldoInicial":5959131.17,"valorEmprestado":1756900.38,"valorAmortizado":80439.33,"saldoCarteira":7635592.22},
-  {"competencia":"2026-04","quantidadeContratos":142,"prazoMedio":77,"saldoInicial":7635592.22,"valorEmprestado":1636428.49,"valorAmortizado":140243.17,"saldoCarteira":9131777.54},
-  {"competencia":"2026-05","quantidadeContratos":85,"prazoMedio":73,"saldoInicial":9131777.54,"valorEmprestado":1298575.19,"valorAmortizado":121470.14,"saldoCarteira":10308882.59}
+  {"competencia":"2025-09","quantidadeContratos":9,"prazoMedio":44,"saldoInicial":0.0,"valorEmprestado":134052.23,"valorAmortizado":0.0,"saldoCarteira":134052.23,"concessoesMes":134052.23,"amortizacoesMes":0.0,"jurosMes":36.93,"inadimplencia":0,"contratosAtivos":9},
+  {"competencia":"2025-10","quantidadeContratos":90,"prazoMedio":63,"saldoInicial":134052.23,"valorEmprestado":1912609.99,"valorAmortizado":3706.79,"saldoCarteira":2042955.43,"concessoesMes":1912609.99,"amortizacoesMes":3706.79,"jurosMes":4506.32,"inadimplencia":0,"contratosAtivos":99},
+  {"competencia":"2025-11","quantidadeContratos":58,"prazoMedio":62,"saldoInicial":2042955.43,"valorEmprestado":1038005.5,"valorAmortizado":2499.88,"saldoCarteira":3078461.05,"concessoesMes":1038005.5,"amortizacoesMes":2499.88,"jurosMes":21977.67,"inadimplencia":0,"contratosAtivos":157},
+  {"competencia":"2025-12","quantidadeContratos":47,"prazoMedio":69,"saldoInicial":3078461.05,"valorEmprestado":913634.79,"valorAmortizado":66690.34,"saldoCarteira":3925405.5,"concessoesMes":913634.79,"amortizacoesMes":66690.34,"jurosMes":33486.65,"inadimplencia":0,"contratosAtivos":204},
+  {"competencia":"2026-01","quantidadeContratos":71,"prazoMedio":60,"saldoInicial":3925405.5,"valorEmprestado":1489942.54,"valorAmortizado":127845.33,"saldoCarteira":5287502.71,"concessoesMes":1489942.54,"amortizacoesMes":127845.33,"jurosMes":40969.27,"inadimplencia":0,"contratosAtivos":272},
+  {"competencia":"2026-02","quantidadeContratos":51,"prazoMedio":62,"saldoInicial":5287502.71,"valorEmprestado":796177.22,"valorAmortizado":124548.76,"saldoCarteira":5959131.17,"concessoesMes":796177.22,"amortizacoesMes":124548.76,"jurosMes":30202.46,"inadimplencia":0,"contratosAtivos":320},
+  {"competencia":"2026-03","quantidadeContratos":144,"prazoMedio":77,"saldoInicial":5959131.17,"valorEmprestado":1756900.38,"valorAmortizado":80439.33,"saldoCarteira":7635592.22,"concessoesMes":1756900.38,"amortizacoesMes":80439.33,"jurosMes":65222.64,"inadimplencia":0,"contratosAtivos":464},
+  {"competencia":"2026-04","quantidadeContratos":142,"prazoMedio":77,"saldoInicial":7635592.22,"valorEmprestado":1636428.49,"valorAmortizado":140243.17,"saldoCarteira":9131777.54,"concessoesMes":1636428.49,"amortizacoesMes":140243.17,"jurosMes":85947.18,"inadimplencia":0,"contratosAtivos":603},
+  {"competencia":"2026-05","quantidadeContratos":85,"prazoMedio":73,"saldoInicial":9131777.54,"valorEmprestado":1298575.19,"valorAmortizado":121470.14,"saldoCarteira":10308882.59,"concessoesMes":1298575.19,"amortizacoesMes":121470.14,"jurosMes":97789.19,"inadimplencia":0,"contratosAtivos":686},
+  {"competencia":"2026-06","quantidadeContratos":759,"prazoMedio":68,"saldoInicial":10254840.75,"valorEmprestado":1530943.04,"valorAmortizado":180090.67,"saldoCarteira":11605696.12,"concessoesMes":1530943.04,"amortizacoesMes":180090.67,"jurosMes":110594.79,"inadimplencia":0,"contratosAtivos":759}
 ];
 
 export const agendaReunioes: AgendaReuniao[] = [
