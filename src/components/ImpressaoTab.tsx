@@ -4,7 +4,6 @@ import {
   Download, 
   Copy, 
   Check, 
-  FileText, 
   Target, 
   Briefcase, 
   Scale, 
@@ -15,7 +14,6 @@ import {
   Building, 
   CheckCircle2, 
   AlertTriangle,
-  Edit3,
   Calendar,
   Layers,
   ShieldCheck,
@@ -54,15 +52,8 @@ type ReportType =
 export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialCompetence }) => {
   const [selectedCompetence, setSelectedCompetence] = useState<string>(initialCompetence);
   const [reportType, setReportType] = useState<ReportType>("receitas_despesas");
-  const [showSignatures, setShowSignatures] = useState<boolean>(true);
-  const [showNotes, setShowNotes] = useState<boolean>(true);
   const [economicPrint, setEconomicPrint] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
-
-  // Custom manager/auditor commentary
-  const [customNotes, setCustomNotes] = useState<string>(
-    "Relatório gerado pelo Sistema de Gestão Estratégica da Maringá Previdência. Os dados apresentados refletem a posição contábil, financeira e atuarial oficial do RPPS até o fechamento da competência selecionada, devidamente homologados pelos órgãos de controle."
-  );
 
   const availableCompetences = [
     { value: "2026-06", label: "Junho / 2026" },
@@ -269,10 +260,23 @@ export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialC
   };
 
   // Segment allocation calculation for active competence comp
+  const segmentLabelMap: Record<string, string> = {
+    rendaFixa: "Renda Fixa",
+    rendaVariavel: "Renda Variável",
+    variavel: "Renda Variável",
+    estruturados: "Investimentos Estruturados",
+    fundosImobiliarios: "Fundo Imobiliário",
+    exterior: "Investimentos no Exterior",
+    emprestimoConsignado: "Empréstimos Consignados",
+    emprestimosConsignados: "Empréstimos Consignados",
+    outrosAtivos: "Disponibilidades e Ajustes"
+  };
+
   const segmentoMap: Record<string, number> = {};
   let totalInvestimentosSaldo = 0;
   ativosMes.forEach(({ inv, hist }) => {
-    const seg = inv.segmento || "Outros";
+    const rawSeg = inv.segmento || "Outros";
+    const seg = segmentLabelMap[rawSeg] || rawSeg;
     const saldo = hist.saldoFinal || 0;
     segmentoMap[seg] = (segmentoMap[seg] || 0) + saldo;
     totalInvestimentosSaldo += saldo;
@@ -372,9 +376,6 @@ Data de Emissão: ${new Date().toLocaleDateString("pt-BR")} às ${new Date().toL
 - Resultado Líquido Consolidado: ${formatCurrency(resultadoSemestre)}
 - Patrimônio / Disponibilidade Total do RPPS: ${formatCurrency(getSaldoBancarioFundo("capitalizacao", comp) + getSaldoBancarioFundo("reparticao", comp) + getSaldoBancarioFundo("orgaoGerenciador", comp))}
 
-5. OBSERVAÇÕES E PARECER TÉCNICO:
-${customNotes}
-
 ========================================================================
 Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
 ========================================================================
@@ -401,9 +402,6 @@ Data de Emissão: ${new Date().toLocaleDateString("pt-BR")} às ${new Date().toL
 - Total de Beneficiários: ${formatNumber(benObj?.totalBeneficiarios)} (Aposentados: ${formatNumber(benObj?.aposentados)} | Pensionistas: ${formatNumber(benObj?.pensionistas)})
 - Valor da Folha de Benefícios: ${formatCurrency(benObj?.valorTotal)}
 - Servidores Ativos: ${formatNumber(segObj?.quantidadeAtivos)}
-
-3. OBSERVAÇÕES E PARECER TÉCNICO:
-${customNotes}
 
 ========================================================================
 Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
@@ -611,26 +609,6 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={showSignatures}
-                  onChange={(e) => setShowSignatures(e.target.checked)}
-                  className="rounded text-blue-600 focus:ring-blue-500 w-4 h-4"
-                />
-                <span className="text-slate-700 font-medium">Incluir Bloco de Assinaturas</span>
-              </label>
-
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={showNotes}
-                  onChange={(e) => setShowNotes(e.target.checked)}
-                  className="rounded text-blue-600 focus:ring-blue-500 w-4 h-4"
-                />
-                <span className="text-slate-700 font-medium">Incluir Parecer / Observações</span>
-              </label>
-
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="checkbox"
                   checked={economicPrint}
                   onChange={(e) => setEconomicPrint(e.target.checked)}
                   className="rounded text-blue-600 focus:ring-blue-500 w-4 h-4"
@@ -669,26 +647,6 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
           </div>
         </div>
 
-        {/* Editable Notes Textbox */}
-        {showNotes && (
-          <div className="bg-amber-50/60 p-3.5 rounded-xl border border-amber-200 text-xs">
-            <div className="flex items-center justify-between mb-1">
-              <span className="font-bold text-amber-900 flex items-center space-x-1">
-                <Edit3 className="w-3.5 h-3.5 text-amber-700" />
-                <span>Parecer Técnico / Observações da Diretoria (editável antes de imprimir)</span>
-              </span>
-              <span className="text-[10px] text-amber-700">Edite o texto abaixo para incluir na versão impressa</span>
-            </div>
-            <textarea
-              rows={2}
-              value={customNotes}
-              onChange={(e) => setCustomNotes(e.target.value)}
-              className="w-full bg-white border border-amber-300 rounded-lg p-2 text-slate-800 text-xs focus:outline-hidden focus:border-amber-500 font-sans"
-              placeholder="Digite aqui ressalvas, pareceres do comitê de investimentos ou comentários contábeis..."
-            />
-          </div>
-        )}
-
       </div>
 
       {/* ========================================================================================= */}
@@ -725,7 +683,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
           </div>
 
           {/* Document Title Banner */}
-          <div className="bg-slate-100 p-3.5 rounded-lg border border-slate-300 flex items-center justify-between">
+          <div className="bg-slate-100 p-3.5 rounded-lg border border-slate-300">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block">Demonstrativo Estratégico</span>
               <h2 className="text-base font-extrabold uppercase text-slate-900">
@@ -738,11 +696,6 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
                 {reportType === "comprev" && "Relatório de Compensação Previdenciária (COMPREV)"}
                 {reportType === "consignado" && "Relatório da Carteira de Empréstimos Consignados"}
               </h2>
-            </div>
-            <div className="text-right text-xs">
-              <span className="px-2.5 py-1 bg-slate-200 text-slate-800 font-bold rounded uppercase text-[10px]">
-                Competência: {comp}
-              </span>
             </div>
           </div>
 
@@ -2017,7 +1970,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
                         <tr key={inv.id} className="border-b border-amber-200">
                           <td className="p-1.5 border border-amber-300 font-bold text-amber-950">{inv.nome}</td>
                           <td className="p-1.5 border border-amber-300 font-mono text-[9px]">{inv.cnpj}</td>
-                          <td className="p-1.5 border border-amber-300">{inv.segmento}</td>
+                          <td className="p-1.5 border border-amber-300">{segmentLabelMap[inv.segmento] || inv.segmento}</td>
                           <td className="p-1.5 border border-amber-300 text-right text-red-800 font-semibold">{formatCurrency(hist.rendimentos)}</td>
                           <td className="p-1.5 border border-amber-300 text-right font-bold">{formatCurrency(hist.saldoFinal)}</td>
                         </tr>
@@ -2421,66 +2374,6 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
                 </table>
               </div>
 
-            </div>
-          )}
-
-          {/* ------------------------------------------------------------------------------------- */}
-          {/* COMMON SECTION: PARECER TÉCNICO / OBSERVAÇÕES DA DIRETORIA                            */}
-          {/* ------------------------------------------------------------------------------------- */}
-          {showNotes && (
-            <div className="pt-4 border-t border-slate-300 break-inside-avoid">
-              <h4 className="text-[11px] font-bold uppercase text-slate-800 mb-1 flex items-center space-x-1">
-                <FileText className="w-3.5 h-3.5 text-slate-600" />
-                <span>Parecer Técnico & Considerações do Gestor</span>
-              </h4>
-              <div className="p-3 bg-slate-50 border border-slate-300 rounded text-[11px] text-slate-800 leading-relaxed font-serif italic">
-                "{customNotes}"
-              </div>
-            </div>
-          )}
-
-          {/* ------------------------------------------------------------------------------------- */}
-          {/* COMMON SECTION: SIGNATURE BLOCK                                                       */}
-          {/* ------------------------------------------------------------------------------------- */}
-          {showSignatures && (
-            <div className="pt-8 border-t-2 border-slate-900 break-inside-avoid space-y-6">
-              <div className="text-center text-[10px] uppercase font-bold text-slate-500 tracking-wider">
-                Termo de Encerramento e Homologação das Informações Prestadas
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center text-[10px]">
-                <div className="space-y-1">
-                  <div className="border-b border-slate-800 pb-1">
-                    <p className="font-bold text-slate-900">Diretor Presidente</p>
-                  </div>
-                  <p className="text-slate-500">Maringá Previdência</p>
-                </div>
-
-                <div className="space-y-1">
-                  <div className="border-b border-slate-800 pb-1">
-                    <p className="font-bold text-slate-900">Diretor de Investimentos</p>
-                  </div>
-                  <p className="text-slate-500">Certificado CGRPPS / ANBIMA</p>
-                </div>
-
-                <div className="space-y-1">
-                  <div className="border-b border-slate-800 pb-1">
-                    <p className="font-bold text-slate-900">Contador Responsável</p>
-                  </div>
-                  <p className="text-slate-500">CRC / PR</p>
-                </div>
-
-                <div className="space-y-1">
-                  <div className="border-b border-slate-800 pb-1">
-                    <p className="font-bold text-slate-900">Comitê / Conselho Fiscal</p>
-                  </div>
-                  <p className="text-slate-500">Representante do Colegiado</p>
-                </div>
-              </div>
-
-              <div className="text-center text-[9px] text-slate-400 font-mono pt-2">
-                Documento emitido eletronicamente pelo SGE Maringá Previdência em {new Date().toLocaleDateString("pt-BR")} às {new Date().toLocaleTimeString("pt-BR")}.
-              </div>
             </div>
           )}
 
