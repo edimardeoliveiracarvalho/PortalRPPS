@@ -102,11 +102,27 @@ export interface AgendaReuniao {
   horario: string;
 }
 
-export const ultimaAtualizacao = {
-  data: "27/07/2026",
-  hora: "23:25",
-  textoExtenso: "27 de Julho de 2026"
+const getCurrentUpdateInfo = () => {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = now.getFullYear();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+
+  const monthNames = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+  ];
+
+  return {
+    data: `${day}/${month}/${year}`,
+    hora: `${hours}:${minutes}`,
+    textoExtenso: `${now.getDate()} de ${monthNames[now.getMonth()]} de ${year}`
+  };
 };
+
+export const ultimaAtualizacao = getCurrentUpdateInfo();
 
 export const seguradosAtivos: SeguradoAtivo[] = [
   {"competencia":"2022-01","quantidadeAtivos":11329,"quantidadeInativos":3845},

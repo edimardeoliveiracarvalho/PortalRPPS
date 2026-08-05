@@ -27,8 +27,7 @@ import {
   movimentacoesFinanceiras, 
   crp, 
   emprestimosConsignados,
-  evolucaoCarteiraConsolidada,
-  ultimaAtualizacao
+  evolucaoCarteiraConsolidada
 } from "../data";
 import { investimentos } from "../data_investimentos";
 import { beneficios } from "../data_beneficios";
