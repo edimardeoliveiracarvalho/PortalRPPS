@@ -1038,7 +1038,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                     >
                       {/* Top Row: Identification, Badges & Days remaining */}
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 flex-wrap gap-y-1">
                           <span className="px-2 py-0.5 rounded text-xs font-black bg-blue-900 text-white font-mono">
                             Nº {c.numeroContrato}/{c.anoContrato}
                           </span>
@@ -1047,6 +1047,24 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                           {c.servicoEssencial && (
                             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
                               Serviço Essencial
+                            </span>
+                          )}
+                          {c.possibilidadeProrrogacao ? (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">
+                              Prorrogável
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                              Não Prorrogável
+                            </span>
+                          )}
+                          {c.necessitaNovaContratacao || !c.possibilidadeProrrogacao ? (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-800 border border-rose-200">
+                              Nova Licitação Necessária
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                              Aditivo de Prorrogação
                             </span>
                           )}
                         </div>
@@ -1064,10 +1082,10 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                         </div>
                       </div>
 
-                      {/* Middle Grid: Provider, Object, Expiration & Financials */}
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+                      {/* Middle Grid: Provider, Object, Expiration, Financials & Licitacao Status */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
                         {/* Column 1: Provider & Object */}
-                        <div className="md:col-span-2 space-y-1">
+                        <div className="space-y-1">
                           <div className="text-[10px] font-bold text-slate-400 uppercase">Empresa Contratada / Objeto</div>
                           <div className="font-black text-slate-900 text-sm">{c.fornecedor}</div>
                           <div className="text-slate-600 line-clamp-2 text-[11px] leading-relaxed">
@@ -1104,6 +1122,50 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                           </div>
                           <div className="text-[11px] text-slate-700">
                             Fiscal: <strong className="text-slate-800">{c.fiscalContrato}</strong>
+                          </div>
+                        </div>
+
+                        {/* Column 4: Encaminhamento / Prorrogação & Licitação */}
+                        <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200/80 space-y-2 flex flex-col justify-between">
+                          <div className="text-[10px] font-bold text-slate-400 uppercase flex items-center justify-between">
+                            <span>Diretriz & Licitação</span>
+                            <FileCheck className="w-3.5 h-3.5 text-blue-600" />
+                          </div>
+
+                          <div className="space-y-1.5">
+                            {/* Admite Prorrogação */}
+                            <div className="flex items-center justify-between text-[11px]">
+                              <span className="text-slate-600 font-medium">Admite Prorrogação?</span>
+                              {c.possibilidadeProrrogacao ? (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1">
+                                  <Check className="w-3 h-3 text-blue-700" /> Sim (Aditivo)
+                                </span>
+                              ) : (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1">
+                                  <X className="w-3 h-3 text-amber-700" /> Não
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Nova Licitação */}
+                            <div className="flex items-center justify-between text-[11px]">
+                              <span className="text-slate-600 font-medium">Nova Licitação?</span>
+                              {c.necessitaNovaContratacao || !c.possibilidadeProrrogacao ? (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1">
+                                  <Scale className="w-3 h-3 text-rose-700" /> Sim (Edital)
+                                </span>
+                              ) : (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-700" /> Não Necessária
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="text-[10px] text-slate-500 font-semibold pt-1 border-t border-slate-200/80">
+                            {c.possibilidadeProrrogacao
+                              ? "📑 Orientação: Termo Aditivo SEI"
+                              : "⚖️ Orientação: Abertura de Licitação SEI"}
                           </div>
                         </div>
                       </div>
