@@ -54,7 +54,12 @@ export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialC
   const [economicPrint, setEconomicPrint] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
 
+  React.useEffect(() => {
+    setSelectedCompetence(initialCompetence);
+  }, [initialCompetence]);
+
   const availableCompetences = [
+    { value: "2026-07", label: "Julho / 2026" },
     { value: "2026-06", label: "Junho / 2026" },
     { value: "2026-05", label: "Maio / 2026" },
     { value: "2026-04", label: "Abril / 2026" },

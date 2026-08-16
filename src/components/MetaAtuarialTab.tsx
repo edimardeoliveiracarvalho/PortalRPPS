@@ -58,9 +58,11 @@ export const MetaAtuarialTab: React.FC<MetaAtuarialTabProps> = ({ competence }) 
   const isMet = currentGoal?.atingiuMeta || false;
 
   // Historical data for 2026 up to selected competence
-  const all2026Comp = ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06"];
-  const selectedIndex = all2026Comp.indexOf(competence);
-  const activeCompetencies = selectedIndex !== -1 ? all2026Comp.slice(0, selectedIndex + 1) : all2026Comp;
+  const compMonthNum = parseInt(competence.split("-")[1] || "6", 10);
+  const activeCompetencies = Array.from({ length: compMonthNum }, (_, i) => {
+    const m = i + 1;
+    return `2026-${m < 10 ? `0${m}` : m}`;
+  });
 
   const monthLabels: { [key: string]: string } = {
     "01": "Jan", "02": "Fev", "03": "Mar", "04": "Abr", "05": "Mai", "06": "Jun",

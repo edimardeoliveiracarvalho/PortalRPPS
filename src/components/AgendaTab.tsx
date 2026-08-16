@@ -259,8 +259,14 @@ export function AgendaTab({ competence }: AgendaTabProps) {
     };
   }, [competence]);
 
-  // Date of the last update
-  const LAST_UPDATE_DATE = "2026-07-15";
+  // Reference date derived dynamically from ultimaAtualizacao
+  const refDateISO = useMemo(() => {
+    const parts = (ultimaAtualizacao.data || "15/08/2026").split("/");
+    if (parts.length === 3) {
+      return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+    return "2026-08-15";
+  }, []);
 
   const upcomingMeetingsByColegiado = useMemo(() => {
     const colegiados = [
@@ -272,7 +278,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
     
     return colegiados.map(col => {
       const colMeetings = agendaReunioes
-        .filter(m => m.colegiado === col && m.data > LAST_UPDATE_DATE)
+        .filter(m => m.colegiado === col && m.data >= refDateISO)
         .sort((a, b) => a.data.localeCompare(b.data))
         .slice(0, 2);
         
@@ -281,7 +287,7 @@ export function AgendaTab({ competence }: AgendaTabProps) {
         meetings: colMeetings
       };
     });
-  }, []);
+  }, [refDateISO]);
 
   return (
     <div id="agenda_tab_dashboard" className="space-y-4">

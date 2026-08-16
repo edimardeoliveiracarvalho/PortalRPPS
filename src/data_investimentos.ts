@@ -76,6 +76,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": -0.14003830784605498,
         "saldoFinal": 1673622.98,
         "participacaoCarteira": 0.001183091477587818
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 1673622.98,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": -1394.1,
+        "rentabilidadeMes": -0.08,
+        "rentabilidadePercentual": -0.08,
+        "saldoFinal": 1672228.88,
+        "participacaoCarteira": 0.0011736718394749614,
+        "participacaoCarteiraConsolidada": 0.12
       }
     ]
   },
@@ -154,6 +166,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": -0.1427570964956857,
         "saldoFinal": 843830.45,
         "participacaoCarteira": 0.0005965074726233105
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 843830.45,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": -52191.59,
+        "rentabilidadeMes": -6.19,
+        "rentabilidadePercentual": -6.19,
+        "saldoFinal": 791638.86,
+        "participacaoCarteira": 0.0005556202551746753,
+        "participacaoCarteiraConsolidada": 0.06
       }
     ]
   },
@@ -232,6 +256,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": -0.1295296948785989,
         "saldoFinal": 1372931.14,
         "participacaoCarteira": 0.0009705310876222118
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 1372931.14,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": -1565.72,
+        "rentabilidadeMes": -0.11,
+        "rentabilidadePercentual": -0.11,
+        "saldoFinal": 1371365.42,
+        "participacaoCarteira": 0.0009625075815481389,
+        "participacaoCarteiraConsolidada": 0.1
       }
     ]
   },
@@ -310,6 +346,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": -0.027342683929262535,
         "saldoFinal": 701933.68,
         "participacaoCarteira": 0.0004962000190985994
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 701933.68,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": -202.08,
+        "rentabilidadeMes": -0.03,
+        "rentabilidadePercentual": -0.03,
+        "saldoFinal": 701731.6,
+        "participacaoCarteira": 0.0004925178769725038,
+        "participacaoCarteiraConsolidada": 0.05
       }
     ]
   },
@@ -388,6 +436,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": -0.0439639607118778,
         "saldoFinal": 702221.11,
         "participacaoCarteira": 0.0004964032046352863
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 702221.11,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": -327.34,
+        "rentabilidadeMes": -0.05,
+        "rentabilidadePercentual": -0.05,
+        "saldoFinal": 701893.77,
+        "participacaoCarteira": 0.0004926316977326187,
+        "participacaoCarteiraConsolidada": 0.05
       }
     ]
   },
@@ -466,6 +526,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": -0.06066775514722167,
         "saldoFinal": 422834.63,
         "participacaoCarteira": 0.00029890366776751494
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 422834.63,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": -289.65,
+        "rentabilidadeMes": -0.07,
+        "rentabilidadePercentual": -0.07,
+        "saldoFinal": 422544.98,
+        "participacaoCarteira": 0.00029656774253145946,
+        "participacaoCarteiraConsolidada": 0.03
       }
     ]
   },
@@ -544,6 +616,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -622,6 +706,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": -0.22278766460249244,
         "saldoFinal": 2270760.4,
         "participacaoCarteira": 0.0016052105575676933
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 2270760.4,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": -4251.2,
+        "rentabilidadeMes": -0.19,
+        "rentabilidadePercentual": -0.19,
+        "saldoFinal": 2266509.2,
+        "participacaoCarteira": 0.0015907738789626236,
+        "participacaoCarteiraConsolidada": 0.16
       }
     ]
   },
@@ -700,6 +796,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": -0.04321285165329414,
         "saldoFinal": 674276.34,
         "participacaoCarteira": 0.00047664892327966597
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 674276.34,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": -261304.27,
+        "rentabilidadeMes": -38.75,
+        "rentabilidadePercentual": -38.75,
+        "saldoFinal": 412972.07,
+        "participacaoCarteira": 0.0002898488926041527,
+        "participacaoCarteiraConsolidada": 0.03
       }
     ]
   },
@@ -778,6 +886,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -856,6 +976,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1124,
         "saldoFinal": 85183461.32,
         "participacaoCarteira": 0.06021656509468072
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 85183461.32,
+        "aplicacoes": 311949.09,
+        "resgates": 4702396.56,
+        "rendimentos": 1023223.32,
+        "rentabilidadeMes": 1.11,
+        "rentabilidadePercentual": 1.11,
+        "saldoFinal": 81816237.17,
+        "participacaoCarteira": 0.05742360673631807,
+        "participacaoCarteiraConsolidada": 5.74
       }
     ]
   },
@@ -934,6 +1066,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0.1741645749858094,
         "saldoFinal": 16758353.55,
         "participacaoCarteira": 0.011846554152482154
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 16758353.55,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 201497.9,
+        "rentabilidadeMes": 1.2,
+        "rentabilidadePercentual": 1.2,
+        "saldoFinal": 16959851.45,
+        "participacaoCarteira": 0.011903454297801382,
+        "participacaoCarteiraConsolidada": 1.19
       }
     ]
   },
@@ -1012,6 +1156,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": -1.0711794669446704,
         "saldoFinal": 1437327,
         "participacaoCarteira": 0.001016052805517086
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 1437327,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 13260,
+        "rentabilidadeMes": 0.92,
+        "rentabilidadePercentual": 0.92,
+        "saldoFinal": 1450587,
+        "participacaoCarteira": 0.0010181101002205307,
+        "participacaoCarteiraConsolidada": 0.1
       }
     ]
   },
@@ -1090,6 +1246,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -1168,6 +1336,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -1246,6 +1426,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -1324,6 +1516,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -1402,6 +1606,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -1480,6 +1696,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1322656583276398,
         "saldoFinal": 18764832.61,
         "participacaoCarteira": 0.013264943063373192
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 18764832.61,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 233386.18,
+        "rentabilidadeMes": 1.24,
+        "rentabilidadePercentual": 1.24,
+        "saldoFinal": 18998218.79,
+        "participacaoCarteira": 0.013334104356580109,
+        "participacaoCarteiraConsolidada": 1.33
       }
     ]
   },
@@ -1558,6 +1786,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1363541906951724,
         "saldoFinal": 21883990.25,
         "participacaoCarteira": 0.015469889377588435
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 21883990.25,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 275096.88,
+        "rentabilidadeMes": 1.26,
+        "rentabilidadePercentual": 1.26,
+        "saldoFinal": 22159087.13,
+        "participacaoCarteira": 0.015552593824927269,
+        "participacaoCarteiraConsolidada": 1.56
       }
     ]
   },
@@ -1636,6 +1876,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.125975822579548,
         "saldoFinal": 12512508.42,
         "participacaoCarteira": 0.008845147474581051
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 12512508.42,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 154627.72,
+        "rentabilidadeMes": 1.24,
+        "rentabilidadePercentual": 1.24,
+        "saldoFinal": 12667136.14,
+        "participacaoCarteira": 0.008890565850240287,
+        "participacaoCarteiraConsolidada": 0.89
       }
     ]
   },
@@ -1714,6 +1966,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -1792,6 +2056,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -1870,6 +2146,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -1948,6 +2236,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1128828357387306,
         "saldoFinal": 42414601.14,
         "participacaoCarteira": 0.029983068907204268
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 42414601.14,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 512817.59,
+        "rentabilidadeMes": 1.21,
+        "rentabilidadePercentual": 1.21,
+        "saldoFinal": 42927418.73,
+        "participacaoCarteira": 0.030129070910885722,
+        "participacaoCarteiraConsolidada": 3.01
       }
     ]
   },
@@ -2026,6 +2326,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1871115274152118,
         "saldoFinal": 9380679.53,
         "participacaoCarteira": 0.0066312437977671035
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 9380679.53,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 117557.85,
+        "rentabilidadeMes": 1.25,
+        "rentabilidadePercentual": 1.25,
+        "saldoFinal": 9498237.38,
+        "participacaoCarteira": 0.0066664401451758445,
+        "participacaoCarteiraConsolidada": 0.67
       }
     ]
   },
@@ -2104,6 +2416,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0.9758926196324182,
         "saldoFinal": 349973793.73999995,
         "participacaoCarteira": 0.2473980207614446
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 349973793.74,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 1909363.73,
+        "rentabilidadeMes": 0.55,
+        "rentabilidadePercentual": 0.55,
+        "saldoFinal": 351883157.47,
+        "participacaoCarteira": 0.2469729817775139,
+        "participacaoCarteiraConsolidada": 24.7
       }
     ]
   },
@@ -2182,6 +2506,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0.9875996826778817,
         "saldoFinal": 264749382.95,
         "participacaoCarteira": 0.1871525083055316
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 264749382.95,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 1478226.57,
+        "rentabilidadeMes": 0.56,
+        "rentabilidadePercentual": 0.56,
+        "saldoFinal": 266227609.52,
+        "participacaoCarteira": 0.1868547134435091,
+        "participacaoCarteiraConsolidada": 18.69
       }
     ]
   },
@@ -2260,6 +2596,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0.9918716363961408,
         "saldoFinal": 116629160.76,
         "participacaoCarteira": 0.08244566893636676
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 116629160.76,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 806391.17,
+        "rentabilidadeMes": 0.69,
+        "rentabilidadePercentual": 0.69,
+        "saldoFinal": 117435551.93,
+        "participacaoCarteira": 0.08242340621066206,
+        "participacaoCarteiraConsolidada": 8.24
       }
     ]
   },
@@ -2338,6 +2686,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1047479529893138,
         "saldoFinal": 38910005.78,
         "participacaoCarteira": 0.027505654966096808
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 38910005.78,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 267011.03,
+        "rentabilidadeMes": 0.69,
+        "rentabilidadePercentual": 0.69,
+        "saldoFinal": 39177016.81,
+        "participacaoCarteira": 0.02749681095361431,
+        "participacaoCarteiraConsolidada": 2.75
       }
     ]
   },
@@ -2416,6 +2776,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 0.9685305474587693,
         "saldoFinal": 195166266.10000005,
         "participacaoCarteira": 0.1379638956293169
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 195166266.1,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 1049086.53,
+        "rentabilidadeMes": 0.54,
+        "rentabilidadePercentual": 0.54,
+        "saldoFinal": 196215352.63,
+        "participacaoCarteira": 0.13771585732599015,
+        "participacaoCarteiraConsolidada": 13.77
       }
     ]
   },
@@ -2494,6 +2866,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.112622642424256,
         "saldoFinal": 20808745.11,
         "participacaoCarteira": 0.014709793838357898
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 20808745.11,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 144549.97,
+        "rentabilidadeMes": 0.69,
+        "rentabilidadePercentual": 0.69,
+        "saldoFinal": 20953295.08,
+        "participacaoCarteira": 0.01470629569536274,
+        "participacaoCarteiraConsolidada": 1.47
       }
     ]
   },
@@ -2572,6 +2956,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.0934315591276658,
         "saldoFinal": 19085840.92,
         "participacaoCarteira": 0.013491865255727334
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 19085840.92,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 128604.31,
+        "rentabilidadeMes": 0.67,
+        "rentabilidadePercentual": 0.67,
+        "saldoFinal": 19214445.23,
+        "participacaoCarteira": 0.013485865210978176,
+        "participacaoCarteiraConsolidada": 1.35
       }
     ]
   },
@@ -2650,6 +3046,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.042036739176993,
         "saldoFinal": 27452964.1,
         "participacaoCarteira": 0.01940662159241762
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 27452964.1,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 169574.16,
+        "rentabilidadeMes": 0.62,
+        "rentabilidadePercentual": 0.62,
+        "saldoFinal": 27622538.26,
+        "participacaoCarteira": 0.01938717580967846,
+        "participacaoCarteiraConsolidada": 1.94
       }
     ]
   },
@@ -2728,6 +3136,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.0930353466545455,
         "saldoFinal": 9243574.23,
         "participacaoCarteira": 0.006534323455551129
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 9243574.23,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 62232.71,
+        "rentabilidadeMes": 0.67,
+        "rentabilidadePercentual": 0.67,
+        "saldoFinal": 9305806.94,
+        "participacaoCarteira": 0.006531380769520415,
+        "participacaoCarteiraConsolidada": 0.65
       }
     ]
   },
@@ -2806,6 +3226,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.071768168645491,
         "saldoFinal": 35409858.57,
         "participacaoCarteira": 0.02503138544187351
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 35409858.57,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 230175.71,
+        "rentabilidadeMes": 0.65,
+        "rentabilidadePercentual": 0.65,
+        "saldoFinal": 35640034.28,
+        "participacaoCarteira": 0.02501434169248308,
+        "participacaoCarteiraConsolidada": 2.5
       }
     ]
   },
@@ -2884,6 +3316,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1628103574510646,
         "saldoFinal": 53685539.51,
         "participacaoCarteira": 0.037950545028955736
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 53685539.51,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 478364.99,
+        "rentabilidadeMes": 0.89,
+        "rentabilidadePercentual": 0.89,
+        "saldoFinal": 54163904.5,
+        "participacaoCarteira": 0.038015519399270954,
+        "participacaoCarteiraConsolidada": 3.8
       }
     ]
   },
@@ -2962,6 +3406,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1778147596273527,
         "saldoFinal": 7984306.22,
         "participacaoCarteira": 0.005644141336618959
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 7984306.22,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 59606.61,
+        "rentabilidadeMes": 0.75,
+        "rentabilidadePercentual": 0.75,
+        "saldoFinal": 8043912.83,
+        "participacaoCarteira": 0.005645706805256433,
+        "participacaoCarteiraConsolidada": 0.56
       }
     ]
   },
@@ -3040,6 +3496,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.2224833399436648,
         "saldoFinal": 6972303.81,
         "participacaoCarteira": 0.004928752362592484
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 6972303.81,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 60021.1,
+        "rentabilidadeMes": 0.86,
+        "rentabilidadePercentual": 0.86,
+        "saldoFinal": 7032324.91,
+        "participacaoCarteira": 0.004935712934766019,
+        "participacaoCarteiraConsolidada": 0.49
       }
     ]
   },
@@ -3118,6 +3586,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.139147706251748,
         "saldoFinal": 4980207.67,
         "participacaoCarteira": 0.0035205308013842424
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 4980207.67,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 37790.66,
+        "rentabilidadeMes": 0.76,
+        "rentabilidadePercentual": 0.76,
+        "saldoFinal": 5017998.33,
+        "participacaoCarteira": 0.003521936142170553,
+        "participacaoCarteiraConsolidada": 0.35
       }
     ]
   },
@@ -3196,6 +3676,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.07746587873634,
         "saldoFinal": 11605696.12,
         "participacaoCarteira": 0.008204117853978083
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 11605696.12,
+        "aplicacoes": 2395018.71,
+        "resgates": 242423.95,
+        "rendimentos": 136367.61,
+        "rentabilidadeMes": 1.18,
+        "rentabilidadePercentual": 1.18,
+        "saldoFinal": 13758290.88,
+        "participacaoCarteira": 0.009656404549813292,
+        "participacaoCarteiraConsolidada": 0.97
       }
     ]
   },
@@ -3274,6 +3766,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1124,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -3352,6 +3856,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1124,
         "saldoFinal": 13829992.45,
         "participacaoCarteira": 0.009776482755213403
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 13829992.45,
+        "aplicacoes": 2156255.54,
+        "resgates": 521601.39,
+        "rendimentos": 182510.24,
+        "rentabilidadeMes": 1.21,
+        "rentabilidadePercentual": 1.21,
+        "saldoFinal": 15647156.84,
+        "participacaoCarteira": 0.010982125455790493,
+        "participacaoCarteiraConsolidada": 1.1
       }
     ]
   },
@@ -3430,6 +3946,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1124,
         "saldoFinal": 0,
         "participacaoCarteira": 0
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 0,
+        "aplicacoes": 0,
+        "resgates": 0,
+        "rendimentos": 0,
+        "rentabilidadeMes": 0,
+        "rentabilidadePercentual": 0,
+        "saldoFinal": 0,
+        "participacaoCarteira": 0,
+        "participacaoCarteiraConsolidada": 0
       }
     ]
   },
@@ -3508,6 +4036,18 @@ export const investimentos: Investimento[] = [
         "rentabilidadeMes": 1.1124,
         "saldoFinal": 21132603.259999998,
         "participacaoCarteira": 0.014938730595196856
+      },
+      {
+        "competencia": "2026-07",
+        "saldoInicial": 21132603.26,
+        "aplicacoes": 2103804.42,
+        "resgates": 858885.09,
+        "rendimentos": 250441.03,
+        "rentabilidadeMes": 1.21,
+        "rentabilidadePercentual": 1.21,
+        "saldoFinal": 22627963.62,
+        "participacaoCarteira": 0.01588167983646946,
+        "participacaoCarteiraConsolidada": 1.59
       }
     ]
   }

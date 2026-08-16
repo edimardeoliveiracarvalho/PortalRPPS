@@ -55,11 +55,13 @@ export const CompensacaoTab: React.FC<CompensacaoTabProps> = ({ competence }) =>
   };
 
   // Define active competencies for YTD calculation
-  const all2026Comp = ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06"];
-  const selectedIndex = all2026Comp.indexOf(competence);
   const activeYTDCompetencies = useMemo(() => {
-    return selectedIndex !== -1 ? all2026Comp.slice(0, selectedIndex + 1) : all2026Comp;
-  }, [selectedIndex]);
+    const monthNum = parseInt(competence.split("-")[1] || "6", 10);
+    return Array.from({ length: monthNum }, (_, i) => {
+      const m = i + 1;
+      return `2026-${m < 10 ? `0${m}` : m}`;
+    });
+  }, [competence]);
 
   // Filter only movements with category "Compensação Previdenciária"
   const refComprevMovs = useMemo(() => {

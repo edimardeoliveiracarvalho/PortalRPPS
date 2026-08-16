@@ -63,11 +63,12 @@ import {
 type TabId = "visao_geral" | "beneficios" | "contabil" | "compensacao" | "carteira_investimentos" | "titulos" | "meta_x_retorno" | "patrimonio" | "servidores" | "consg" | "agenda" | "impressao" | "contratos";
 
 export default function App() {
-  const [competence, setCompetence] = useState<string>("2026-06"); // Default to the latest complete month
+  const [competence, setCompetence] = useState<string>("2026-07"); // Default to the latest complete month
   const [activeTab, setActiveTab] = useState<TabId>("visao_geral");
   const [showCompetenceMenu, setShowCompetenceMenu] = useState(false);
 
   const availableCompetences = [
+    { value: "2026-07", label: "Julho / 2026" },
     { value: "2026-06", label: "Junho / 2026" },
     { value: "2026-05", label: "Maio / 2026" },
     { value: "2026-04", label: "Abril / 2026" },

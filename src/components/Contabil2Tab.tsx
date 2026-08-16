@@ -67,11 +67,18 @@ export const Contabil2Tab: React.FC<Contabil2TabProps> = ({ competence }) => {
     }
   };
 
-  const all2026Comp = ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06"];
-  const selectedIndex = all2026Comp.indexOf(competence);
+  const monthLabelsMap: Record<string, string> = {
+    "01": "Jan", "02": "Fev", "03": "Mar", "04": "Abr", "05": "Mai", "06": "Jun",
+    "07": "Jul", "08": "Ago", "09": "Set", "10": "Out", "11": "Nov", "12": "Dez"
+  };
+
   const activeYTDCompetencies = useMemo(() => {
-    return selectedIndex !== -1 ? all2026Comp.slice(0, selectedIndex + 1) : all2026Comp;
-  }, [selectedIndex]);
+    const monthNum = parseInt(competence.split("-")[1] || "6", 10);
+    return Array.from({ length: monthNum }, (_, i) => {
+      const m = i + 1;
+      return `2026-${m < 10 ? `0${m}` : m}`;
+    });
+  }, [competence]);
 
   // Filter movements for the current selected fund
   const refMovsFundo = useMemo(() => {
@@ -139,11 +146,7 @@ export const Contabil2Tab: React.FC<Contabil2TabProps> = ({ competence }) => {
       const desp = compMovs.filter(m => m.tipo === "despesa").reduce((acc, curr) => acc + curr.valor, 0);
 
       const parts = comp.split("-");
-      const label = parts[1] === "01" ? "Jan" :
-                    parts[1] === "02" ? "Fev" :
-                    parts[1] === "03" ? "Mar" :
-                    parts[1] === "04" ? "Abr" :
-                    parts[1] === "05" ? "Mai" : "Jun";
+      const label = monthLabelsMap[parts[1]] || parts[1];
 
       return {
         name: label,

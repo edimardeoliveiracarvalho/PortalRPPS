@@ -149,7 +149,17 @@ export function TitulosTab() {
     const map: Record<string, { year: string; volume: number; rateSum: number; weightSum: number }> = {};
     
     titulosData.forEach(t => {
-      const year = t.dataAplicacaoInicial ? t.dataAplicacaoInicial.split("-")[0] : null;
+      let year: string | null = null;
+      if (t.dataAplicacaoInicial) {
+        if (t.dataAplicacaoInicial.includes("/")) {
+          const parts = t.dataAplicacaoInicial.split("/");
+          year = parts[parts.length - 1].trim().slice(0, 4);
+        } else if (t.dataAplicacaoInicial.includes("-")) {
+          year = t.dataAplicacaoInicial.split("-")[0].trim();
+        } else {
+          year = t.dataAplicacaoInicial.slice(0, 4);
+        }
+      }
       if (!year) return;
       
       // extract rate number
@@ -967,11 +977,11 @@ export function TitulosTab() {
                           {/* Cupom Semestral indicator */}
                           <td className="py-3 px-4 text-center">
                             <span className={`inline-block px-1.5 py-0.5 rounded text-[9px] uppercase font-bold ${
-                              item.cupomSemestral === "true"
+                              (item.cupomSemestral === true || item.cupomSemestral === "true")
                                 ? "bg-emerald-50 text-emerald-800 border border-emerald-100"
                                 : "bg-slate-100 text-slate-400"
                             }`}>
-                              {item.cupomSemestral === "true" ? "Sim" : "Não"}
+                              {(item.cupomSemestral === true || item.cupomSemestral === "true") ? "Sim" : "Não"}
                             </span>
                           </td>
                         </>

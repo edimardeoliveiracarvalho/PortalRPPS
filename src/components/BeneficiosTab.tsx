@@ -62,14 +62,21 @@ export const BeneficiosTab: React.FC<BeneficiosTabProps> = ({ competence }) => {
   const COLORS = ["#0284c7", "#10b981"];
 
   // Historical data for 2026 for Area Chart
-  const historicalCompetences = ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06"].filter(comp => comp <= competence);
+  const monthLabelsMap: Record<string, string> = {
+    "01": "Jan", "02": "Fev", "03": "Mar", "04": "Abr", "05": "Mai", "06": "Jun",
+    "07": "Jul", "08": "Ago", "09": "Set", "10": "Out", "11": "Nov", "12": "Dez"
+  };
+
+  const compMonthNum = parseInt(competence.split("-")[1] || "6", 10);
+  const historicalCompetences = Array.from({ length: compMonthNum }, (_, i) => {
+    const m = i + 1;
+    return `2026-${m < 10 ? `0${m}` : m}`;
+  });
+
   const historicalBeneficiosData = historicalCompetences.map(comp => {
     const item = beneficios.find(b => b.competencia === comp && b.fundo === activeFundo);
-    const label = comp.split("-")[1] === "01" ? "Jan" :
-                  comp.split("-")[1] === "02" ? "Fev" :
-                  comp.split("-")[1] === "03" ? "Mar" :
-                  comp.split("-")[1] === "04" ? "Abr" :
-                  comp.split("-")[1] === "05" ? "Mai" : "Jun";
+    const mStr = comp.split("-")[1];
+    const label = monthLabelsMap[mStr] || mStr;
     return {
       name: label,
       "Aposentados": item?.aposentados || 0,
