@@ -67,6 +67,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
   // Filters state for Gestores & Fiscais sub-tab
   const [gestorFiscalSearch, setGestorFiscalSearch] = useState<string>("");
   const [gestorFiscalViewMode, setGestorFiscalViewMode] = useState<"gestores" | "fiscais" | "tabela">("gestores");
+  const [gestorFiscalStatusFilter, setGestorFiscalStatusFilter] = useState<"ativos" | "geral">("ativos");
 
   // Sub-filter for Decisões Urgentes / Vencimentos
   const [decisaoFilter, setDecisaoFilter] = useState<"todos" | "urgente60" | "atencao90" | "prazo180" | "aditivo" | "licitacao" | "essencial_risco">("todos");
@@ -76,7 +77,12 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
 
   // Selection state for Comparator & Modal
   const [selectedContractForModal, setSelectedContractForModal] = useState<Contrato | null>(null);
-  const [comparedIds, setComparedIds] = useState<string[]>(["202201", "202302", "202307"]);
+  const [comparedIds, setComparedIds] = useState<string[]>(["C012026", "C012025", "C042025"]);
+
+  // Helper to obtain current contract value (fallback to initial value if not yet amended)
+  const getValorContrato = (c: Contrato) => {
+    return c.valorAtualizado && c.valorAtualizado > 0 ? c.valorAtualizado : (c.valorInicialContrato || 0);
+  };
 
   // Helper to calculate days remaining until expiration (Reference Date: 2026-08-06)
   const getDaysRemaining = (endDateStr: string) => {
@@ -158,8 +164,8 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
       return d >= 0 && d <= 180;
     });
 
-    const valorAtRisco180 = v180.reduce((acc, c) => acc + c.valorAtualizado, 0);
-    const valorAtRisco60 = v60.reduce((acc, c) => acc + c.valorAtualizado, 0);
+    const valorAtRisco180 = v180.reduce((acc, c) => acc + getValorContrato(c), 0);
+    const valorAtRisco60 = v60.reduce((acc, c) => acc + getValorContrato(c), 0);
 
     const prorrogaveis180 = v180.filter((c) => c.possibilidadeProrrogacao === true);
     const licitacaoObrigatoria180 = v180.filter((c) => c.possibilidadeProrrogacao === false || c.necessitaNovaContratacao === true);
@@ -228,7 +234,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
 
       if (map[key]) {
         map[key].total += 1;
-        map[key].valor += c.valorAtualizado;
+        map[key].valor += getValorContrato(c);
         if (c.possibilidadeProrrogacao) map[key].aditivos += 1;
         else map[key].licitacoes += 1;
       }
@@ -253,17 +259,17 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
   const overviewStats = useMemo(() => {
     const ativos = contratosData.filter((c) => c.statusContrato === "Ativo");
 
-    const valorInicialTotal = ativos.reduce((acc, c) => acc + c.valorInicialContrato, 0);
-    const valorAtualizadoTotal = ativos.reduce((acc, c) => acc + c.valorAtualizado, 0);
-    const saldoRemanescenteTotal = ativos.reduce((acc, c) => acc + c.saldoContrato, 0);
-    const valorExecutadoTotal = valorAtualizadoTotal - saldoRemanescenteTotal;
+    const valorInicialTotal = ativos.reduce((acc, c) => acc + (c.valorInicialContrato || 0), 0);
+    const valorAtualizadoTotal = ativos.reduce((acc, c) => acc + getValorContrato(c), 0);
+    const saldoRemanescenteTotal = ativos.reduce((acc, c) => acc + (c.saldoContrato || 0), 0);
+    const valorExecutadoTotal = Math.max(0, valorAtualizadoTotal - saldoRemanescenteTotal);
     const valorMensalTotal = ativos.reduce((acc, c) => acc + (c.valorMensal || 0), 0);
 
     const vencimentos90 = ativos.filter((c) => {
       const d = getDaysRemaining(c.fimVigencia);
       return d >= 0 && d <= 90;
     });
-    const vencimentos90Value = vencimentos90.reduce((acc, c) => acc + c.valorAtualizado, 0);
+    const vencimentos90Value = vencimentos90.reduce((acc, c) => acc + getValorContrato(c), 0);
 
     const essenciais = ativos.filter((c) => c.servicoEssencial);
     const riscoAlto = ativos.filter((c) => c.riscoDescontinuidade === "Alto");
@@ -298,22 +304,23 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
     contratosData.forEach((c) => {
       if (c.statusContrato !== "Ativo") return;
       const days = getDaysRemaining(c.fimVigencia);
+      const val = getValorContrato(c);
 
       if (days < 30) {
         map.critico.count += 1;
-        map.critico.valor += c.valorAtualizado;
+        map.critico.valor += val;
       } else if (days <= 90) {
         map.urgente.count += 1;
-        map.urgente.valor += c.valorAtualizado;
+        map.urgente.valor += val;
       } else if (days <= 180) {
         map.medio.count += 1;
-        map.medio.valor += c.valorAtualizado;
+        map.medio.valor += val;
       } else if (days <= 365) {
         map.ano1.count += 1;
-        map.ano1.valor += c.valorAtualizado;
+        map.ano1.valor += val;
       } else {
         map.longo.count += 1;
-        map.longo.valor += c.valorAtualizado;
+        map.longo.valor += val;
       }
     });
 
@@ -331,7 +338,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
         map[mod] = { modalidade: mod, count: 0, valor: 0 };
       }
       map[mod].count += 1;
-      map[mod].valor += c.valorAtualizado;
+      map[mod].valor += getValorContrato(c);
     });
 
     return Object.values(map).sort((a, b) => b.valor - a.valor);
@@ -344,6 +351,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
     contratosData.forEach((c) => {
       if (c.statusContrato !== "Ativo") return;
       const cat = c.categoriaContrato || "Geral";
+      const valAtual = getValorContrato(c);
       if (!map[cat]) {
         map[cat] = {
           categoria: cat,
@@ -354,10 +362,10 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
           count: 0
         };
       }
-      map[cat].valorInicial += c.valorInicialContrato;
-      map[cat].valorAtualizado += c.valorAtualizado;
-      map[cat].saldoRemanescente += c.saldoContrato;
-      map[cat].executado += (c.valorAtualizado - c.saldoContrato);
+      map[cat].valorInicial += c.valorInicialContrato || 0;
+      map[cat].valorAtualizado += valAtual;
+      map[cat].saldoRemanescente += c.saldoContrato || 0;
+      map[cat].executado += Math.max(0, valAtual - (c.saldoContrato || 0));
       map[cat].count += 1;
     });
 
@@ -368,9 +376,17 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
   const topContratosAtivos = useMemo(() => {
     return contratosData
       .filter((c) => c.statusContrato === "Ativo")
-      .sort((a, b) => b.valorAtualizado - a.valorAtualizado)
+      .sort((a, b) => getValorContrato(b) - getValorContrato(a))
       .slice(0, 5);
   }, []);
+
+  // Filtered dataset for Gestores & Fiscais based on selector (Ativos vs Geral)
+  const gestorFiscalContratos = useMemo(() => {
+    if (gestorFiscalStatusFilter === "ativos") {
+      return contratosData.filter((c) => c.statusContrato === "Ativo");
+    }
+    return contratosData;
+  }, [gestorFiscalStatusFilter]);
 
   // Summary aggregation for Gestores (Contract Managers)
   const gestoresSummary = useMemo(() => {
@@ -383,16 +399,17 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
       contratos: Contrato[];
     }> = {};
 
-    contratosData.forEach((c) => {
-      const g = c.gestorContrato || "Não Designado";
+    gestorFiscalContratos.forEach((c) => {
+      const g = (c.gestorContrato || "Não Designado").trim();
       if (!map[g]) {
         map[g] = { nome: g, totalContratos: 0, ativosCount: 0, valorTotal: 0, vencimentoUrgente: 0, contratos: [] };
       }
       map[g].totalContratos += 1;
       map[g].contratos.push(c);
+      map[g].valorTotal += getValorContrato(c);
+
       if (c.statusContrato === "Ativo") {
         map[g].ativosCount += 1;
-        map[g].valorTotal += c.valorAtualizado;
         const days = getDaysRemaining(c.fimVigencia);
         if (days >= 0 && days <= 180) {
           map[g].vencimentoUrgente += 1;
@@ -400,8 +417,13 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
       }
     });
 
-    return Object.values(map).sort((a, b) => b.ativosCount - a.ativosCount || b.valorTotal - a.valorTotal);
-  }, []);
+    return Object.values(map).sort((a, b) => {
+      if (gestorFiscalStatusFilter === "ativos") {
+        return b.ativosCount - a.ativosCount || b.valorTotal - a.valorTotal;
+      }
+      return b.totalContratos - a.totalContratos || b.valorTotal - a.valorTotal;
+    });
+  }, [gestorFiscalContratos, gestorFiscalStatusFilter]);
 
   // Summary aggregation for Fiscais (Contract Inspectors)
   const fiscaisSummary = useMemo(() => {
@@ -414,16 +436,17 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
       contratos: Contrato[];
     }> = {};
 
-    contratosData.forEach((c) => {
-      const f = c.fiscalContrato || "Não Designado";
+    gestorFiscalContratos.forEach((c) => {
+      const f = (c.fiscalContrato || "Não Designado").trim();
       if (!map[f]) {
         map[f] = { nome: f, totalContratos: 0, ativosCount: 0, valorTotal: 0, vencimentoUrgente: 0, contratos: [] };
       }
       map[f].totalContratos += 1;
       map[f].contratos.push(c);
+      map[f].valorTotal += getValorContrato(c);
+
       if (c.statusContrato === "Ativo") {
         map[f].ativosCount += 1;
-        map[f].valorTotal += c.valorAtualizado;
         const days = getDaysRemaining(c.fimVigencia);
         if (days >= 0 && days <= 180) {
           map[f].vencimentoUrgente += 1;
@@ -431,8 +454,13 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
       }
     });
 
-    return Object.values(map).sort((a, b) => b.ativosCount - a.ativosCount || b.valorTotal - a.valorTotal);
-  }, []);
+    return Object.values(map).sort((a, b) => {
+      if (gestorFiscalStatusFilter === "ativos") {
+        return b.ativosCount - a.ativosCount || b.valorTotal - a.valorTotal;
+      }
+      return b.totalContratos - a.totalContratos || b.valorTotal - a.valorTotal;
+    });
+  }, [gestorFiscalContratos, gestorFiscalStatusFilter]);
 
   // Toggle comparison contract
   const handleToggleCompare = (id: string) => {
@@ -1250,7 +1278,9 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
             {/* KPI 1: Total Gestores */}
             <div className="bg-white rounded shadow-sm border-l-4 border-blue-600 p-4">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">GESTORES DE CONTRATOS</span>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                  {gestorFiscalStatusFilter === "ativos" ? "GESTORES (ATIVOS)" : "GESTORES (GERAL)"}
+                </span>
                 <div className="p-1.5 rounded bg-blue-50 text-blue-600">
                   <UserCheck className="h-4 w-4" />
                 </div>
@@ -1260,7 +1290,9 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                   {gestoresSummary.length} <span className="text-xs font-bold text-slate-500 font-sans">servidores</span>
                 </h4>
                 <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
-                  Gestão técnica de {stats.totalAtivos} contratos ativos
+                  {gestorFiscalStatusFilter === "ativos"
+                    ? `Gestão técnica de ${gestorFiscalContratos.length} contratos ativos`
+                    : `Gestão histórica de ${gestorFiscalContratos.length} contratos no total`}
                 </span>
               </div>
             </div>
@@ -1268,7 +1300,9 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
             {/* KPI 2: Total Fiscais */}
             <div className="bg-white rounded shadow-sm border-l-4 border-indigo-500 p-4">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">FISCAIS DE CONTRATOS</span>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                  {gestorFiscalStatusFilter === "ativos" ? "FISCAIS (ATIVOS)" : "FISCAIS (GERAL)"}
+                </span>
                 <div className="p-1.5 rounded bg-indigo-50 text-indigo-600">
                   <UserCog className="h-4 w-4" />
                 </div>
@@ -1278,7 +1312,9 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                   {fiscaisSummary.length} <span className="text-xs font-bold text-slate-500 font-sans">servidores</span>
                 </h4>
                 <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
-                  Acompanhamento de execução e faturamento
+                  {gestorFiscalStatusFilter === "ativos"
+                    ? `Fiscalização de ${gestorFiscalContratos.length} contratos ativos`
+                    : `Fiscalização de ${gestorFiscalContratos.length} contratos no total`}
                 </span>
               </div>
             </div>
@@ -1286,7 +1322,9 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
             {/* KPI 3: Maior Carga (Gestão) */}
             <div className="bg-white rounded shadow-sm border-l-4 border-amber-500 p-4">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">MAIOR CARGA (GESTOR)</span>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                  MAIOR CARGA ({gestorFiscalStatusFilter === "ativos" ? "ATIVOS" : "GERAL"})
+                </span>
                 <div className="p-1.5 rounded bg-amber-50 text-amber-600">
                   <Users className="h-4 w-4" />
                 </div>
@@ -1296,7 +1334,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                   {gestoresSummary[0]?.nome || "N/A"}
                 </h4>
                 <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
-                  <strong className="text-slate-800 font-mono">{gestoresSummary[0]?.ativosCount || 0}</strong> contrato(s) | <strong className="font-mono">{formatCurrency(gestoresSummary[0]?.valorTotal || 0)}</strong>
+                  <strong className="text-slate-800 font-mono">{gestoresSummary[0]?.totalContratos || 0}</strong> contrato(s) | <strong className="font-mono">{formatCurrency(gestoresSummary[0]?.valorTotal || 0)}</strong>
                 </span>
               </div>
             </div>
@@ -1304,65 +1342,114 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
             {/* KPI 4: Vencimentos sob Responsabilidade */}
             <div className="bg-white rounded shadow-sm border-l-4 border-rose-500 p-4">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">ATENÇÃO A VENCIMENTOS</span>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                  {gestorFiscalStatusFilter === "ativos" ? "ATENÇÃO A VENCIMENTOS" : "BASE HISTÓRICA"}
+                </span>
                 <div className="p-1.5 rounded bg-rose-50 text-rose-600">
                   <Clock className="h-4 w-4" />
                 </div>
               </div>
               <div className="mt-2">
                 <h4 className="text-xl font-black text-slate-800 tracking-tight">
-                  {stats.v180Count} <span className="text-xs font-bold text-slate-500 font-sans">contratos em &lt; 180d</span>
+                  {gestorFiscalStatusFilter === "ativos" ? (
+                    <>
+                      {stats.v180Count} <span className="text-xs font-bold text-slate-500 font-sans">contratos em &lt; 180d</span>
+                    </>
+                  ) : (
+                    <>
+                      {contratosData.length} <span className="text-xs font-bold text-slate-500 font-sans">contratos</span>
+                    </>
+                  )}
                 </h4>
                 <span className="text-[10px] text-slate-400 mt-0.5 block font-semibold">
-                  Atuação preventiva dos gestores designados
+                  {gestorFiscalStatusFilter === "ativos"
+                    ? "Atuação preventiva dos gestores designados"
+                    : `${stats.totalAtivos} ativos, ${contratosData.filter(c => c.statusContrato === "Encerrado").length} encerrados, ${contratosData.filter(c => c.statusContrato === "Suspenso").length} suspensos`}
                 </span>
               </div>
             </div>
           </div>
 
           {/* Sub-Filter & View Switcher Bar */}
-          <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
-            {/* View switcher buttons */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              <button
-                onClick={() => setGestorFiscalViewMode("gestores")}
-                className={`px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer transition-all flex items-center space-x-1.5 ${
-                  gestorFiscalViewMode === "gestores"
-                    ? "bg-[#1e3a8a] text-white shadow-xs"
-                    : "bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200"
-                }`}
-              >
-                <UserCheck className="w-3.5 h-3.5" />
-                <span>Visão por Gestor ({gestoresSummary.length})</span>
-              </button>
+          <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-xs flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+            {/* Left Controls: Status Selector (Ativos vs Geral) & View switcher buttons */}
+            <div className="flex flex-wrap items-center gap-2">
+              
+              {/* Seletor de Escopo: Contratos Ativos vs Geral (Inicialmente Ativos) */}
+              <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button
+                  id="btn-gestor-escopo-ativos"
+                  onClick={() => setGestorFiscalStatusFilter("ativos")}
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                    gestorFiscalStatusFilter === "ativos"
+                      ? "bg-emerald-700 text-white shadow-xs"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
+                  }`}
+                  title="Exibir somente contratos ativos sob responsabilidade de gestores e fiscais"
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Contratos Ativos ({contratosData.filter((c) => c.statusContrato === "Ativo").length})</span>
+                </button>
+                
+                <button
+                  id="btn-gestor-escopo-geral"
+                  onClick={() => setGestorFiscalStatusFilter("geral")}
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                    gestorFiscalStatusFilter === "geral"
+                      ? "bg-[#1e3a8a] text-white shadow-xs"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
+                  }`}
+                  title="Exibir todos os contratos (ativos, encerrados e suspensos)"
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>Geral ({contratosData.length})</span>
+                </button>
+              </div>
 
-              <button
-                onClick={() => setGestorFiscalViewMode("fiscais")}
-                className={`px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer transition-all flex items-center space-x-1.5 ${
-                  gestorFiscalViewMode === "fiscais"
-                    ? "bg-[#1e3a8a] text-white shadow-xs"
-                    : "bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200"
-                }`}
-              >
-                <UserCog className="w-3.5 h-3.5" />
-                <span>Visão por Fiscal ({fiscaisSummary.length})</span>
-              </button>
+              <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
 
-              <button
-                onClick={() => setGestorFiscalViewMode("tabela")}
-                className={`px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer transition-all flex items-center space-x-1.5 ${
-                  gestorFiscalViewMode === "tabela"
-                    ? "bg-[#1e3a8a] text-white shadow-xs"
-                    : "bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200"
-                }`}
-              >
-                <Layers className="w-3.5 h-3.5" />
-                <span>Matriz Completa de Atribuições</span>
-              </button>
+              {/* View switcher buttons */}
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  onClick={() => setGestorFiscalViewMode("gestores")}
+                  className={`px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer transition-all flex items-center space-x-1.5 ${
+                    gestorFiscalViewMode === "gestores"
+                      ? "bg-[#1e3a8a] text-white shadow-xs"
+                      : "bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200"
+                  }`}
+                >
+                  <UserCheck className="w-3.5 h-3.5" />
+                  <span>Visão por Gestor ({gestoresSummary.length})</span>
+                </button>
+
+                <button
+                  onClick={() => setGestorFiscalViewMode("fiscais")}
+                  className={`px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer transition-all flex items-center space-x-1.5 ${
+                    gestorFiscalViewMode === "fiscais"
+                      ? "bg-[#1e3a8a] text-white shadow-xs"
+                      : "bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200"
+                  }`}
+                >
+                  <UserCog className="w-3.5 h-3.5" />
+                  <span>Visão por Fiscal ({fiscaisSummary.length})</span>
+                </button>
+
+                <button
+                  onClick={() => setGestorFiscalViewMode("tabela")}
+                  className={`px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider cursor-pointer transition-all flex items-center space-x-1.5 ${
+                    gestorFiscalViewMode === "tabela"
+                      ? "bg-[#1e3a8a] text-white shadow-xs"
+                      : "bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200"
+                  }`}
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>Matriz Completa ({gestorFiscalContratos.length})</span>
+                </button>
+              </div>
             </div>
 
             {/* Search Box */}
-            <div className="relative w-full md:w-72">
+            <div className="relative w-full xl:w-72">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
               <input
                 type="text"
@@ -1407,7 +1494,11 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                         <div>
                           <div className="text-sm font-black text-slate-900">{g.nome}</div>
                           <div className="text-[11px] text-slate-500 font-medium">
-                            Gestor responsável por <strong className="text-slate-800">{g.ativosCount}</strong> contrato(s) ativo(s)
+                            {gestorFiscalStatusFilter === "ativos" ? (
+                              <>Gestor responsável por <strong className="text-slate-800">{g.ativosCount}</strong> contrato(s) ativo(s)</>
+                            ) : (
+                              <>Gestor de <strong className="text-slate-800">{g.totalContratos}</strong> contrato(s) no total (<span className="text-emerald-700 font-bold">{g.ativosCount} ativo(s)</span>, {g.totalContratos - g.ativosCount} inativo(s))</>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1431,6 +1522,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                         <thead>
                           <tr className="bg-slate-50 text-slate-600 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200">
                             <th className="p-2">Contrato / Ano</th>
+                            {gestorFiscalStatusFilter === "geral" && <th className="p-2">Status</th>}
                             <th className="p-2">Fornecedor</th>
                             <th className="p-2">Categoria</th>
                             <th className="p-2">Fiscal Responsável</th>
@@ -1445,6 +1537,9 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                               <td className="p-2 font-bold text-slate-800 font-mono">
                                 Nº {c.numeroContrato}/{c.anoContrato}
                               </td>
+                              {gestorFiscalStatusFilter === "geral" && (
+                                <td className="p-2">{getStatusBadge(c.statusContrato)}</td>
+                              )}
                               <td className="p-2 font-bold text-slate-900">{c.fornecedor}</td>
                               <td className="p-2 text-slate-600">{c.categoriaContrato}</td>
                               <td className="p-2 text-slate-800 font-semibold">{c.fiscalContrato}</td>
@@ -1453,7 +1548,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                                 {getVigenciaAlertBadge(c)}
                               </td>
                               <td className="p-2 text-right font-mono font-bold text-blue-900">
-                                {formatCurrency(c.valorAtualizado)}
+                                {formatCurrency(getValorContrato(c))}
                               </td>
                               <td className="p-2 text-right">
                                 <button
@@ -1501,7 +1596,11 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                         <div>
                           <div className="text-sm font-black text-slate-900">{f.nome}</div>
                           <div className="text-[11px] text-slate-500 font-medium">
-                            Fiscal responsável por inspecionar <strong className="text-slate-800">{f.ativosCount}</strong> contrato(s) ativo(s)
+                            {gestorFiscalStatusFilter === "ativos" ? (
+                              <>Fiscal responsável por inspecionar <strong className="text-slate-800">{f.ativosCount}</strong> contrato(s) ativo(s)</>
+                            ) : (
+                              <>Fiscal de <strong className="text-slate-800">{f.totalContratos}</strong> contrato(s) no total (<span className="text-emerald-700 font-bold">{f.ativosCount} ativo(s)</span>, {f.totalContratos - f.ativosCount} inativo(s))</>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1525,6 +1624,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                         <thead>
                           <tr className="bg-slate-50 text-slate-600 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200">
                             <th className="p-2">Contrato / Ano</th>
+                            {gestorFiscalStatusFilter === "geral" && <th className="p-2">Status</th>}
                             <th className="p-2">Fornecedor</th>
                             <th className="p-2">Categoria</th>
                             <th className="p-2">Gestor Responsável</th>
@@ -1539,6 +1639,9 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                               <td className="p-2 font-bold text-slate-800 font-mono">
                                 Nº {c.numeroContrato}/{c.anoContrato}
                               </td>
+                              {gestorFiscalStatusFilter === "geral" && (
+                                <td className="p-2">{getStatusBadge(c.statusContrato)}</td>
+                              )}
                               <td className="p-2 font-bold text-slate-900">{c.fornecedor}</td>
                               <td className="p-2 text-slate-600">{c.categoriaContrato}</td>
                               <td className="p-2 text-slate-800 font-semibold">{c.gestorContrato}</td>
@@ -1547,7 +1650,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                                 {getVigenciaAlertBadge(c)}
                               </td>
                               <td className="p-2 text-right font-mono font-bold text-indigo-900">
-                                {formatCurrency(c.valorAtualizado)}
+                                {formatCurrency(getValorContrato(c))}
                               </td>
                               <td className="p-2 text-right">
                                 <button
@@ -1573,10 +1676,10 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                 <h4 className="text-xs uppercase font-black tracking-wider text-slate-800 flex items-center gap-1.5">
                   <Layers className="w-4 h-4 text-blue-600" />
-                  <span>Matriz Geral de Responsabilidade Técnica (Gestão & Fiscalização)</span>
+                  <span>Matriz de Responsabilidade Técnica (Gestão & Fiscalização)</span>
                 </h4>
                 <span className="text-[11px] text-slate-500 font-medium">
-                  {contratosData.filter((c) => c.statusContrato === "Ativo").length} contratos ativos
+                  {gestorFiscalContratos.length} contrato(s) no escopo ({gestorFiscalStatusFilter === "ativos" ? "Ativos" : "Geral"})
                 </span>
               </div>
 
@@ -1585,6 +1688,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                   <thead>
                     <tr className="bg-slate-50 text-slate-600 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200">
                       <th className="p-2.5">Contrato</th>
+                      {gestorFiscalStatusFilter === "geral" && <th className="p-2.5">Status</th>}
                       <th className="p-2.5">Empresa Contratada</th>
                       <th className="p-2.5">Gestor do Contrato</th>
                       <th className="p-2.5">Fiscal do Contrato</th>
@@ -1594,7 +1698,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-xs text-slate-700 font-medium">
-                    {contratosData
+                    {gestorFiscalContratos
                       .filter((c) => {
                         if (!gestorFiscalSearch) return true;
                         const search = gestorFiscalSearch.toLowerCase();
@@ -1611,6 +1715,9 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                             Nº {c.numeroContrato}/{c.anoContrato}
                             <div className="text-[10px] font-sans text-slate-400">{c.categoriaContrato}</div>
                           </td>
+                          {gestorFiscalStatusFilter === "geral" && (
+                            <td className="p-2.5">{getStatusBadge(c.statusContrato)}</td>
+                          )}
                           <td className="p-2.5 font-bold text-slate-900">{c.fornecedor}</td>
                           <td className="p-2.5 font-black text-blue-900">{c.gestorContrato}</td>
                           <td className="p-2.5 font-bold text-slate-800">{c.fiscalContrato}</td>
@@ -1619,7 +1726,7 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                             <div>{getVigenciaAlertBadge(c)}</div>
                           </td>
                           <td className="p-2.5 text-right font-mono font-bold text-slate-900">
-                            {formatCurrency(c.valorAtualizado)}
+                            {formatCurrency(getValorContrato(c))}
                           </td>
                           <td className="p-2.5 text-right">
                             <button
