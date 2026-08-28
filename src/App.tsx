@@ -200,9 +200,15 @@ export default function App() {
         {/* Footer Bar */}
         <footer className="bg-slate-200 h-8 px-6 flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-slate-500 shrink-0 border-t border-slate-300">
           <div>Maringá Previdência • Sistema de Gestão Estratégica (SGE)</div>
-          <div className="flex items-center">
-            <span className="mr-4">Versão 2.4.0</span>
+          <div className="flex items-center gap-3">
+            <span>Versão 2.4.0</span>
+            <span>•</span>
             <span className="text-emerald-600">● Conexão Segura</span>
+            <span>•</span>
+            <span className="text-slate-600 flex items-center gap-1 font-mono lowercase first-letter:uppercase">
+              <Calendar className="w-3 h-3 text-slate-500" />
+              <span className="uppercase">{new Date().toLocaleDateString('pt-BR')}</span>
+            </span>
           </div>
         </footer>
       </div>
