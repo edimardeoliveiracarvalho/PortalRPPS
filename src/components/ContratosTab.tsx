@@ -215,28 +215,58 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
 
   // Chart Data: Expiration timeline & financial commitments
   const chartSemestreData = useMemo(() => {
-    const map: Record<string, { semestre: string; total: number; valor: number; aditivos: number; licitacoes: number }> = {
-      "2026-H2": { semestre: "2º Sem 2026", total: 0, valor: 0, aditivos: 0, licitacoes: 0 },
-      "2027-H1": { semestre: "1º Sem 2027", total: 0, valor: 0, aditivos: 0, licitacoes: 0 },
-      "2027-H2": { semestre: "2º Sem 2027", total: 0, valor: 0, aditivos: 0, licitacoes: 0 },
-      "2028+": { semestre: "2028 em diante", total: 0, valor: 0, aditivos: 0, licitacoes: 0 }
+    const map: Record<string, {
+      semestre: string;
+      total: number;
+      valor: number;
+      aditivos: number;
+      valorAditivos: number;
+      licitacoes: number;
+      valorLicitacoes: number;
+    }> = {
+      "2026-H2": { semestre: "2º Sem 2026", total: 0, valor: 0, aditivos: 0, valorAditivos: 0, licitacoes: 0, valorLicitacoes: 0 },
+      "2027-H1": { semestre: "1º Sem 2027", total: 0, valor: 0, aditivos: 0, valorAditivos: 0, licitacoes: 0, valorLicitacoes: 0 },
+      "2027-H2": { semestre: "2º Sem 2027", total: 0, valor: 0, aditivos: 0, valorAditivos: 0, licitacoes: 0, valorLicitacoes: 0 },
+      "2028+": { semestre: "2028 em diante", total: 0, valor: 0, aditivos: 0, valorAditivos: 0, licitacoes: 0, valorLicitacoes: 0 }
     };
 
     contratosData.forEach((c) => {
       if (c.statusContrato !== "Ativo") return;
-      const year = parseInt(c.fimVigencia.substring(0, 4));
-      const month = parseInt(c.fimVigencia.substring(5, 7));
+
+      let year = 2026;
+      let month = 1;
+      if (c.fimVigencia) {
+        if (c.fimVigencia.includes("-")) {
+          const parts = c.fimVigencia.split("-").map(Number);
+          year = parts[0] || 2026;
+          month = parts[1] || 1;
+        } else if (c.fimVigencia.includes("/")) {
+          const parts = c.fimVigencia.split("/").map(Number);
+          year = parts[2] || 2026;
+          month = parts[1] || 1;
+        }
+      }
 
       let key = "2028+";
-      if (year === 2026) key = "2026-H2";
+      if (year <= 2026) key = "2026-H2";
       else if (year === 2027 && month <= 6) key = "2027-H1";
       else if (year === 2027 && month > 6) key = "2027-H2";
 
+      const val = getValorContrato(c);
+
       if (map[key]) {
         map[key].total += 1;
-        map[key].valor += getValorContrato(c);
-        if (c.possibilidadeProrrogacao) map[key].aditivos += 1;
-        else map[key].licitacoes += 1;
+        map[key].valor += val;
+        
+        // Verifica se é passível de termo aditivo de prorrogação ou se exige nova licitação
+        const isAditivo = c.possibilidadeProrrogacao && !c.necessitaNovaContratacao;
+        if (isAditivo) {
+          map[key].aditivos += 1;
+          map[key].valorAditivos += val;
+        } else {
+          map[key].licitacoes += 1;
+          map[key].valorLicitacoes += val;
+        }
       }
     });
 
@@ -261,9 +291,8 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
 
     const valorInicialTotal = ativos.reduce((acc, c) => acc + (c.valorInicialContrato || 0), 0);
     const valorAtualizadoTotal = ativos.reduce((acc, c) => acc + getValorContrato(c), 0);
-    const saldoRemanescenteTotal = ativos.reduce((acc, c) => acc + (c.saldoContrato || 0), 0);
-    const valorExecutadoTotal = Math.max(0, valorAtualizadoTotal - saldoRemanescenteTotal);
     const valorMensalTotal = ativos.reduce((acc, c) => acc + (c.valorMensal || 0), 0);
+    const contratosComMensalidade = ativos.filter((c) => (c.valorMensal || 0) > 0).length;
 
     const vencimentos90 = ativos.filter((c) => {
       const d = getDaysRemaining(c.fimVigencia);
@@ -280,9 +309,8 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
       totalAtivos: ativos.length,
       valorInicialTotal,
       valorAtualizadoTotal,
-      saldoRemanescenteTotal,
-      valorExecutadoTotal,
       valorMensalTotal,
+      contratosComMensalidade,
       vencimentos90Count: vencimentos90.length,
       vencimentos90Value,
       essenciaisCount: essenciais.length,
@@ -327,8 +355,8 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
     return Object.values(map).sort((a, b) => a.order - b.order);
   }, []);
 
-  // Chart 2: Contracting Modality (Tipo de Contratação)
-  const chartModalidadeData = useMemo(() => {
+  // Chart 2: Contracting Modality by Total Value (Tipo de Contratação por Valor)
+  const chartModalidadePorValor = useMemo(() => {
     const map: Record<string, { modalidade: string; count: number; valor: number }> = {};
 
     contratosData.forEach((c) => {
@@ -344,32 +372,21 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
     return Object.values(map).sort((a, b) => b.valor - a.valor);
   }, []);
 
-  // Chart 3: Financial Execution Breakdown (Valor Inicial x Valor Atualizado x Saldo Remanescente)
-  const chartExecucaoPorCategoria = useMemo(() => {
-    const map: Record<string, { categoria: string; valorInicial: number; valorAtualizado: number; saldoRemanescente: number; executado: number; count: number }> = {};
+  // Chart 3: Contracting Modality by Number of Contracts (Tipo de Contratação por Número de Contratos)
+  const chartModalidadePorQtd = useMemo(() => {
+    const map: Record<string, { modalidade: string; count: number; valor: number }> = {};
 
     contratosData.forEach((c) => {
       if (c.statusContrato !== "Ativo") return;
-      const cat = c.categoriaContrato || "Geral";
-      const valAtual = getValorContrato(c);
-      if (!map[cat]) {
-        map[cat] = {
-          categoria: cat,
-          valorInicial: 0,
-          valorAtualizado: 0,
-          saldoRemanescente: 0,
-          executado: 0,
-          count: 0
-        };
+      const mod = c.tipoContratacao || "Outros";
+      if (!map[mod]) {
+        map[mod] = { modalidade: mod, count: 0, valor: 0 };
       }
-      map[cat].valorInicial += c.valorInicialContrato || 0;
-      map[cat].valorAtualizado += valAtual;
-      map[cat].saldoRemanescente += c.saldoContrato || 0;
-      map[cat].executado += Math.max(0, valAtual - (c.saldoContrato || 0));
-      map[cat].count += 1;
+      map[mod].count += 1;
+      map[mod].valor += getValorContrato(c);
     });
 
-    return Object.values(map).sort((a, b) => b.valorAtualizado - a.valorAtualizado);
+    return Object.values(map).sort((a, b) => b.count - a.count);
   }, []);
 
   // Top 5 largest active contracts
@@ -654,11 +671,11 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
               </div>
             </div>
 
-            {/* Card 3: Saldo Remanescente Total */}
+            {/* Card 3: Compromisso Mensal Recorrente */}
             <div className="bg-white rounded shadow-sm border-l-4 border-emerald-500 p-4">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                  Saldo Remanescente Total
+                  Compromisso Mensal Estimado
                 </span>
                 <div className="p-1.5 rounded bg-emerald-50 text-emerald-600">
                   <DollarSign className="h-4 w-4" />
@@ -666,13 +683,13 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
               </div>
               <div className="mt-2">
                 <h4 className="text-xl font-black text-slate-800 tracking-tight font-mono">
-                  {formatCurrency(overviewStats.saldoRemanescenteTotal)}
+                  {formatCurrency(overviewStats.valorMensalTotal)}
                 </h4>
                 <span className="text-[10px] text-slate-500 mt-0.5 block font-semibold">
-                  Compromisso Mensal: <strong className="text-slate-800 font-mono">{formatCurrency(overviewStats.valorMensalTotal)}</strong>
+                  Contratos Recorrentes: <strong className="text-slate-800">{overviewStats.contratosComMensalidade} ativos</strong>
                 </span>
                 <span className="text-[10px] text-emerald-700 block font-medium">
-                  Executado: <span className="font-mono">{formatCurrency(overviewStats.valorExecutadoTotal)}</span>
+                  Total Inicial Ativos: <span className="font-mono">{formatCurrency(overviewStats.valorInicialTotal)}</span>
                 </span>
               </div>
             </div>
@@ -758,32 +775,29 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
             </div>
           </div>
 
-          {/* Grid com 2 Gráficos: Modalidade & Comparativo de Execução */}
+          {/* Grid com 2 Gráficos: Modalidade por Valor & Modalidade por Número de Contratos */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             
-            {/* Gráfico 2: Modalidade de Contratação */}
+            {/* Gráfico 1: Modalidade de Contratação por Valor */}
             <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs flex flex-col justify-between space-y-3">
               <div>
                 <h4 className="text-xs uppercase font-black tracking-wider text-slate-800 flex items-center gap-1.5">
                   <BarChart3 className="w-4 h-4 text-indigo-600" />
-                  <span>Modalidade de Contratação (Tipo)</span>
+                  <span>Tipo de Contratação (por Valor)</span>
                 </h4>
                 <p className="text-[11px] text-slate-500 mt-0.5">
-                  Distribuição dos contratos ativos por modalidade licitatória (Pregão, Inexigibilidade, Dispensa, etc.)
+                  Volume financeiro total atualizado dos contratos ativos por modalidade licitatória
                 </p>
               </div>
 
               <div className="h-60 w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartModalidadeData} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
+                  <BarChart data={chartModalidadePorValor} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
                     <XAxis type="number" tickFormatter={(v) => `R$ ${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 10, fill: "#64748b" }} />
                     <YAxis type="category" dataKey="modalidade" tick={{ fontSize: 11, fill: "#334155", fontWeight: 600 }} width={100} />
                     <Tooltip
-                      formatter={(value: any, name: any, props: any) => {
-                        const count = props.payload?.count || 0;
-                        return [`${formatCurrency(Number(value))} (${count} contrato(s))`, "Valor Total"];
-                      }}
+                      formatter={(value: any) => [formatCurrency(Number(value)), "Valor Total"]}
                       contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", borderColor: "#cbd5e1", fontSize: "12px" }}
                     />
                     <Bar dataKey="valor" name="Valor Atualizado" fill="#4f46e5" radius={[0, 4, 4, 0]} />
@@ -792,47 +806,47 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
               </div>
 
               <div className="pt-2 border-t border-slate-100 flex flex-wrap gap-2 text-[11px]">
-                {chartModalidadeData.map((m) => (
-                  <span key={m.modalidade} className="bg-slate-100 border border-slate-200 px-2 py-1 rounded text-slate-700 font-semibold">
-                    {m.modalidade}: <strong className="text-slate-900 font-mono">{m.count}</strong> ({formatCurrency(m.valor)})
+                {chartModalidadePorValor.map((m) => (
+                  <span key={m.modalidade} className="bg-indigo-50/70 border border-indigo-100 px-2 py-1 rounded text-slate-700 font-semibold">
+                    {m.modalidade}: <strong className="text-indigo-900 font-mono">{formatCurrency(m.valor)}</strong>
                   </span>
                 ))}
               </div>
             </div>
 
-            {/* Gráfico 3: Comparativo de Execução: Valor Inicial x Valor Atualizado x Saldo Remanescente */}
+            {/* Gráfico 2: Modalidade de Contratação por Número de Contratos */}
             <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs flex flex-col justify-between space-y-3">
               <div>
                 <h4 className="text-xs uppercase font-black tracking-wider text-slate-800 flex items-center gap-1.5">
-                  <PieChartIcon className="w-4 h-4 text-emerald-600" />
-                  <span>Comparativo de Execução por Categoria</span>
+                  <Layers className="w-4 h-4 text-sky-600" />
+                  <span>Tipo de Contratação (por Número de Contratos)</span>
                 </h4>
                 <p className="text-[11px] text-slate-500 mt-0.5">
-                  Confronto entre Valor Inicial, Valor Atualizado (Aditivos/Reajustes) e Saldo Remanescente por Categoria
+                  Quantidade de contratos ativos distribuídos por modalidade licitatória
                 </p>
               </div>
 
               <div className="h-60 w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartExecucaoPorCategoria} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="categoria" tick={{ fontSize: 10, fill: "#475569" }} />
-                    <YAxis tickFormatter={(v) => `R$ ${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 10, fill: "#64748b" }} />
+                  <BarChart data={chartModalidadePorQtd} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                    <XAxis type="number" allowDecimals={false} tick={{ fontSize: 10, fill: "#64748b" }} />
+                    <YAxis type="category" dataKey="modalidade" tick={{ fontSize: 11, fill: "#334155", fontWeight: 600 }} width={100} />
                     <Tooltip
-                      formatter={(value: any, name: any) => [formatCurrency(Number(value)), name]}
+                      formatter={(value: any) => [`${value} contrato(s)`, "Qtd de Contratos"]}
                       contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", borderColor: "#cbd5e1", fontSize: "12px" }}
                     />
-                    <Legend wrapperStyle={{ fontSize: "11px" }} />
-                    <Bar dataKey="valorInicial" name="Valor Inicial" fill="#64748b" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="valorAtualizado" name="Valor Atualizado" fill="#2563eb" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="saldoRemanescente" name="Saldo Remanescente" fill="#10b981" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="count" name="Qtd Contratos" fill="#0284c7" radius={[0, 4, 4, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
 
-              <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center font-medium">
-                <span>Total Atualizado: <strong className="text-slate-800 font-mono">{formatCurrency(overviewStats.valorAtualizadoTotal)}</strong></span>
-                <span>Saldo Disponível: <strong className="text-emerald-700 font-mono">{formatCurrency(overviewStats.saldoRemanescenteTotal)}</strong></span>
+              <div className="pt-2 border-t border-slate-100 flex flex-wrap gap-2 text-[11px]">
+                {chartModalidadePorQtd.map((m) => (
+                  <span key={m.modalidade} className="bg-sky-50/70 border border-sky-100 px-2 py-1 rounded text-slate-700 font-semibold">
+                    {m.modalidade}: <strong className="text-sky-900 font-mono">{m.count} {m.count === 1 ? "contrato" : "contratos"}</strong>
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -856,8 +870,8 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                     <th className="p-2.5">Fornecedor</th>
                     <th className="p-2.5">Categoria / Modalidade</th>
                     <th className="p-2.5">Término Vigência</th>
+                    <th className="p-2.5 text-right">Valor Inicial</th>
                     <th className="p-2.5 text-right">Valor Atualizado</th>
-                    <th className="p-2.5 text-right">Saldo Remanescente</th>
                     <th className="p-2.5 text-center">Status / Risco</th>
                     <th className="p-2.5 text-right">Ação</th>
                   </tr>
@@ -881,11 +895,11 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                           {c.fimVigencia}
                           <div className="text-[10px]">{getVigenciaAlertBadge(c)}</div>
                         </td>
+                        <td className="p-2.5 text-right font-mono font-semibold text-slate-700">
+                          {formatCurrency(c.valorInicialContrato)}
+                        </td>
                         <td className="p-2.5 text-right font-mono font-bold text-slate-900">
                           {formatCurrency(c.valorAtualizado)}
-                        </td>
-                        <td className="p-2.5 text-right font-mono font-bold text-emerald-700">
-                          {formatCurrency(c.saldoContrato)}
                         </td>
                         <td className="p-2.5 text-center">
                           {getRiscoBadge(c.riscoDescontinuidade)}
@@ -1117,25 +1131,25 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                           <div className="text-[10px] font-bold text-slate-400 uppercase">Empresa Contratada / Objeto</div>
                           <div className="font-black text-slate-900 text-sm">{c.fornecedor}</div>
                           <div className="text-slate-600 line-clamp-2 text-[11px] leading-relaxed">
-                            {c.objetoContrato}
+                            {c.objeto}
                           </div>
                           <div className="text-[10px] text-slate-400 font-mono">CNPJ: {c.cnpjFornecedor}</div>
                         </div>
 
                         {/* Column 2: Financial Numbers */}
                         <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200/80 space-y-1">
-                          <div className="text-[10px] font-bold text-slate-400 uppercase">Valores & Saldo</div>
+                          <div className="text-[10px] font-bold text-slate-400 uppercase">Valores do Contrato</div>
+                          <div className="flex justify-between items-center text-xs">
+                            <span className="text-slate-500">Valor Inicial:</span>
+                            <strong className="font-mono text-slate-700">{formatCurrency(c.valorInicialContrato)}</strong>
+                          </div>
                           <div className="flex justify-between items-center text-xs">
                             <span className="text-slate-500">Valor Atualizado:</span>
                             <strong className="font-mono text-blue-900">{formatCurrency(c.valorAtualizado)}</strong>
                           </div>
-                          <div className="flex justify-between items-center text-xs">
+                          <div className="flex justify-between items-center text-xs border-t border-slate-200 pt-1">
                             <span className="text-slate-500">Mensalidade:</span>
                             <strong className="font-mono text-slate-800">{c.valorMensal ? formatCurrency(c.valorMensal) : "Sob demanda"}</strong>
-                          </div>
-                          <div className="flex justify-between items-center text-xs border-t border-slate-200 pt-1">
-                            <span className="text-slate-500">Saldo Restante:</span>
-                            <strong className="font-mono text-emerald-700">{formatCurrency(c.saldoContrato)}</strong>
                           </div>
                         </div>
 
@@ -1209,22 +1223,63 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
             {/* Chart 1: Projeção de Vencimentos */}
             <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-4 shadow-xs space-y-3">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <h4 className="text-xs uppercase font-black tracking-wider text-slate-800 flex items-center gap-1.5">
-                  <BarChart3 className="w-4 h-4 text-blue-600" />
-                  <span>Projeção de Vencimentos Contratuais e Quantitativos</span>
-                </h4>
-                <span className="text-[10px] text-slate-400 font-bold">Distribuição Temporal</span>
+                <div>
+                  <h4 className="text-xs uppercase font-black tracking-wider text-slate-800 flex items-center gap-1.5">
+                    <BarChart3 className="w-4 h-4 text-blue-600" />
+                    <span>Projeção de Vencimentos Contratuais e Quantitativos</span>
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Cronograma semestral de término de vigência segregado por diretriz (Prorrogação via Aditivo vs Nova Licitação)
+                  </p>
+                </div>
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Distribuição Temporal</span>
               </div>
-              <div className="h-56">
+              <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartSemestreData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                    <XAxis dataKey="semestre" tick={{ fontSize: 11 }} />
-                    <YAxis tick={{ fontSize: 11 }} />
+                  <BarChart data={chartSemestreData} margin={{ top: 10, right: 15, left: -15, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis dataKey="semestre" tick={{ fontSize: 11, fill: "#475569" }} />
+                    <YAxis tick={{ fontSize: 11, fill: "#475569" }} allowDecimals={false} />
                     <Tooltip
-                      formatter={(val: number, name: string) => [val, name === "aditivos" ? "Termos Aditivos" : "Novas Licitações"]}
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          const data = payload[0].payload;
+                          return (
+                            <div className="bg-white p-3 rounded-xl border border-slate-300 shadow-xl text-xs space-y-2 max-w-sm z-50">
+                              <div className="font-bold text-slate-900 border-b border-slate-100 pb-1.5 flex items-center justify-between">
+                                <span className="font-bold text-sm text-slate-800">{data.semestre}</span>
+                                <span className="text-[11px] font-mono font-black bg-slate-100 text-slate-800 px-2 py-0.5 rounded">
+                                  Total: {data.total} {data.total === 1 ? "contrato" : "contratos"}
+                                </span>
+                              </div>
+
+                              <div className="p-2 bg-slate-50 rounded-lg border border-slate-100 space-y-1 text-xs">
+                                <div className="flex justify-between items-center text-slate-600">
+                                  <span>Volume Financeiro Total:</span>
+                                  <strong className="font-mono text-slate-900">{formatCurrency(data.valor)}</strong>
+                                </div>
+                                <div className="flex justify-between items-center text-blue-700 pt-1 border-t border-slate-200/60 font-medium">
+                                  <span className="flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-blue-600 inline-block"></span>
+                                    Prorrogação via Aditivo:
+                                  </span>
+                                  <strong className="font-mono">{data.aditivos} {data.aditivos === 1 ? "contrato" : "contratos"} ({formatCurrency(data.valorAditivos)})</strong>
+                                </div>
+                                <div className="flex justify-between items-center text-rose-700 font-medium">
+                                  <span className="flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-rose-600 inline-block"></span>
+                                    Nova Licitação Necessária:
+                                  </span>
+                                  <strong className="font-mono">{data.licitacoes} {data.licitacoes === 1 ? "contrato" : "contratos"} ({formatCurrency(data.valorLicitacoes)})</strong>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
                     />
-                    <Legend wrapperStyle={{ fontSize: "11px" }} />
+                    <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "6px" }} />
                     <Bar dataKey="aditivos" name="Prorrogação via Aditivo" fill="#2563eb" radius={[4, 4, 0, 0]} />
                     <Bar dataKey="licitacoes" name="Nova Licitação Necessária" fill="#e11d48" radius={[4, 4, 0, 0]} />
                   </BarChart>
@@ -1240,24 +1295,28 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                   <span>Distribuição de Encaminhamentos (&lt; 180d)</span>
                 </h4>
               </div>
-              <div className="h-56">
+              <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={chartRouteData}
                       cx="50%"
-                      cy="50%"
+                      cy="45%"
                       innerRadius={45}
                       outerRadius={70}
                       paddingAngle={4}
                       dataKey="value"
-                      label={({ name, value }) => `${name}: ${value}`}
+                      label={({ name, value }) => `${value}`}
                     >
                       {chartRouteData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip
+                      formatter={(value: any, name: any) => [`${value} contrato(s)`, name]}
+                      contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", borderColor: "#cbd5e1", fontSize: "12px", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)" }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -1863,7 +1922,6 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                     <th className="p-2.5">Fornecedor</th>
                     <th className="p-2.5 text-right">Valor Inicial</th>
                     <th className="p-2.5 text-right">Valor Atualizado</th>
-                    <th className="p-2.5 text-right">Saldo Restante</th>
                     <th className="p-2.5">Vigência & Alerta</th>
                     <th className="p-2.5 text-center">Risco</th>
                     <th className="p-2.5 text-center">Ações</th>
@@ -1888,9 +1946,6 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                       </td>
                       <td className="p-2.5 text-right font-mono font-black text-blue-900">
                         {formatCurrency(c.valorAtualizado)}
-                      </td>
-                      <td className="p-2.5 text-right font-mono font-bold text-emerald-700">
-                        {formatCurrency(c.saldoContrato)}
                       </td>
                       <td className="p-2.5 text-[11px] text-slate-600">
                         <div className="font-semibold text-slate-800">{c.inicioVigencia} até <strong>{c.fimVigencia}</strong></div>
@@ -2013,10 +2068,18 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                       ))}
                     </tr>
                     <tr>
-                      <td className="p-3 font-bold text-slate-800 bg-slate-50/50">Saldo Restante</td>
+                      <td className="p-3 font-bold text-slate-800 bg-slate-50/50">Valor Inicial</td>
                       {comparedContracts.map((c) => (
-                        <td key={c.idContrato} className="p-3 text-center border-l border-slate-100 font-mono font-bold text-emerald-700">
-                          {formatCurrency(c.saldoContrato)}
+                        <td key={c.idContrato} className="p-3 text-center border-l border-slate-100 font-mono font-semibold text-slate-700">
+                          {formatCurrency(c.valorInicialContrato)}
+                        </td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold text-slate-800 bg-slate-50/50">Valor Atualizado</td>
+                      {comparedContracts.map((c) => (
+                        <td key={c.idContrato} className="p-3 text-center border-l border-slate-100 font-mono font-black text-blue-900">
+                          {formatCurrency(c.valorAtualizado)}
                         </td>
                       ))}
                     </tr>
@@ -2127,9 +2190,9 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
               <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-1">
                   <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Resumo Financeiro e Saldos Contratuais</span>
+                  <span>Resumo Financeiro do Contrato</span>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                   <div>
                     <span className="text-[10px] text-slate-500 block">Valor Inicial</span>
                     <span className="font-mono font-bold text-slate-800 text-sm">{formatCurrency(selectedContractForModal.valorInicialContrato)}</span>
@@ -2139,13 +2202,9 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                     <span className="font-mono font-black text-blue-900 text-sm">{formatCurrency(selectedContractForModal.valorAtualizado)}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 block">Saldo Restante</span>
-                    <span className="font-mono font-bold text-emerald-700 text-sm">{formatCurrency(selectedContractForModal.saldoContrato)}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-slate-500 block">Recorrência Mensal</span>
+                    <span className="text-[10px] text-slate-500 block">Recorrência / Mensalidade</span>
                     <span className="font-mono font-bold text-slate-800 text-sm">
-                      {selectedContractForModal.valorMensal ? formatCurrency(selectedContractForModal.valorMensal) : "N/A (Sob Demanda)"}
+                      {selectedContractForModal.valorMensal ? formatCurrency(selectedContractForModal.valorMensal) : "N/A (Sob Demanda / Única)"}
                     </span>
                   </div>
                 </div>

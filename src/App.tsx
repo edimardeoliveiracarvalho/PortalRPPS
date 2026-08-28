@@ -89,8 +89,8 @@ export default function App() {
     { id: "servidores", label: "Servidores", icon: Users, component: ServidoresTab },
     { id: "consg", label: "CONSIGNADO", icon: Coins, component: ConsgTab },
     { id: "agenda", label: "Agenda", icon: Calendar, component: AgendaTab },
+    { id: "contratos", label: "CONTRATOS", icon: FileText, component: ContratosTab },
     { id: "impressao", label: "IMPRESSÃO", icon: Printer, component: ImpressaoTab },
-    { id: "contratos", label: "CONTRATOS (TESTE)", icon: FileText, component: ContratosTab },
   ] as const;
 
   const handleCompetenceChange = (comp: string) => {
