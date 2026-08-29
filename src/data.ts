@@ -59,6 +59,13 @@ export interface EvolucaoCarteira {
   valorCarteiraConsolidada: number;
 }
 
+export interface FundoRiscoConsignado {
+  saldoInicial: number;
+  entradas: number;
+  saidas: number;
+  saldoFinal: number;
+}
+
 export interface EmprestimoConsignado {
   competencia: string;
   quantidadeContratos: number;
@@ -72,6 +79,12 @@ export interface EmprestimoConsignado {
   jurosMes?: number;
   inadimplencia?: number;
   contratosAtivos?: number;
+  retornoFinanceiro?: number;
+  retornoPercentual?: number;
+  contratosNovos?: number;
+  contratosQuitados?: number;
+  prazosContratados?: number[];
+  fundoRisco?: FundoRiscoConsignado;
 }
 
 export interface CRP {
@@ -456,17 +469,281 @@ export const crp: CRP[] = [
 ];
 
 export const emprestimosConsignados: EmprestimoConsignado[] = [
-  {"competencia":"2025-09","quantidadeContratos":9,"prazoMedio":44,"saldoInicial":0.0,"valorEmprestado":134052.23,"valorAmortizado":0.0,"saldoCarteira":134052.23,"concessoesMes":134052.23,"amortizacoesMes":0.0,"jurosMes":36.93,"inadimplencia":0,"contratosAtivos":9},
-  {"competencia":"2025-10","quantidadeContratos":90,"prazoMedio":63,"saldoInicial":134052.23,"valorEmprestado":1912609.99,"valorAmortizado":3706.79,"saldoCarteira":2042955.43,"concessoesMes":1912609.99,"amortizacoesMes":3706.79,"jurosMes":4506.32,"inadimplencia":0,"contratosAtivos":99},
-  {"competencia":"2025-11","quantidadeContratos":58,"prazoMedio":62,"saldoInicial":2042955.43,"valorEmprestado":1038005.5,"valorAmortizado":2499.88,"saldoCarteira":3078461.05,"concessoesMes":1038005.5,"amortizacoesMes":2499.88,"jurosMes":21977.67,"inadimplencia":0,"contratosAtivos":157},
-  {"competencia":"2025-12","quantidadeContratos":47,"prazoMedio":69,"saldoInicial":3078461.05,"valorEmprestado":913634.79,"valorAmortizado":66690.34,"saldoCarteira":3925405.5,"concessoesMes":913634.79,"amortizacoesMes":66690.34,"jurosMes":33486.65,"inadimplencia":0,"contratosAtivos":204},
-  {"competencia":"2026-01","quantidadeContratos":71,"prazoMedio":60,"saldoInicial":3925405.5,"valorEmprestado":1489942.54,"valorAmortizado":127845.33,"saldoCarteira":5287502.71,"concessoesMes":1489942.54,"amortizacoesMes":127845.33,"jurosMes":40969.27,"inadimplencia":0,"contratosAtivos":272},
-  {"competencia":"2026-02","quantidadeContratos":51,"prazoMedio":62,"saldoInicial":5287502.71,"valorEmprestado":796177.22,"valorAmortizado":124548.76,"saldoCarteira":5959131.17,"concessoesMes":796177.22,"amortizacoesMes":124548.76,"jurosMes":30202.46,"inadimplencia":0,"contratosAtivos":320},
-  {"competencia":"2026-03","quantidadeContratos":144,"prazoMedio":77,"saldoInicial":5959131.17,"valorEmprestado":1756900.38,"valorAmortizado":80439.33,"saldoCarteira":7635592.22,"concessoesMes":1756900.38,"amortizacoesMes":80439.33,"jurosMes":65222.64,"inadimplencia":0,"contratosAtivos":464},
-  {"competencia":"2026-04","quantidadeContratos":142,"prazoMedio":77,"saldoInicial":7635592.22,"valorEmprestado":1636428.49,"valorAmortizado":140243.17,"saldoCarteira":9131777.54,"concessoesMes":1636428.49,"amortizacoesMes":140243.17,"jurosMes":85947.18,"inadimplencia":0,"contratosAtivos":603},
-  {"competencia":"2026-05","quantidadeContratos":85,"prazoMedio":73,"saldoInicial":9131777.54,"valorEmprestado":1298575.19,"valorAmortizado":121470.14,"saldoCarteira":10308882.59,"concessoesMes":1298575.19,"amortizacoesMes":121470.14,"jurosMes":97789.19,"inadimplencia":0,"contratosAtivos":686},
-  {"competencia":"2026-06","quantidadeContratos":759,"prazoMedio":68,"saldoInicial":10254840.75,"valorEmprestado":1530943.04,"valorAmortizado":180090.67,"saldoCarteira":11605696.12,"concessoesMes":1530943.04,"amortizacoesMes":180090.67,"jurosMes":110594.79,"inadimplencia":0,"contratosAtivos":759},
-  {"competencia":"2026-07","quantidadeContratos":857,"prazoMedio":74,"saldoInicial":11605696.12,"valorEmprestado":2395018.71,"valorAmortizado":242423.95,"saldoCarteira":13758290.88,"concessoesMes":2395018.71,"amortizacoesMes":242423.95,"jurosMes":136367.61,"inadimplencia":0,"contratosAtivos":857}
+  {
+    "competencia": "2025-09",
+    "quantidadeContratos": 9,
+    "prazoMedio": 44,
+    "saldoInicial": 0.0,
+    "valorEmprestado": 134052.23,
+    "valorAmortizado": 0.0,
+    "saldoCarteira": 134052.23,
+    "concessoesMes": 134052.23,
+    "amortizacoesMes": 0.0,
+    "jurosMes": 36.93,
+    "inadimplencia": 0,
+    "contratosAtivos": 9,
+    "retornoFinanceiro": 36.93,
+    "retornoPercentual": 0.06,
+    "contratosNovos": 9,
+    "contratosQuitados": 0,
+    "prazosContratados": [45, 24, 48, 11, 24, 50, 40, 96, 60],
+    "fundoRisco": {
+      "saldoInicial": 0.0,
+      "entradas": 0.0,
+      "saidas": 0.0,
+      "saldoFinal": 0.0
+    }
+  },
+  {
+    "competencia": "2025-10",
+    "quantidadeContratos": 90,
+    "prazoMedio": 63,
+    "saldoInicial": 134052.23,
+    "valorEmprestado": 1912609.99,
+    "valorAmortizado": 4769.91,
+    "saldoCarteira": 2041892.31,
+    "concessoesMes": 1912609.99,
+    "amortizacoesMes": 4769.91,
+    "jurosMes": 4506.32,
+    "inadimplencia": 0,
+    "contratosAtivos": 99,
+    "retornoFinanceiro": 4506.32,
+    "retornoPercentual": 3.36,
+    "contratosNovos": 90,
+    "contratosQuitados": 0,
+    "prazosContratados": [96, 28, 25, 40, 48, 18, 96, 96, 49, 72, 96, 96, 96, 96, 96, 96, 20, 42, 96, 96, 45, 24, 96, 30, 38, 40, 96, 40, 10, 40, 40, 48, 96, 36, 96, 67, 36, 96, 36, 96, 96, 60, 29, 96, 96, 42, 96, 96, 48, 30, 60, 72, 41, 31, 96, 42, 40, 36, 96, 42, 29, 96, 96, 96, 48, 96, 53, 24, 96, 96, 96, 42, 96, 36, 96, 96, 96, 23, 71, 96, 60, 42, 12, 36, 36, 24, 12, 96, 96, 35],
+    "fundoRisco": {
+      "saldoInicial": 0.0,
+      "entradas": 345.48,
+      "saidas": 0.0,
+      "saldoFinal": 345.48
+    }
+  },
+  {
+    "competencia": "2025-11",
+    "quantidadeContratos": 58,
+    "prazoMedio": 62,
+    "saldoInicial": 2041892.31,
+    "valorEmprestado": 1038008.48,
+    "valorAmortizado": 26508.72,
+    "saldoCarteira": 3053392.07,
+    "concessoesMes": 1038008.48,
+    "amortizacoesMes": 26508.72,
+    "jurosMes": 21977.67,
+    "inadimplencia": 0,
+    "contratosAtivos": 157,
+    "retornoFinanceiro": 21977.67,
+    "retornoPercentual": 1.08,
+    "contratosNovos": 58,
+    "contratosQuitados": 0,
+    "prazosContratados": [24, 96, 36, 96, 32, 12, 85, 36, 96, 96, 96, 96, 12, 96, 40, 96, 65, 42, 12, 96, 96, 12, 60, 10, 36, 96, 24, 13, 46, 96, 48, 24, 96, 96, 48, 96, 96, 84, 42, 12, 96, 18, 51, 96, 96, 96, 40, 96, 18, 24, 30, 96, 96, 39, 96, 80, 45, 96],
+    "fundoRisco": {
+      "saldoInicial": 345.48,
+      "entradas": 252.6,
+      "saidas": 0.0,
+      "saldoFinal": 598.08
+    }
+  },
+  {
+    "competencia": "2025-12",
+    "quantidadeContratos": 47,
+    "prazoMedio": 69,
+    "saldoInicial": 3053389.09,
+    "valorEmprestado": 913630.79,
+    "valorAmortizado": 41582.65,
+    "saldoCarteira": 3925440.21,
+    "concessoesMes": 913630.79,
+    "amortizacoesMes": 41582.65,
+    "jurosMes": 33486.65,
+    "inadimplencia": 0,
+    "contratosAtivos": 204,
+    "retornoFinanceiro": 33486.65,
+    "retornoPercentual": 1.1,
+    "contratosNovos": 47,
+    "contratosQuitados": 0,
+    "prazosContratados": [96, 96, 96, 39, 38, 40, 40, 96, 24, 96, 96, 40, 96, 96, 96, 36, 36, 96, 44, 96, 65, 96, 96, 36, 96, 60, 96, 36, 24, 96, 12, 96, 96, 96, 96, 36, 24, 96, 96, 96, 16, 36, 96, 39, 96, 40, 96],
+    "fundoRisco": {
+      "saldoInicial": 598.08,
+      "entradas": 6086.59,
+      "saidas": 0.0,
+      "saldoFinal": 6684.67
+    }
+  },
+  {
+    "competencia": "2026-01",
+    "quantidadeContratos": 71,
+    "prazoMedio": 60,
+    "saldoInicial": 3925437.23,
+    "valorEmprestado": 1489852.48,
+    "valorAmortizado": 125976.48,
+    "saldoCarteira": 5289316.21,
+    "concessoesMes": 1489852.48,
+    "amortizacoesMes": 125976.48,
+    "jurosMes": 41060.77,
+    "inadimplencia": 0,
+    "contratosAtivos": 272,
+    "retornoFinanceiro": 41060.77,
+    "retornoPercentual": 1.05,
+    "contratosNovos": 71,
+    "contratosQuitados": 3,
+    "prazosContratados": [96, 96, 96, 25, 96, 92, 36, 6, 25, 44, 30, 96, 96, 96, 40, 96, 12, 36, 96, 96, 10, 24, 96, 12, 96, 96, 60, 96, 10, 36, 96, 25, 96, 96, 96, 36, 60, 48, 12, 60, 10, 55, 60, 96, 34, 96, 96, 96, 96, 96, 24, 12, 36, 60, 96, 25, 48, 12, 96, 25, 15, 79, 36, 36, 96, 96, 36, 48, 12, 96, 96],
+    "fundoRisco": {
+      "saldoInicial": 6684.67,
+      "entradas": 85.58,
+      "saidas": 0.0,
+      "saldoFinal": 6770.25
+    }
+  },
+  {
+    "competencia": "2026-02",
+    "quantidadeContratos": 51,
+    "prazoMedio": 62,
+    "saldoInicial": 5289313.21,
+    "valorEmprestado": 796177.22,
+    "valorAmortizado": 160593.61,
+    "saldoCarteira": 5924899.82,
+    "concessoesMes": 796177.22,
+    "amortizacoesMes": 160593.61,
+    "jurosMes": 55133.7,
+    "inadimplencia": 0,
+    "contratosAtivos": 320,
+    "retornoFinanceiro": 55133.7,
+    "retornoPercentual": 1.04,
+    "contratosNovos": 51,
+    "contratosQuitados": 3,
+    "prazosContratados": [12, 12, 17, 96, 96, 96, 96, 96, 48, 24, 24, 18, 96, 96, 96, 36, 46, 15, 42, 96, 68, 58, 60, 96, 96, 24, 96, 12, 96, 96, 36, 10, 36, 96, 96, 48, 96, 25, 10, 96, 24, 12, 77, 96, 96, 96, 96, 96, 55, 96, 16],
+    "fundoRisco": {
+      "saldoInicial": 6770.25,
+      "entradas": 4734.96,
+      "saidas": 0.0,
+      "saldoFinal": 11505.21
+    }
+  },
+  {
+    "competencia": "2026-03",
+    "quantidadeContratos": 144,
+    "prazoMedio": 77,
+    "saldoInicial": 5924896.82,
+    "valorEmprestado": 1756907.38,
+    "valorAmortizado": 83239.04,
+    "saldoCarteira": 7598568.16,
+    "concessoesMes": 1756907.38,
+    "amortizacoesMes": 83239.04,
+    "jurosMes": 71935.5,
+    "inadimplencia": 0,
+    "contratosAtivos": 464,
+    "retornoFinanceiro": 71935.5,
+    "retornoPercentual": 1.21,
+    "contratosNovos": 144,
+    "contratosQuitados": 0,
+    "prazosContratados": [36, 96, 96, 48, 10, 48, 96, 96, 48, 96, 96, 24, 12, 36, 36, 36, 96, 48, 15, 96, 96, 96, 48, 36, 67, 24, 36, 25, 20, 48, 27, 48, 96, 36, 81, 25, 25, 79, 96, 96, 77, 77, 60, 80, 96, 84, 96, 96, 40, 96, 96, 20, 30, 96, 40, 48, 25, 36, 60, 96, 96, 96, 96, 36, 96, 96, 96, 96, 20, 25, 36, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 36, 96, 96, 96, 36, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 79, 96, 96, 96, 96, 96, 48, 96, 96, 96, 96, 96, 96, 96, 96, 96, 18, 96, 96, 96, 96, 96, 94, 96, 96, 96, 96, 96],
+    "fundoRisco": {
+      "saldoInicial": 11505.21,
+      "entradas": 9985.88,
+      "saidas": 0.0,
+      "saldoFinal": 21491.09
+    }
+  },
+  {
+    "competencia": "2026-04",
+    "quantidadeContratos": 140,
+    "prazoMedio": 77,
+    "saldoInicial": 7598565.16,
+    "valorEmprestado": 1636421.49,
+    "valorAmortizado": 149152.8,
+    "saldoCarteira": 9085836.85,
+    "concessoesMes": 1636421.49,
+    "amortizacoesMes": 149152.8,
+    "jurosMes": 93786.71,
+    "inadimplencia": 0,
+    "contratosAtivos": 603,
+    "retornoFinanceiro": 93786.71,
+    "retornoPercentual": 1.23,
+    "contratosNovos": 140,
+    "contratosQuitados": 1,
+    "prazosContratados": [96, 96, 96, 29, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 42, 96, 96, 96, 96, 96, 96, 96, 36, 96, 74, 12, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 60, 96, 22, 96, 96, 96, 37, 96, 96, 15, 30, 85, 96, 96, 96, 50, 96, 25, 96, 96, 96, 48, 8, 96, 96, 24, 96, 96, 96, 96, 96, 48, 96, 41, 36, 96, 25, 52, 81, 75, 96, 96, 96, 96, 96, 96, 96, 48, 96, 15, 40, 96, 96, 39, 96, 84, 84, 24, 36, 96, 24, 48, 96, 96, 96, 48, 96, 30, 96, 48, 25, 96, 35, 50, 48, 96, 25, 24, 96, 96, 15, 48, 96, 48, 96, 96, 96, 96, 20, 96, 96, 15, 96, 96, 96, 96, 20, 96, 40, 96, 96, 96, 70],
+    "fundoRisco": {
+      "saldoInicial": 21491.09,
+      "entradas": 3840.89,
+      "saidas": 0.0,
+      "saldoFinal": 25331.98
+    }
+  },
+  {
+    "competencia": "2026-05",
+    "quantidadeContratos": 85,
+    "prazoMedio": 73,
+    "saldoInicial": 9085833.85,
+    "valorEmprestado": 1298575.19,
+    "valorAmortizado": 129568.29,
+    "saldoCarteira": 10254843.75,
+    "concessoesMes": 1298575.19,
+    "amortizacoesMes": 129568.29,
+    "jurosMes": 104936.97,
+    "inadimplencia": 0,
+    "contratosAtivos": 686,
+    "retornoFinanceiro": 104936.97,
+    "retornoPercentual": 1.15,
+    "contratosNovos": 85,
+    "contratosQuitados": 2,
+    "prazosContratados": [48, 48, 72, 96, 96, 96, 60, 96, 96, 96, 18, 76, 96, 72, 96, 96, 60, 12, 96, 24, 25, 96, 32, 48, 96, 96, 96, 96, 96, 96, 96, 96, 20, 96, 96, 60, 24, 96, 10, 78, 96, 96, 25, 10, 40, 96, 96, 60, 96, 48, 96, 96, 96, 96, 42, 96, 96, 96, 35, 36, 96, 12, 70, 96, 25, 48, 96, 96, 51, 96, 96, 24, 96, 96, 96, 67, 96, 56, 36, 96, 96, 36, 96, 96, 96, 70],
+    "fundoRisco": {
+      "saldoInicial": 25331.98,
+      "entradas": 56637.45,
+      "saidas": 0.0,
+      "saldoFinal": 81969.43
+    }
+  },
+  {
+    "competencia": "2026-06",
+    "quantidadeContratos": 77,
+    "prazoMedio": 68,
+    "saldoInicial": 10254840.75,
+    "valorEmprestado": 1530943.04,
+    "valorAmortizado": 180090.67,
+    "saldoCarteira": 11605696.12,
+    "concessoesMes": 1530943.04,
+    "amortizacoesMes": 180090.67,
+    "jurosMes": 110492.41,
+    "inadimplencia": 0,
+    "contratosAtivos": 759,
+    "retornoFinanceiro": 110492.41,
+    "retornoPercentual": 1.08,
+    "contratosNovos": 77,
+    "contratosQuitados": 4,
+    "prazosContratados": [96, 96, 96, 96, 96, 60, 48, 40, 96, 40, 96, 96, 96, 40, 10, 96, 20, 96, 96, 60, 60, 96, 96, 96, 18, 96, 96, 96, 96, 96, 40, 70, 36, 7, 96, 96, 96, 6, 15, 96, 81, 65, 95, 24, 96, 10, 25, 96, 96, 24, 96, 96, 95, 60, 90, 69, 18, 91, 96, 36, 96, 96, 77, 96, 36, 10, 96, 12, 71, 96, 96, 42, 59, 85, 24, 96, 96],
+    "fundoRisco": {
+      "saldoInicial": 81969.43,
+      "entradas": 56637.45,
+      "saidas": 0.0,
+      "saldoFinal": 138606.9
+    }
+  },
+  {
+    "competencia": "2026-07",
+    "quantidadeContratos": 103,
+    "prazoMedio": 74,
+    "saldoInicial": 11605696.12,
+    "valorEmprestado": 2395018.71,
+    "valorAmortizado": 242423.95,
+    "saldoCarteira": 13758290.88,
+    "concessoesMes": 2395018.71,
+    "amortizacoesMes": 242423.95,
+    "jurosMes": 136367.61,
+    "inadimplencia": 0,
+    "contratosAtivos": 857,
+    "retornoFinanceiro": 136367.61,
+    "retornoPercentual": 1.18,
+    "contratosNovos": 103,
+    "contratosQuitados": 5,
+    "prazosContratados": [96, 96, 96, 96, 96, 60, 48, 40, 96, 40, 96, 96, 96, 40, 10, 96, 20, 96, 96, 60, 60, 96, 96, 96, 18, 96, 96, 96, 96, 96, 40, 70, 36, 7, 96, 96, 96, 6, 15, 96, 81, 65, 95, 24, 96, 10, 25, 96, 96, 24, 96, 96, 95, 60, 90, 69, 18, 91, 96, 36, 96, 96, 77, 96, 36, 10, 96, 12, 71, 96, 96, 42, 59, 85, 24, 96, 96],
+    "fundoRisco": {
+      "saldoInicial": 138606.9,
+      "entradas": 94009.73,
+      "saidas": 0.0,
+      "saldoFinal": 232616.6
+    }
+  }
 ];
 
 export const agendaReunioes: AgendaReuniao[] = [

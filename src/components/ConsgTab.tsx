@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { evolucaoCarteiraConsolidada, retornoMetaAtuarial } from "../data";
+import { emprestimosConsignados, evolucaoCarteiraConsolidada, retornoMetaAtuarial } from "../data";
 import { formatCurrency, formatNumber, getMonthName, getPrevCompetence } from "../utils";
 import { 
   PiggyBank, 
@@ -12,7 +12,13 @@ import {
   Award,
   Calendar,
   Layers,
-  ArrowRightLeft
+  ArrowRightLeft,
+  ShieldCheck,
+  ShieldAlert,
+  Lock,
+  Scale,
+  CheckCircle2,
+  AlertCircle
 } from "lucide-react";
 import { 
   ResponsiveContainer, 
@@ -26,164 +32,31 @@ import {
   Legend, 
   CartesianGrid,
   Cell,
-  LabelList
+  LabelList,
+  ComposedChart,
+  Line
 } from "recharts";
 
-// Consignment Loan data with the new structure provided by the user
-export const emprestimosConsignadosData = [
-  {
-    "competencia": "2025-09",
-    "saldoInicial": 0,
-    "valorConcedido": 134052.23,
-    "valorAmortizado": 0,
-    "saldoFinal": 134052.23,
-    "retornoFinanceiro": 36.93,
-    "retornoPercentual": 0.06,
-    "contratosNovos": 9,
-    "contratosQuitados": 0,
-    "contratosAtivos": 9,
-    "prazosContratados": [45,24,48,11,24,50,40,96,60]
-  },
-  {
-    "competencia": "2025-10",
-    "saldoInicial": 134052.23,
-    "valorConcedido": 1912609.99,
-    "valorAmortizado": 4769.91,
-    "saldoFinal": 2041892.31,
-    "retornoFinanceiro": 4506.32,
-    "retornoPercentual": 3.36,
-    "contratosNovos": 90,
-    "contratosQuitados": 0,
-    "contratosAtivos": 99,
-    "prazosContratados": [96,28,25,40,48,18,96,96,49,72,96,96,96,96,96,96,20,42,96,96,45,24,96,30,38,40,96,40,10,40,40,48,96,36,96,67,36,96,36,96,96,60,29,96,96,42,96,96,48,30,60,72,41,31,96,42,40,36,96,42,29,96,96,96,48,96,53,24,96,96,96,42,96,36,96,96,96,23,71,96,60,42,12,36,36,24,12,96,96,35]
-  },
-  {
-    "competencia": "2025-11",
-    "saldoInicial": 2041892.31,
-    "valorConcedido": 1038008.48,
-    "valorAmortizado": 26508.72,
-    "saldoFinal": 3053392.07,
-    "retornoFinanceiro": 21977.67,
-    "retornoPercentual": 1.08,
-    "contratosNovos": 58,
-    "contratosQuitados": 0,
-    "contratosAtivos": 157,
-    "prazosContratados": [24,96,36,96,32,12,85,36,96,96,96,96,12,96,40,96,65,42,12,96,96,12,60,10,36,96,24,13,46,96,48,24,96,96,48,96,96,84,42,12,96,18,51,96,96,96,40,96,18,24,30,96,96,39,96,80,45,96]
-  },
-  {
-    "competencia": "2025-12",
-    "saldoInicial": 3053389.09,
-    "valorConcedido": 913630.79,
-    "valorAmortizado": 41582.65,
-    "saldoFinal": 3925440.21,
-    "retornoFinanceiro": 33486.65,
-    "retornoPercentual": 1.10,
-    "contratosNovos": 47,
-    "contratosQuitados": 0,
-    "contratosAtivos": 204,
-    "prazosContratados": [96,96,96,39,38,40,40,96,24,96,96,40,96,96,96,36,36,96,44,96,65,96,96,36,96,60,96,36,24,96,12,96,96,96,96,36,24,96,96,96,16,36,96,39,96,40,96]
-  },
-  {
-    "competencia": "2026-01",
-    "saldoInicial": 3925437.23,
-    "valorConcedido": 1489852.48,
-    "valorAmortizado": 125976.48,
-    "saldoFinal": 5289316.21,
-    "retornoFinanceiro": 41060.77,
-    "retornoPercentual": 1.05,
-    "contratosNovos": 71,
-    "contratosQuitados": 3,
-    "contratosAtivos": 272,
-    "prazosContratados": [96,96,96,25,96,92,36,6,25,44,30,96,96,96,40,96,12,36,96,96,10,24,96,12,96,96,60,96,10,36,96,25,96,96,96,36,60,48,12,60,10,55,60,96,34,96,96,96,96,96,24,12,36,60,96,25,48,12,96,25,15,79,36,36,96,96,36,48,12,96,96]
-  },
-  {
-    "competencia": "2026-02",
-    "saldoInicial": 5289313.21,
-    "valorConcedido": 796177.22,
-    "valorAmortizado": 160593.61,
-    "saldoFinal": 5924899.82,
-    "retornoFinanceiro": 55133.70,
-    "retornoPercentual": 1.04,
-    "contratosNovos": 51,
-    "contratosQuitados": 3,
-    "contratosAtivos": 320,
-    "prazosContratados": [12,12,17,96,96,96,96,96,48,24,24,18,96,96,96,36,46,15,42,96,68,58,60,96,96,24,96,12,96,96,36,10,36,96,96,48,96,25,10,96,24,12,77,96,96,96,96,96,55,96,16]
-  },
-  {
-    "competencia": "2026-03",
-    "saldoInicial": 5924896.82,
-    "valorConcedido": 1756907.38,
-    "valorAmortizado": 83239.04,
-    "saldoFinal": 7598568.16,
-    "retornoFinanceiro": 71935.50,
-    "retornoPercentual": 1.21,
-    "contratosNovos": 144,
-    "contratosQuitados": 0,
-    "contratosAtivos": 464,
-    "prazosContratados": [36,96,96,48,10,48,96,96,48,96,96,24,12,36,36,36,96,48,15,96,96,96,48,36,67,24,36,25,20,48,27,48,96,36,81,25,25,79,96,96,77,77,60,80,96,84,96,96,40,96,96,20,30,96,40,48,25,36,60,96,96,96,96,36,96,96,96,96,20,25,36,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,36,96,96,96,36,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,79,96,96,96,96,96,48,96,96,96,96,96,96,96,96,96,18,96,96,96,96,96,94,96,96,96,96,96]
-  },
-  {
-    "competencia": "2026-04",
-    "saldoInicial": 7598565.16,
-    "valorConcedido": 1636421.49,
-    "valorAmortizado": 149152.80,
-    "saldoFinal": 9085836.85,
-    "retornoFinanceiro": 93786.71,
-    "retornoPercentual": 1.23,
-    "contratosNovos": 140,
-    "contratosQuitados": 1,
-    "contratosAtivos": 603,
-    "prazosContratados": [96,96,96,29,96,96,96,96,96,96,96,96,96,96,96,42,96,96,96,96,96,96,96,36,96,74,12,96,96,96,96,96,96,96,96,96,96,96,60,96,22,96,96,96,37,96,96,15,30,85,96,96,96,50,96,25,96,96,96,48,8,96,96,24,96,96,96,96,96,48,96,41,36,96,25,52,81,75,96,96,96,96,96,96,96,48,96,15,40,96,96,39,96,84,84,24,36,96,24,48,96,96,96,48,96,30,96,48,25,96,35,50,48,96,25,24,96,96,15,48,96,48,96,96,96,96,20,96,96,15,96,96,96,96,20,96,40,96,96,96,70]
-  },
-  {
-    "competencia": "2026-05",
-    "saldoInicial": 9085833.85,
-    "valorConcedido": 1298575.19,
-    "valorAmortizado": 129568.29,
-    "saldoFinal": 10254843.75,
-    "retornoFinanceiro": 104936.97,
-    "retornoPercentual": 1.15,
-    "contratosNovos": 85,
-    "contratosQuitados": 2,
-    "contratosAtivos": 686,
-    "prazosContratados": [48,48,72,96,96,96,60,96,96,96,18,76,96,72,96,96,60,12,96,24,25,96,32,48,96,96,96,96,96,96,96,96,20,96,96,60,24,96,10,78,96,96,25,10,40,96,96,60,96,48,96,96,96,96,42,96,96,96,35,36,96,12,70,96,25,48,96,96,51,96,96,24,96,96,96,67,96,56,36,96,96,36,96,96,96,70]
-  },
-  {
-    "competencia": "2026-06",
-    "saldoInicial": 10254840.75,
-    "valorConcedido": 1530943.04,
-    "valorAmortizado": 180090.67,
-    "saldoFinal": 11605696.12,
-    "retornoFinanceiro": 110492.41,
-    "retornoPercentual": 1.08,
-    "contratosNovos": 77,
-    "contratosQuitados": 4,
-    "contratosAtivos": 759,
-    "prazosContratados": [96,96,96,96,96,60,48,40,96,40,96,96,96,40,10,96,20,96,96,60,60,96,96,96,18,96,96,96,96,96,40,70,36,7,96,96,96,6,15,96,81,65,95,24,96,10,25,96,96,24,96,96,95,60,90,69,18,91,96,36,96,96,77,96,36,10,96,12,71,96,96,42,59,85,24,96,96]
-  },
-  {
-    "competencia": "2026-07",
-    "saldoInicial": 11605696.12,
-    "valorConcedido": 2395018.71,
-    "valorAmortizado": 242423.95,
-    "saldoFinal": 13758290.88,
-    "retornoFinanceiro": 136367.61,
-    "retornoPercentual": 1.18,
-    "contratosNovos": 103,
-    "contratosQuitados": 5,
-    "contratosAtivos": 857,
-    "prazosContratados": [
-      96, 96, 96, 96, 96, 60, 48, 40, 96, 40,
-      96, 96, 96, 40, 10, 96, 20, 96, 96, 60,
-      60, 96, 96, 96, 18, 96, 96, 96, 96, 96,
-      40, 70, 36, 7, 96, 96, 96, 6, 15, 96,
-      81, 65, 95, 24, 96, 10, 25, 96, 96, 24,
-      96, 96, 95, 60, 90, 69, 18, 91, 96, 36,
-      96, 96, 77, 96, 36, 10, 96, 12, 71, 96,
-      96, 42, 59, 85, 24, 96, 96
-    ]
+// Consignment Loan data normalized from single-source data.ts
+export const emprestimosConsignadosData = emprestimosConsignados.map(item => ({
+  competencia: item.competencia,
+  saldoInicial: item.saldoInicial,
+  valorConcedido: item.concessoesMes ?? item.valorEmprestado,
+  valorAmortizado: item.amortizacoesMes ?? item.valorAmortizado,
+  saldoFinal: item.saldoCarteira,
+  retornoFinanceiro: item.retornoFinanceiro ?? item.jurosMes ?? 0,
+  retornoPercentual: item.retornoPercentual ?? 0,
+  contratosNovos: item.contratosNovos ?? item.quantidadeContratos,
+  contratosQuitados: item.contratosQuitados ?? 0,
+  contratosAtivos: item.contratosAtivos ?? item.quantidadeContratos,
+  prazosContratados: item.prazosContratados ?? [],
+  fundoRisco: item.fundoRisco ?? {
+    saldoInicial: 0,
+    entradas: 0,
+    saidas: 0,
+    saldoFinal: 0
   }
-];
+}));
 
 interface ConsgTabProps {
   competence: string;
@@ -193,8 +66,11 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
   // Mode selection key state for Chart 1: "recurso" or "contrato"
   const [evolutionMode, setEvolutionMode] = useState<"recurso" | "contrato">("recurso");
 
-  // New State for horizontal bar chart (Monthly vs Accumulated)
+  // State for horizontal bar chart (Monthly vs Accumulated)
   const [termViewMode, setTermViewMode] = useState<"mensal" | "acumulado">("mensal");
+
+  // State for Table View: "carteira" | "fundoRisco"
+  const [tableTab, setTableTab] = useState<"carteira" | "fundoRisco">("carteira");
 
   // Find current and previous month records
   const currentLoan = useMemo(() => {
@@ -206,7 +82,7 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
     return emprestimosConsignadosData.find(c => c.competencia === prevCompetence);
   }, [prevCompetence]);
 
-  // KPIs
+  // Core KPIs
   const saldoFinal = currentLoan.saldoFinal;
   const prevSaldoFinal = prevLoan?.saldoFinal || 0;
   const saldoGrowthVal = saldoFinal - prevSaldoFinal;
@@ -223,14 +99,28 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
   const retornoFinanceiro = currentLoan.retornoFinanceiro;
   const retornoPercentual = currentLoan.retornoPercentual;
 
-  // New Memo for horizontal bar chart (Monthly vs Accumulated)
+  // Fundo de Risco KPIs
+  const currentFundoRisco = currentLoan.fundoRisco || { saldoInicial: 0, entradas: 0, saidas: 0, saldoFinal: 0 };
+  const prevFundoRisco = prevLoan?.fundoRisco || { saldoInicial: 0, entradas: 0, saidas: 0, saldoFinal: 0 };
+  
+  const fundoSaldoFinal = currentFundoRisco.saldoFinal;
+  const fundoEntradas = currentFundoRisco.entradas;
+  const fundoSaidas = currentFundoRisco.saidas;
+  const fundoSaldoInicial = currentFundoRisco.saldoInicial;
+  
+  const fundoVarVal = fundoSaldoFinal - prevFundoRisco.saldoFinal;
+  const fundoVarPct = prevFundoRisco.saldoFinal > 0 ? (fundoVarVal / prevFundoRisco.saldoFinal) * 100 : 0;
+  
+  // Taxa de Cobertura do Fundo de Risco em relação ao Saldo Total da Carteira Consignada
+  const coberturaCarteiraPct = saldoFinal > 0 ? (fundoSaldoFinal / saldoFinal) * 100 : 0;
+
+  // Horizontal bar chart data for term distribution
   const termDistributionData = useMemo(() => {
     let activePrazos: number[] = [];
     
     if (termViewMode === "mensal") {
       activePrazos = currentLoan.prazosContratados || [];
     } else {
-      // Accumulate all prazos up to selected competence
       const relevantLoans = emprestimosConsignadosData.filter(
         item => item.competencia <= currentLoan.competencia
       );
@@ -239,7 +129,6 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
       }, []);
     }
 
-    // Count occurrences
     const counts: Record<string, number> = {
       "96 meses": 0,
       "84 meses": 0,
@@ -262,61 +151,40 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
       else counts["12 meses"]++;
     });
 
-    const bucketOrder = [
-      "96 meses",
-      "84 meses",
-      "72 meses",
-      "60 meses",
-      "48 meses",
-      "36 meses",
-      "24 meses",
-      "12 meses"
-    ];
+    const total = activePrazos.length || 1;
 
-    const colors = [
-      "#4f46e5", // 96
-      "#3b82f6", // 84
-      "#10b981", // 72
-      "#0ea5e9", // 60
-      "#14b8a6", // 48
-      "#f59e0b", // 36
-      "#6366f1", // 24
-      "#ef4444", // 12
+    return [
+      { range: "96 meses", count: counts["96 meses"], pct: (counts["96 meses"] / total) * 100 },
+      { range: "84 meses", count: counts["84 meses"], pct: (counts["84 meses"] / total) * 100 },
+      { range: "72 meses", count: counts["72 meses"], pct: (counts["72 meses"] / total) * 100 },
+      { range: "60 meses", count: counts["60 meses"], pct: (counts["60 meses"] / total) * 100 },
+      { range: "48 meses", count: counts["48 meses"], pct: (counts["48 meses"] / total) * 100 },
+      { range: "36 meses", count: counts["36 meses"], pct: (counts["36 meses"] / total) * 100 },
+      { range: "24 meses", count: counts["24 meses"], pct: (counts["24 meses"] / total) * 100 },
+      { range: "12 meses", count: counts["12 meses"], pct: (counts["12 meses"] / total) * 100 },
     ];
-
-    return bucketOrder.map((name, index) => {
-      const value = counts[name];
-      return {
-        name,
-        value,
-        color: colors[index % colors.length]
-      };
-    });
   }, [currentLoan, termViewMode]);
 
-  // Compare with Patrimonio Consolidado and Limit (10%)
-  const patrimonioConsolidado = useMemo(() => {
-    const matchingPatr = evolucaoCarteiraConsolidada.find(e => e.competencia === currentLoan.competencia);
-    if (matchingPatr) return matchingPatr.valorCarteiraConsolidada;
-    
-    // Fallback: search closest or latest
-    return evolucaoCarteiraConsolidada[evolucaoCarteiraConsolidada.length - 1]?.valorCarteiraConsolidada || 1414618402.85;
+  // Enquadramento Limite 10% do Patrimônio Consolidado
+  const currentPatrimonio = useMemo(() => {
+    return evolucaoCarteiraConsolidada.find(p => p.competencia === currentLoan.competencia) || 
+           evolucaoCarteiraConsolidada[evolucaoCarteiraConsolidada.length - 1];
   }, [currentLoan.competencia]);
 
+  const patrimonioConsolidado = currentPatrimonio.valorCarteiraConsolidada;
   const limiteMaximo = patrimonioConsolidado * 0.10;
+  const percentualUtilizado = patrimonioConsolidado > 0 ? (saldoFinal / patrimonioConsolidado) * 100 : 0;
   const margemDisponivel = Math.max(0, limiteMaximo - saldoFinal);
-  const percentualUtilizado = (saldoFinal / patrimonioConsolidado) * 100;
 
-  // Recharts historical charts data preparation
+  // Historical chart data
   const chartHistoricalData = useMemo(() => {
     return emprestimosConsignadosData.map(item => {
-      const parts = item.competencia.split("-");
-      const monthNames: Record<string, string> = {
-        "01": "Jan", "02": "Fev", "03": "Mar", "04": "Abr", "05": "Mai", "06": "Jun",
-        "07": "Jul", "08": "Ago", "09": "Set", "10": "Out", "11": "Nov", "12": "Dez"
-      };
-      const label = `${monthNames[parts[1]] || parts[1]}/${parts[0].substring(2)}`;
-      
+      const [year, month] = item.competencia.split("-");
+      const shortMonths = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+      const label = `${shortMonths[parseInt(month, 10) - 1]}/${year.slice(2)}`;
+      const fundo = item.fundoRisco || { saldoInicial: 0, entradas: 0, saidas: 0, saldoFinal: 0 };
+      const cobPct = item.saldoFinal > 0 ? (fundo.saldoFinal / item.saldoFinal) * 100 : 0;
+
       return {
         ...item,
         name: label,
@@ -325,7 +193,10 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
         "Concedido (k)": parseFloat((item.valorConcedido / 1000).toFixed(1)),
         "Amortizado (k)": parseFloat((item.valorAmortizado / 1000).toFixed(1)),
         "Retorno (k)": parseFloat((item.retornoFinanceiro / 1000).toFixed(2)),
-        "Rentabilidade (%)": item.retornoPercentual
+        "Rentabilidade (%)": item.retornoPercentual,
+        "Fundo Risco (k)": parseFloat((fundo.saldoFinal / 1000).toFixed(2)),
+        "Entradas Fundo (k)": parseFloat((fundo.entradas / 1000).toFixed(2)),
+        "Cobertura (%)": parseFloat(cobPct.toFixed(2))
       };
     });
   }, []);
@@ -335,7 +206,7 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
     return retornoMetaAtuarial.find(m => m.competencia === currentLoan.competencia);
   }, [currentLoan.competencia]);
 
-  const metaMensalPercentual = currentMeta ? currentMeta.metaAtuarialPercentual * 100 : 0.49; // fallback
+  const metaMensalPercentual = currentMeta ? currentMeta.metaAtuarialPercentual * 100 : 0.49;
 
   // Performance status traffic light (Semáforo)
   const performanceStatus = useMemo(() => {
@@ -370,7 +241,7 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
 
   return (
     <div className="space-y-4">
-      {/* Main KPI Grid - Exactly formatted as Aba Contábil layout */}
+      {/* Main KPI Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* KPI 1: Saldo Final da Carteira */}
         <div className="bg-white rounded shadow-sm border-l-4 border-indigo-600 p-4 flex flex-col justify-between">
@@ -449,6 +320,7 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
           </div>
         </div>
       </div>
+
 
       {/* Alertas e Estatísticas - Grid 3 colunas */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -531,7 +403,7 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
           </div>
         </div>
 
-        {/* Chart 3: Distribuição de Contratos por Prazo (Estilo Barras Horizontais com Chave para filtro mensal/acumulado) */}
+        {/* Chart 3: Distribuição de Contratos por Prazo */}
         <div className="bg-white rounded border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-2 mb-2">
             <div>
@@ -549,7 +421,7 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
                     : "text-slate-500 hover:text-slate-800"
                 }`}
               >
-                Mensal
+                No Mês
               </button>
               <button
                 onClick={() => setTermViewMode("acumulado")}
@@ -563,64 +435,60 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
               </button>
             </div>
           </div>
-
-          <div className="h-40 mt-1 flex-1">
-            {termDistributionData.some(d => d.value > 0) ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart 
-                  data={termDistributionData} 
-                  layout="vertical"
-                  margin={{ top: 5, right: 35, left: 5, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                  <XAxis type="number" stroke="#94a3b8" fontSize={9} tickLine={false} />
-                  <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    stroke="#475569" 
-                    fontSize={10} 
-                    fontWeight={600}
-                    tickLine={false} 
-                    width={70}
+          
+          <div className="h-44 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                layout="vertical"
+                data={termDistributionData}
+                margin={{ top: 0, right: 35, left: 10, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                <XAxis type="number" hide domain={[0, 'dataMax + 10']} />
+                <YAxis 
+                  dataKey="range" 
+                  type="category" 
+                  stroke="#64748b" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false}
+                  width={60}
+                />
+                <Tooltip
+                  formatter={(value: any) => [`${value} contratos`, "Quantidade"]}
+                  contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0", fontSize: "11px" }}
+                />
+                <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+                  {termDistributionData.map((entry, index) => {
+                    const colors = ["#4338ca", "#4f46e5", "#6366f1", "#818cf8", "#38bdf8", "#34d399", "#fbbf24", "#f87171"];
+                    return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
+                  })}
+                  <LabelList 
+                    dataKey="count" 
+                    position="right" 
+                    formatter={(val: any) => val > 0 ? `${val}` : ""}
+                    style={{ fontSize: "10px", fill: "#475569", fontWeight: 700 }}
                   />
-                  <Tooltip 
-                    formatter={(value: any) => [`${value} contratos`, "Quantidade"]}
-                    contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0" }}
-                  />
-                  <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={12}>
-                    {termDistributionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                    <LabelList 
-                      dataKey="value" 
-                      position="right" 
-                      style={{ fill: '#334155', fontSize: 9, fontWeight: 'bold' }} 
-                    />
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="h-full flex items-center justify-center text-xs text-slate-400 font-semibold">
-                Sem contratos para o período selecionado
-              </div>
-            )}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
 
-      {/* Visual Charts Section - Double Columns */}
+      {/* Visual Charts Grid: Carteira & Concessões vs Amortizações */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Chart 1: Evolução da Carteira (Now with toggling key between money and contract count) */}
+        {/* Chart 1: Evolução Histórica do Saldo da Carteira */}
         <div className="bg-white rounded border border-slate-200 p-4 shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-2.5 mb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
             <div>
               <h4 className="text-sm font-bold text-slate-800">Evolução Histórica do Saldo da Carteira</h4>
-              <p className="text-[11px] text-slate-400">Acompanhamento da evolução da Carteira de Empréstimo Consignado.</p>
+              <p className="text-[11px] text-slate-400">Acompanhamento do saldo e quantidade de contratos ativos ao longo dos meses.</p>
             </div>
-            <div className="mt-2 sm:mt-0 flex bg-slate-100 p-1 rounded-lg self-start">
+            <div className="flex bg-slate-100 p-0.5 rounded-lg self-start">
               <button
                 onClick={() => setEvolutionMode("recurso")}
-                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all cursor-pointer ${
+                className={`px-3 py-1 text-xs font-bold rounded-md transition-all cursor-pointer ${
                   evolutionMode === "recurso"
                     ? "bg-white text-indigo-700 shadow-xs"
                     : "text-slate-500 hover:text-slate-800"
@@ -630,52 +498,55 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
               </button>
               <button
                 onClick={() => setEvolutionMode("contrato")}
-                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all cursor-pointer ${
+                className={`px-3 py-1 text-xs font-bold rounded-md transition-all cursor-pointer ${
                   evolutionMode === "contrato"
                     ? "bg-white text-indigo-700 shadow-xs"
                     : "text-slate-500 hover:text-slate-800"
                 }`}
               >
-                Contratos (Qtd)
+                Contratos
               </button>
             </div>
           </div>
           <div className="h-56 mt-3">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartHistoricalData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorConsgBalance" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={evolutionMode === "recurso" ? "#4f46e5" : "#3b82f6"} stopOpacity={0.20}/>
-                    <stop offset="95%" stopColor={evolutionMode === "recurso" ? "#4f46e5" : "#3b82f6"} stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} />
-                <YAxis 
-                  stroke="#94a3b8" 
-                  fontSize={10} 
-                  tickLine={false} 
-                  axisLine={false}
-                  tickFormatter={(val) => evolutionMode === "recurso" ? `R$ ${val}M` : `${val}`}
-                />
-                <Tooltip 
-                  formatter={(value: any) => 
-                    evolutionMode === "recurso" 
-                      ? [`R$ ${value} Milhões`, "Saldo da Carteira"] 
-                      : [`${value} contratos`, "Contratos Ativos"]
-                  }
-                  labelStyle={{ fontWeight: "bold", color: "#1e293b" }}
-                  contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0" }}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey={evolutionMode === "recurso" ? "Saldo (Milhões)" : "Contratos Ativos"} 
-                  stroke={evolutionMode === "recurso" ? "#4f46e5" : "#2563eb"} 
-                  strokeWidth={2.5} 
-                  fillOpacity={1} 
-                  fill="url(#colorConsgBalance)" 
-                />
-              </AreaChart>
+              {evolutionMode === "recurso" ? (
+                <AreaChart data={chartHistoricalData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorConsgSaldo" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.15}/>
+                      <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} />
+                  <YAxis 
+                    stroke="#94a3b8" 
+                    fontSize={10} 
+                    tickLine={false} 
+                    axisLine={false}
+                    tickFormatter={(val) => `R$ ${val}M`}
+                  />
+                  <Tooltip 
+                    formatter={(value: any) => [`R$ ${value} Milhões`, "Saldo"]}
+                    labelStyle={{ fontWeight: "bold", color: "#1e293b" }}
+                    contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0" }}
+                  />
+                  <Area type="monotone" dataKey="Saldo (Milhões)" stroke="#4f46e5" strokeWidth={2} fillOpacity={1} fill="url(#colorConsgSaldo)" />
+                </AreaChart>
+              ) : (
+                <BarChart data={chartHistoricalData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} />
+                  <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
+                  <Tooltip 
+                    formatter={(value: any) => [`${value} contratos`, "Ativos"]}
+                    labelStyle={{ fontWeight: "bold", color: "#1e293b" }}
+                    contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0" }}
+                  />
+                  <Bar dataKey="Contratos Ativos" fill="#4f46e5" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              )}
             </ResponsiveContainer>
           </div>
         </div>
@@ -683,8 +554,8 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
         {/* Chart 2: Concessões vs Amortizações */}
         <div className="bg-white rounded border border-slate-200 p-4 shadow-sm">
           <div>
-            <h4 className="text-sm font-bold text-slate-800">Concessões (Novos Recursos) vs. Amortizações (Retorno em Folha)</h4>
-            <p className="text-[11px] text-slate-400">Fluxo mensal de caixa gerado pela modalidade consignada (R$ Milhares).</p>
+            <h4 className="text-sm font-bold text-slate-800">Concessões vs. Amortizações Mensais</h4>
+            <p className="text-[11px] text-slate-400">Volume concedido de novos contratos em confronto com os valores amortizados.</p>
           </div>
           <div className="h-56 mt-3">
             <ResponsiveContainer width="100%" height="100%">
@@ -712,114 +583,242 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
         </div>
       </div>
 
-      {/* Chart 4: Evolução do Retorno e Rentabilidade - Full width */}
-      <div className="bg-white rounded border border-slate-200 p-4 shadow-sm">
-        <div>
-          <h4 className="text-sm font-bold text-slate-800">Evolução de Retorno Financeiro vs. Rentabilidade Percentual</h4>
-          <p className="text-[11px] text-slate-400">Geração de juros reais recebidos no período em confronto com a rentabilidade percentual correspondente.</p>
+      {/* Visual Charts Grid 2: Evolução Fundo de Risco & Retorno Financeiro */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Chart: Evolução do Saldo do Fundo de Risco */}
+        <div className="bg-white rounded border border-slate-200 p-4 shadow-sm">
+          <div>
+            <h4 className="text-sm font-bold text-slate-800 flex items-center">
+              <ShieldCheck className="h-4 w-4 mr-1.5 text-indigo-600" />
+              Evolução do Saldo do Fundo de Risco
+            </h4>
+            <p className="text-[11px] text-slate-400">Acompanhamento do saldo acumulado da provisão de risco e das entradas mensais.</p>
+          </div>
+          <div className="h-56 mt-3">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={chartHistoricalData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorFundoSaldo" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.2}/>
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} />
+                <YAxis 
+                  stroke="#94a3b8" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false}
+                  tickFormatter={(val) => `R$ ${val}k`}
+                />
+                <Tooltip 
+                  formatter={(value: any, name: any) => [`R$ ${value}k`, name]}
+                  labelStyle={{ fontWeight: "bold", color: "#1e293b" }}
+                  contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0" }}
+                />
+                <Legend verticalAlign="top" height={32} iconSize={8} iconType="circle" wrapperStyle={{ fontSize: "11px", fontWeight: 600, color: "#475569" }} />
+                <Bar dataKey="Entradas Fundo (k)" fill="#10b981" radius={[4, 4, 0, 0]} name="Aporte Mensal (R$ k)" />
+                <Area type="monotone" dataKey="Fundo Risco (k)" stroke="#4338ca" strokeWidth={2.5} fillOpacity={1} fill="url(#colorFundoSaldo)" name="Saldo Acumulado (R$ k)" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
         </div>
-        <div className="h-56 mt-3">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={chartHistoricalData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
-              <defs>
-                <linearGradient id="colorConsgReturn" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.15}/>
-                  <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-              <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} />
-              <YAxis 
-                stroke="#94a3b8" 
-                fontSize={10} 
-                tickLine={false} 
-                axisLine={false}
-                tickFormatter={(val) => `R$ ${val}k`}
-              />
-              <Tooltip 
-                formatter={(value: any, name: any) => {
-                  if (name === "Rentabilidade (%)") return [`${value}% a.m.`, name];
-                  return [`R$ ${value}k`, name];
-                }}
-                labelStyle={{ fontWeight: "bold", color: "#1e293b" }}
-                contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0" }}
-              />
-              <Legend verticalAlign="top" height={32} iconSize={8} iconType="circle" wrapperStyle={{ fontSize: "11px", fontWeight: 600, color: "#475569" }} />
-              <Area type="monotone" dataKey="Retorno (k)" stroke="#f59e0b" strokeWidth={2} fillOpacity={1} fill="url(#colorConsgReturn)" name="Retorno Financeiro (R$ k)" />
-            </AreaChart>
-          </ResponsiveContainer>
+
+        {/* Chart: Evolução do Retorno e Rentabilidade */}
+        <div className="bg-white rounded border border-slate-200 p-4 shadow-sm">
+          <div>
+            <h4 className="text-sm font-bold text-slate-800">Evolução de Retorno Financeiro vs. Rentabilidade Percentual</h4>
+            <p className="text-[11px] text-slate-400">Geração de juros reais recebidos no período em confronto com a rentabilidade percentual.</p>
+          </div>
+          <div className="h-56 mt-3">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={chartHistoricalData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorConsgReturn" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.15}/>
+                    <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} />
+                <YAxis 
+                  stroke="#94a3b8" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false}
+                  tickFormatter={(val) => `R$ ${val}k`}
+                />
+                <Tooltip 
+                  formatter={(value: any, name: any) => {
+                    if (name === "Rentabilidade (%)") return [`${value}% a.m.`, name];
+                    return [`R$ ${value}k`, name];
+                  }}
+                  labelStyle={{ fontWeight: "bold", color: "#1e293b" }}
+                  contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0" }}
+                />
+                <Legend verticalAlign="top" height={32} iconSize={8} iconType="circle" wrapperStyle={{ fontSize: "11px", fontWeight: 600, color: "#475569" }} />
+                <Area type="monotone" dataKey="Retorno (k)" stroke="#f59e0b" strokeWidth={2} fillOpacity={1} fill="url(#colorConsgReturn)" name="Retorno Financeiro (R$ k)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
-      {/* Detailed Historical Data Table - Harmonized with Visão Geral */}
+      {/* Detailed Historical Data Table Section with Tab selector */}
       <div className="bg-white rounded border border-slate-200 overflow-hidden shadow-sm">
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h4 className="text-sm font-bold text-slate-800">Evolução Mensal da Carteira de Consignado</h4>
-            <p className="text-[11px] text-slate-400">Demonstrativo mensal completo das posições, captação, amortização e rentabilidade obtida.</p>
+            <h4 className="text-sm font-bold text-slate-800">Demonstrativo Detalhado de Empréstimos Consignados</h4>
+            <p className="text-[11px] text-slate-400">Histórico completo mensal de posições, movimentações e constituição do Fundo de Risco.</p>
           </div>
-          <div className="flex items-center space-x-1.5 text-[10px] text-slate-400 font-semibold bg-slate-50 border border-slate-100 px-2.5 py-1 rounded-lg">
-            <Info className="h-3.5 w-3.5 text-slate-400" />
-            <span>Valores nominais e acumulados</span>
+          
+          <div className="flex bg-slate-100 p-0.5 rounded-lg self-start sm:self-auto">
+            <button
+              onClick={() => setTableTab("carteira")}
+              className={`px-3 py-1 text-xs font-bold rounded-md transition-all cursor-pointer flex items-center ${
+                tableTab === "carteira"
+                  ? "bg-white text-indigo-700 shadow-xs"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <FileText className="h-3.5 w-3.5 mr-1" />
+              Movimentação da Carteira
+            </button>
+            <button
+              onClick={() => setTableTab("fundoRisco")}
+              className={`px-3 py-1 text-xs font-bold rounded-md transition-all cursor-pointer flex items-center ${
+                tableTab === "fundoRisco"
+                  ? "bg-white text-indigo-700 shadow-xs"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <ShieldCheck className="h-3.5 w-3.5 mr-1" />
+              Demonstrativo Fundo de Risco
+            </button>
           </div>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                <th className="py-3 px-4">Competência</th>
-                <th className="py-3 px-4 text-right">Saldo Inicial</th>
-                <th className="py-3 px-4 text-right">Valor Concedido</th>
-                <th className="py-3 px-4 text-right">Valor Amortizado</th>
-                <th className="py-3 px-4 text-right">Saldo Final</th>
-                <th className="py-3 px-4 text-right">Retorno Juros (R$)</th>
-                <th className="py-3 px-4 text-center">Rentabilidade (%)</th>
-                <th className="py-3 px-4 text-center">Novos</th>
-                <th className="py-3 px-4 text-center">Ativos</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-xs">
-              {[...emprestimosConsignadosData]
-                .sort((a, b) => b.competencia.localeCompare(a.competencia))
-                .map((row) => {
-                  const isCurrent = row.competencia === competence;
-                  return (
-                    <tr 
-                      key={row.competencia} 
-                      className={`hover:bg-slate-50/80 transition-colors ${
-                        isCurrent ? "bg-indigo-50/40 font-bold text-slate-950 border-y border-indigo-100/50" : "text-slate-600"
-                      }`}
-                    >
-                      <td className="py-3 px-4 font-semibold uppercase">
-                        <span className="flex items-center">
-                          {isCurrent && <span className="w-1.5 h-1.5 bg-indigo-600 rounded-full mr-2"></span>}
-                          {getMonthName(row.competencia)}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-right font-mono">{formatCurrency(row.saldoInicial)}</td>
-                      <td className="py-3 px-4 text-right font-mono text-emerald-600">+{formatCurrency(row.valorConcedido)}</td>
-                      <td className="py-3 px-4 text-right font-mono text-rose-600">-{formatCurrency(row.valorAmortizado)}</td>
-                      <td className="py-3 px-4 text-right font-mono font-bold text-indigo-950">{formatCurrency(row.saldoFinal)}</td>
-                      <td className="py-3 px-4 text-right font-mono text-amber-600">{formatCurrency(row.retornoFinanceiro)}</td>
-                      <td className="py-3 px-4 text-center">
-                        <span className={`inline-block font-mono font-bold px-2 py-0.5 rounded ${
-                          row.retornoPercentual >= 1.10 
-                            ? "bg-emerald-50 text-emerald-700" 
-                            : row.retornoPercentual >= 0.95 
-                            ? "bg-blue-50 text-blue-700" 
-                            : "bg-slate-100 text-slate-700"
-                        }`}>
-                          {row.retornoPercentual.toFixed(2)}% a.m.
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-center font-semibold text-slate-800">{row.contratosNovos}</td>
-                      <td className="py-3 px-4 text-center font-bold text-indigo-900">{row.contratosAtivos}</td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        </div>
+
+        {tableTab === "carteira" ? (
+          /* TABELA 1: MOVIMENTAÇÃO GERAL DA CARTEIRA */
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+                  <th className="py-3 px-4">Competência</th>
+                  <th className="py-3 px-4 text-right">Saldo Inicial</th>
+                  <th className="py-3 px-4 text-right">Valor Concedido</th>
+                  <th className="py-3 px-4 text-right">Valor Amortizado</th>
+                  <th className="py-3 px-4 text-right">Saldo Final</th>
+                  <th className="py-3 px-4 text-right">Fundo de Risco</th>
+                  <th className="py-3 px-4 text-right">Retorno Juros</th>
+                  <th className="py-3 px-4 text-center">Rentabilidade</th>
+                  <th className="py-3 px-4 text-center">Novos</th>
+                  <th className="py-3 px-4 text-center">Ativos</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-xs">
+                {[...emprestimosConsignadosData]
+                  .sort((a, b) => b.competencia.localeCompare(a.competencia))
+                  .map((row) => {
+                    const isCurrent = row.competencia === competence;
+                    return (
+                      <tr 
+                        key={row.competencia} 
+                        className={`hover:bg-slate-50/80 transition-colors ${
+                          isCurrent ? "bg-indigo-50/40 font-bold text-slate-950 border-y border-indigo-100/50" : "text-slate-600"
+                        }`}
+                      >
+                        <td className="py-3 px-4 font-semibold uppercase">
+                          <span className="flex items-center">
+                            {isCurrent && <span className="w-1.5 h-1.5 bg-indigo-600 rounded-full mr-2"></span>}
+                            {getMonthName(row.competencia)}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-right font-mono">{formatCurrency(row.saldoInicial)}</td>
+                        <td className="py-3 px-4 text-right font-mono text-emerald-600">+{formatCurrency(row.valorConcedido)}</td>
+                        <td className="py-3 px-4 text-right font-mono text-rose-600">-{formatCurrency(row.valorAmortizado)}</td>
+                        <td className="py-3 px-4 text-right font-mono font-bold text-indigo-950">{formatCurrency(row.saldoFinal)}</td>
+                        <td className="py-3 px-4 text-right font-mono font-bold text-indigo-700">{formatCurrency(row.fundoRisco.saldoFinal)}</td>
+                        <td className="py-3 px-4 text-right font-mono text-amber-600">{formatCurrency(row.retornoFinanceiro)}</td>
+                        <td className="py-3 px-4 text-center">
+                          <span className={`inline-block font-mono font-bold px-2 py-0.5 rounded ${
+                            row.retornoPercentual >= 1.10 
+                              ? "bg-emerald-50 text-emerald-700" 
+                              : row.retornoPercentual >= 0.95 
+                              ? "bg-blue-50 text-blue-700" 
+                              : "bg-slate-100 text-slate-700"
+                          }`}>
+                            {row.retornoPercentual.toFixed(2)}% a.m.
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-center font-semibold text-slate-800">{row.contratosNovos}</td>
+                        <td className="py-3 px-4 text-center font-bold text-indigo-900">{row.contratosAtivos}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          /* TABELA 2: DEMONSTRATIVO DO FUNDO DE RISCO */
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+                  <th className="py-3 px-4">Competência</th>
+                  <th className="py-3 px-4 text-right">Saldo Inicial Fundo</th>
+                  <th className="py-3 px-4 text-right">Entradas (Aportes)</th>
+                  <th className="py-3 px-4 text-right">Saídas (Sinistros)</th>
+                  <th className="py-3 px-4 text-right">Saldo Final Fundo</th>
+                  <th className="py-3 px-4 text-right">Saldo da Carteira</th>
+                  <th className="py-3 px-4 text-center">% Cobertura</th>
+                  <th className="py-3 px-4 text-center">Status de Inadimplência</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-xs">
+                {[...emprestimosConsignadosData]
+                  .sort((a, b) => b.competencia.localeCompare(a.competencia))
+                  .map((row) => {
+                    const isCurrent = row.competencia === competence;
+                    const fundo = row.fundoRisco;
+                    const cobPct = row.saldoFinal > 0 ? (fundo.saldoFinal / row.saldoFinal) * 100 : 0;
+                    return (
+                      <tr 
+                        key={row.competencia} 
+                        className={`hover:bg-slate-50/80 transition-colors ${
+                          isCurrent ? "bg-indigo-50/40 font-bold text-slate-950 border-y border-indigo-100/50" : "text-slate-600"
+                        }`}
+                      >
+                        <td className="py-3 px-4 font-semibold uppercase">
+                          <span className="flex items-center">
+                            {isCurrent && <span className="w-1.5 h-1.5 bg-indigo-600 rounded-full mr-2"></span>}
+                            {getMonthName(row.competencia)}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-right font-mono text-slate-600">{formatCurrency(fundo.saldoInicial)}</td>
+                        <td className="py-3 px-4 text-right font-mono text-emerald-600 font-semibold">+{formatCurrency(fundo.entradas)}</td>
+                        <td className="py-3 px-4 text-right font-mono text-slate-500">{formatCurrency(fundo.saidas)}</td>
+                        <td className="py-3 px-4 text-right font-mono font-bold text-indigo-950">{formatCurrency(fundo.saldoFinal)}</td>
+                        <td className="py-3 px-4 text-right font-mono text-slate-700">{formatCurrency(row.saldoFinal)}</td>
+                        <td className="py-3 px-4 text-center">
+                          <span className="inline-block font-mono font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-100">
+                            {cobPct.toFixed(2)}%
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-center">
+                          <span className="inline-flex items-center font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px]">
+                            <CheckCircle2 className="h-3 w-3 mr-1 text-emerald-600" />
+                            0,00% Sinistro
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
