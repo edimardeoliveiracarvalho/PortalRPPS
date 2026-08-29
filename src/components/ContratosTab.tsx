@@ -2068,22 +2068,6 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
                       ))}
                     </tr>
                     <tr>
-                      <td className="p-3 font-bold text-slate-800 bg-slate-50/50">Valor Inicial</td>
-                      {comparedContracts.map((c) => (
-                        <td key={c.idContrato} className="p-3 text-center border-l border-slate-100 font-mono font-semibold text-slate-700">
-                          {formatCurrency(c.valorInicialContrato)}
-                        </td>
-                      ))}
-                    </tr>
-                    <tr>
-                      <td className="p-3 font-bold text-slate-800 bg-slate-50/50">Valor Atualizado</td>
-                      {comparedContracts.map((c) => (
-                        <td key={c.idContrato} className="p-3 text-center border-l border-slate-100 font-mono font-black text-blue-900">
-                          {formatCurrency(c.valorAtualizado)}
-                        </td>
-                      ))}
-                    </tr>
-                    <tr>
                       <td className="p-3 font-bold text-slate-800 bg-slate-50/50">Valor Mensal</td>
                       {comparedContracts.map((c) => (
                         <td key={c.idContrato} className="p-3 text-center border-l border-slate-100 font-mono">
