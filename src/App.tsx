@@ -90,7 +90,7 @@ export default function App() {
     { id: "consg", label: "CONSIGNADO", icon: Coins, component: ConsgTab },
     { id: "agenda", label: "Agenda", icon: Calendar, component: AgendaTab },
     { id: "contratos", label: "CONTRATOS", icon: FileText, component: ContratosTab },
-    { id: "impressao", label: "IMPRESSÃO", icon: Printer, component: ImpressaoTab },
+    { id: "impressao", label: "IMPRESSÃO (EM DESENV.)", icon: Printer, component: ImpressaoTab },
   ] as const;
 
   const handleCompetenceChange = (comp: string) => {

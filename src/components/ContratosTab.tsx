@@ -1008,13 +1008,13 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
           </div>
 
           {/* Directorial Filter Bar for Decisions */}
-          <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-slate-700 shrink-0">
+          <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-xs flex flex-col sm:flex-row sm:items-center justify-start gap-2.5">
+            <div className="flex items-center space-x-1.5 text-xs font-bold uppercase tracking-wider text-slate-700 shrink-0">
               <Zap className="w-4 h-4 text-amber-600" />
               <span>Filtro:</span>
             </div>
 
-            <div className="flex flex-wrap gap-1.5 w-full sm:w-auto">
+            <div className="flex flex-wrap items-center justify-start gap-1.5">
               {[
                 { id: "todos", label: "TODOS OS VENCIMENTOS (< 180d)", icon: Clock },
                 { id: "urgente60", label: `🚨 URGENTE (< 60d: ${stats.v60Count})`, icon: Zap },
