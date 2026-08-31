@@ -60,7 +60,7 @@ import {
   Printer
 } from "lucide-react";
 
-type TabId = "visao_geral" | "beneficios" | "contabil" | "compensacao" | "carteira_investimentos" | "titulos" | "meta_x_retorno" | "patrimonio" | "servidores" | "consg" | "agenda" | "impressao" | "contratos";
+type TabId = "visao_geral" | "beneficios" | "contabil" | "compensacao" | "carteira_investimentos" | "titulos" | "meta_x_retorno" | "patrimonio" | "servidores" | "consg" | "agenda" | "contratos" | "impressao";
 
 export default function App() {
   const [competence, setCompetence] = useState<string>("2026-07"); // Default to the latest complete month

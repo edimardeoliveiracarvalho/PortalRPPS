@@ -551,10 +551,13 @@ export function TitulosTab() {
                 tick={{ fill: '#64748b', fontSize: 10 }} 
               />
               <Tooltip
-                contentStyle={{ fontSize: "11px", borderRadius: "8px" }}
-                formatter={(v: any, name: any) => {
-                  if (name === "volume") return [formatCurrency(v), "Capital Comprado (Volume R$)"];
-                  return [`${v.toFixed(4).replace(".", ",")}% a.a. + IPCA`, "Taxa Média Contratada"];
+                contentStyle={{ fontSize: "11px", borderRadius: "8px", border: "1px solid #cbd5e1", backgroundColor: "rgba(255, 255, 255, 0.98)" }}
+                formatter={(v: any, name: any, item: any) => {
+                  const key = item?.dataKey;
+                  if (key === "volume" || name === "Capital Comprado (Volume R$)") {
+                    return [formatCurrency(Number(v)), "Capital Comprado (Volume Nominal)"];
+                  }
+                  return [`${Number(v).toFixed(4).replace(".", ",")}% a.a. + IPCA`, "Taxa Média Contratada"];
                 }}
               />
               <Legend iconSize={8} wrapperStyle={{ fontSize: '10px', fontWeight: 700 }} />
