@@ -130,38 +130,38 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
     }
 
     const counts: Record<string, number> = {
-      "96 meses": 0,
-      "84 meses": 0,
-      "72 meses": 0,
-      "60 meses": 0,
-      "48 meses": 0,
-      "36 meses": 0,
-      "24 meses": 0,
-      "12 meses": 0,
+      "85 a 96 meses": 0,
+      "73 a 84 meses": 0,
+      "61 a 72 meses": 0,
+      "49 a 60 meses": 0,
+      "37 a 48 meses": 0,
+      "25 a 36 meses": 0,
+      "13 a 24 meses": 0,
+      "0 a 12 meses": 0,
     };
 
     activePrazos.forEach(p => {
-      if (p > 84) counts["96 meses"]++;
-      else if (p > 72) counts["84 meses"]++;
-      else if (p > 60) counts["72 meses"]++;
-      else if (p > 48) counts["60 meses"]++;
-      else if (p > 36) counts["48 meses"]++;
-      else if (p > 24) counts["36 meses"]++;
-      else if (p > 12) counts["24 meses"]++;
-      else counts["12 meses"]++;
+      if (p > 84) counts["85 a 96 meses"]++;
+      else if (p > 72) counts["73 a 84 meses"]++;
+      else if (p > 60) counts["61 a 72 meses"]++;
+      else if (p > 48) counts["49 a 60 meses"]++;
+      else if (p > 36) counts["37 a 48 meses"]++;
+      else if (p > 24) counts["25 a 36 meses"]++;
+      else if (p > 12) counts["13 a 24 meses"]++;
+      else counts["0 a 12 meses"]++;
     });
 
     const total = activePrazos.length || 1;
 
     return [
-      { range: "96 meses", count: counts["96 meses"], pct: (counts["96 meses"] / total) * 100 },
-      { range: "84 meses", count: counts["84 meses"], pct: (counts["84 meses"] / total) * 100 },
-      { range: "72 meses", count: counts["72 meses"], pct: (counts["72 meses"] / total) * 100 },
-      { range: "60 meses", count: counts["60 meses"], pct: (counts["60 meses"] / total) * 100 },
-      { range: "48 meses", count: counts["48 meses"], pct: (counts["48 meses"] / total) * 100 },
-      { range: "36 meses", count: counts["36 meses"], pct: (counts["36 meses"] / total) * 100 },
-      { range: "24 meses", count: counts["24 meses"], pct: (counts["24 meses"] / total) * 100 },
-      { range: "12 meses", count: counts["12 meses"], pct: (counts["12 meses"] / total) * 100 },
+      { range: "85 a 96 meses", count: counts["85 a 96 meses"], pct: (counts["85 a 96 meses"] / total) * 100 },
+      { range: "73 a 84 meses", count: counts["73 a 84 meses"], pct: (counts["73 a 84 meses"] / total) * 100 },
+      { range: "61 a 72 meses", count: counts["61 a 72 meses"], pct: (counts["61 a 72 meses"] / total) * 100 },
+      { range: "49 a 60 meses", count: counts["49 a 60 meses"], pct: (counts["49 a 60 meses"] / total) * 100 },
+      { range: "37 a 48 meses", count: counts["37 a 48 meses"], pct: (counts["37 a 48 meses"] / total) * 100 },
+      { range: "25 a 36 meses", count: counts["25 a 36 meses"], pct: (counts["25 a 36 meses"] / total) * 100 },
+      { range: "13 a 24 meses", count: counts["13 a 24 meses"], pct: (counts["13 a 24 meses"] / total) * 100 },
+      { range: "0 a 12 meses", count: counts["0 a 12 meses"], pct: (counts["0 a 12 meses"] / total) * 100 },
     ];
   }, [currentLoan, termViewMode]);
 
@@ -441,7 +441,7 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
               <BarChart
                 layout="vertical"
                 data={termDistributionData}
-                margin={{ top: 0, right: 35, left: 10, bottom: 0 }}
+                margin={{ top: 0, right: 35, left: 5, bottom: 0 }}
               >
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
                 <XAxis type="number" hide domain={[0, 'dataMax + 10']} />
@@ -452,10 +452,13 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
                   fontSize={10} 
                   tickLine={false} 
                   axisLine={false}
-                  width={60}
+                  width={82}
                 />
                 <Tooltip
-                  formatter={(value: any) => [`${value} contratos`, "Quantidade"]}
+                  formatter={(value: any, _name: any, item: any) => {
+                    const pct = item?.payload?.pct ?? 0;
+                    return [`${value} contratos (${Number(pct).toFixed(1)}%)`, "Quantidade"];
+                  }}
                   contentStyle={{ backgroundColor: "#ffffff", borderRadius: "8px", border: "1px solid #e2e8f0", fontSize: "11px" }}
                 />
                 <Bar dataKey="count" radius={[0, 4, 4, 0]}>

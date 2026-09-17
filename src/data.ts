@@ -182,7 +182,8 @@ export const seguradosAtivos: SeguradoAtivo[] = [
   {"competencia":"2026-04","quantidadeAtivos":11330,"quantidadeInativos":5064},
   {"competencia":"2026-05","quantidadeAtivos":11292,"quantidadeInativos":5088},
   {"competencia":"2026-06","quantidadeAtivos":11265,"quantidadeInativos":5099},
-  {"competencia":"2026-07","quantidadeAtivos":11263,"quantidadeInativos":5120}
+  {"competencia":"2026-07","quantidadeAtivos":11263,"quantidadeInativos":5120},
+  {"competencia":"2026-08","quantidadeAtivos":11234,"quantidadeInativos":5132}
 ];
 
 export const retornoMetaAtuarial: RetornoMetaAtuarial[] = [
@@ -204,7 +205,8 @@ export const retornoMetaAtuarial: RetornoMetaAtuarial[] = [
   {"competencia":"2026-04","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":21833448.34,"retornoPercentual":0.0176,"metaAtuarialPercentual":0.0115,"retornoAcumulado":0.0483,"metaAcumulada":0.0459,"atingiuMeta":true},
   {"competencia":"2026-05","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":14192289.28,"retornoPercentual":0.0122,"metaAtuarialPercentual":0.0106,"retornoAcumulado":0.0611,"metaAcumulada":0.0570,"atingiuMeta":true},
   {"competencia":"2026-06","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":13858350.44,"retornoPercentual":0.0105,"metaAtuarialPercentual":0.0064,"retornoAcumulado":0.0722,"metaAcumulada":0.0638,"atingiuMeta":true},
-  {"competencia":"2026-07","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":9227308.35,"retornoPercentual":0.0079,"metaAtuarialPercentual":0.0055,"retornoAcumulado":0.0806,"metaAcumulada":0.0697,"atingiuMeta":true}
+  {"competencia":"2026-07","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":9227308.35,"retornoPercentual":0.0079,"metaAtuarialPercentual":0.0055,"retornoAcumulado":0.0806,"metaAcumulada":0.0697,"atingiuMeta":true},
+  {"competencia":"2026-08","metaAtuarialFormula":"IPCA + 5.92%","retornoValor":7611351.84,"retornoPercentual":0.0076,"metaAtuarialPercentual":0.0016,"retornoAcumulado":0.0888,"metaAcumulada":0.0714,"atingiuMeta":true}
 ];
 
 export const movimentacoesFinanceiras: MovimentacaoFinanceira[] = [
@@ -458,14 +460,52 @@ export const movimentacoesFinanceiras: MovimentacaoFinanceira[] = [
   {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-07","categoria":"Bens Permanentes","valor":0.00},
   {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-07","categoria":"Outras Despesas","valor":39910.26},
   {"tipo":"transferenciaRecebida","fundo":"reparticao","competencia":"2026-07","categoria":"Aporte por Insuficiência Financeira","valor":9000000.00},
-  {"tipo":"transferenciaRecebida","fundo":"orgaoGerenciador","competencia":"2026-07","categoria":"Interferência Financeira","valor":1550000.00}
+  {"tipo":"transferenciaRecebida","fundo":"orgaoGerenciador","competencia":"2026-07","categoria":"Interferência Financeira","valor":1550000.00},
+
+  {"tipo":"receita","fundo":"reparticao","competencia":"2026-08","categoria":"Contribuição Patronal","valor":4276275.18},
+  {"tipo":"receita","fundo":"reparticao","competencia":"2026-08","categoria":"Contribuição do Servidor","valor":4278388.43},
+  {"tipo":"receita","fundo":"reparticao","competencia":"2026-08","categoria":"Contribuição de Inativos e Pensionistas","valor":325973.24},
+  {"tipo":"receita","fundo":"reparticao","competencia":"2026-08","categoria":"Rendimento de Aplicação","valor":178403.79},
+  {"tipo":"receita","fundo":"reparticao","competencia":"2026-08","categoria":"Compensação Previdenciária","valor":1078593.45},
+  {"tipo":"receita","fundo":"reparticao","competencia":"2026-08","categoria":"Outras Receitas","valor":0.00},
+  {"tipo":"receita","fundo":"capitalizacao","competencia":"2026-08","categoria":"Contribuição Patronal","valor":2770203.05},
+  {"tipo":"receita","fundo":"capitalizacao","competencia":"2026-08","categoria":"Contribuição do Servidor","valor":2770949.93},
+  {"tipo":"receita","fundo":"capitalizacao","competencia":"2026-08","categoria":"Contribuição de Inativos e Pensionistas","valor":147044.17},
+  {"tipo":"receita","fundo":"capitalizacao","competencia":"2026-08","categoria":"Rendimento de Aplicação","valor":6037719.23},
+  {"tipo":"receita","fundo":"capitalizacao","competencia":"2026-08","categoria":"Juros de Empréstimos Consignados","valor":77798.27},
+  {"tipo":"receita","fundo":"capitalizacao","competencia":"2026-08","categoria":"Compensação Previdenciária","valor":24837.94},
+  {"tipo":"receita","fundo":"capitalizacao","competencia":"2026-08","categoria":"Parcelamentos","valor":12848.62},
+  {"tipo":"receita","fundo":"capitalizacao","competencia":"2026-08","categoria":"Outras Receitas","valor":3944.85},
+  {"tipo":"receita","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Taxa de Administração","valor":845546.37},
+  {"tipo":"receita","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Rendimento de Aplicação","valor":236905.56},
+  {"tipo":"receita","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Outras Receitas","valor":43018.93},
+  {"tipo":"despesa","fundo":"reparticao","competencia":"2026-08","categoria":"Aposentadorias","valor":15460431.21},
+  {"tipo":"despesa","fundo":"reparticao","competencia":"2026-08","categoria":"Pensões","valor":2262629.69},
+  {"tipo":"despesa","fundo":"reparticao","competencia":"2026-08","categoria":"Compensação Previdenciária","valor":212723.30},
+  {"tipo":"despesa","fundo":"reparticao","competencia":"2026-08","categoria":"Outras Despesas","valor":0.00},
+  {"tipo":"despesa","fundo":"capitalizacao","competencia":"2026-08","categoria":"Aposentadorias","valor":6928916.90},
+  {"tipo":"despesa","fundo":"capitalizacao","competencia":"2026-08","categoria":"Pensões","valor":1066614.38},
+  {"tipo":"despesa","fundo":"capitalizacao","competencia":"2026-08","categoria":"Compensação Previdenciária","valor":283.79},
+  {"tipo":"despesa","fundo":"capitalizacao","competencia":"2026-08","categoria":"Outras Despesas","valor":0.00},
+  {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Folha de Pagamento","valor":238629.11},
+  {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"SAMA","valor":703524.69},
+  {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"PASEP","valor":11335.39},
+  {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Pessoa Física","valor":50310.31},
+  {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Pessoa Jurídica","valor":65664.13},
+  {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Previdência Complementar","valor":11837.72},
+  {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Bens Permanentes","valor":0.00},
+  {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Auxílio Social para Aposentados e Pensionistas","valor":739800.00},
+  {"tipo":"despesa","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Outras Despesas","valor":13551.30},
+  {"tipo":"transferenciaRecebida","fundo":"reparticao","competencia":"2026-08","categoria":"Aporte por Insuficiência Financeira","valor":9000000.00},
+  {"tipo":"transferenciaRecebida","fundo":"orgaoGerenciador","competencia":"2026-08","categoria":"Interferência Financeira","valor":1450000.00}
 ];
 
 export const crp: CRP[] = [
   {"tipo":"CRP","numero":"987691-236629","status":"ativa","emissao":"2024-09-16","validade":"2025-03-15","situacao":"vencida"},
   {"tipo":"CRP","numero":"987691-241916","status":"ativa","emissao":"2025-03-15","validade":"2025-09-11","situacao":"vencida"},
   {"tipo":"CRP","numero":"987691-247191","status":"ativa","emissao":"2025-09-11","validade":"2026-03-10","situacao":"vencida"},
-  {"tipo":"CRP","numero":"987691-252301","status":"ativa","emissao":"2026-03-11","validade":"2026-09-07","situacao":"vigente"}
+  {"tipo":"CRP","numero":"987691-252301","status":"ativa","emissao":"2026-03-11","validade":"2026-09-07","situacao":"vencida"},
+  {"tipo":"CRP","numero":"987691-257470","status":"ativa","emissao":"2026-09-08","validade":"2027-03-07","situacao":"vigente"}
 ];
 
 export const emprestimosConsignados: EmprestimoConsignado[] = [
@@ -1361,5 +1401,6 @@ export const evolucaoCarteiraConsolidada: EvolucaoCarteira[] = [
   {"competencia":"2026-04","valorCarteiraConsolidada":1394270157.21},
   {"competencia":"2026-05","valorCarteiraConsolidada":1408263937.19},
   {"competencia":"2026-06","valorCarteiraConsolidada":1414618405.85},
-  {"competencia":"2026-07","valorCarteiraConsolidada":1424784018.63}
+  {"competencia":"2026-07","valorCarteiraConsolidada":1424784018.63},
+  {"competencia":"2026-08","valorCarteiraConsolidada":1431992950.24}
 ];

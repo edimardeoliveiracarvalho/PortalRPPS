@@ -59,6 +59,7 @@ export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialC
   }, [initialCompetence]);
 
   const availableCompetences = [
+    { value: "2026-08", label: "Agosto / 2026" },
     { value: "2026-07", label: "Julho / 2026" },
     { value: "2026-06", label: "Junho / 2026" },
     { value: "2026-05", label: "Maio / 2026" },
@@ -130,8 +131,18 @@ export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialC
   const estressados = ativosMes.filter(item => item.inv.ativoEstressado);
 
   // Month-by-month constants & helper functions for Receita e Despesas report
-  const monthsList = ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06"];
-  const monthShortLabels = ["Jan/26", "Fev/26", "Mar/26", "Abr/26", "Mai/26", "Jun/26"];
+  const compMonthNum = parseInt(comp.split("-")[1] || "8", 10);
+  const monthsCount = Math.max(6, Math.min(12, compMonthNum));
+  const monthsList = Array.from({ length: monthsCount }, (_, i) => {
+    const m = i + 1;
+    return `2026-${m < 10 ? `0${m}` : m}`;
+  });
+  const monthNamesMap: Record<string, string> = {
+    "01": "Jan/26", "02": "Fev/26", "03": "Mar/26", "04": "Abr/26",
+    "05": "Mai/26", "06": "Jun/26", "07": "Jul/26", "08": "Ago/26",
+    "09": "Set/26", "10": "Out/26", "11": "Nov/26", "12": "Dez/26"
+  };
+  const monthShortLabels = monthsList.map(c => monthNamesMap[c.split("-")[1]] || c);
 
   const getVal = (fundo: string, tipo: string, c: string, cat: string): number => {
     const item = movimentacoesFinanceiras.find(
@@ -188,6 +199,7 @@ export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialC
     "Pessoa Jurídica",
     "Previdência Complementar",
     "Bens Permanentes",
+    "Auxílio Social para Aposentados e Pensionistas",
     "Outras Despesas"
   ];
 
@@ -1087,13 +1099,13 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
                           {monthShortLabels.map((lbl, i) => (
                             <th key={i} className="p-2 border border-amber-800 text-right w-[85px]">{lbl}</th>
                           ))}
-                          <th className="p-2 border border-amber-800 text-right bg-amber-950 text-amber-300 font-black w-[105px]">Acumulado Semestre</th>
+                          <th className="p-2 border border-amber-800 text-right bg-amber-950 text-amber-300 font-black w-[105px]">{monthsList.length > 6 ? "Acumulado Ano" : "Acumulado Semestre"}</th>
                         </tr>
                       </thead>
                       <tbody>
                         {/* DADOS DEMOGRÁFICOS */}
                         <tr className="bg-amber-100/70 font-black text-amber-950 uppercase border-b border-amber-300">
-                          <td colSpan={8} className="p-1.5 pl-3">1. QUADRO DEMOGRÁFICO DO FUNDO EM REPARTIÇÃO</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">1. QUADRO DEMOGRÁFICO DO FUNDO EM REPARTIÇÃO</td>
                         </tr>
                         <tr className="hover:bg-amber-50/50 border-b border-slate-200">
                           <td className="p-1.5 pl-4 font-semibold text-slate-800">Servidores Ativos (Contribuintes)</td>
@@ -1123,7 +1135,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
 
                         {/* RECEITAS PRÓPRIAS */}
                         <tr className="bg-amber-100/70 font-black text-amber-950 uppercase border-b border-amber-300">
-                          <td colSpan={8} className="p-1.5 pl-3">2. RECEITAS PRÓPRIAS E TRANSFERÊNCIAS RECEBIDAS</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">2. RECEITAS PRÓPRIAS E TRANSFERÊNCIAS RECEBIDAS</td>
                         </tr>
                         {repReceitaCats.map((cat, idx) => {
                           const totalCat = monthsList.reduce((acc, c) => acc + getVal("reparticao", "receita", c, cat), 0);
@@ -1168,7 +1180,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
 
                         {/* DESPESAS */}
                         <tr className="bg-amber-100/70 font-black text-amber-950 uppercase border-b border-amber-300">
-                          <td colSpan={8} className="p-1.5 pl-3">3. DESPESAS PREVIDENCIÁRIAS REALIZADAS</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">3. DESPESAS PREVIDENCIÁRIAS REALIZADAS</td>
                         </tr>
                         {repDespesaCats.map((cat, idx) => {
                           const totalCat = monthsList.reduce((acc, c) => acc + getVal("reparticao", "despesa", c, cat), 0);
@@ -1201,7 +1213,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
 
                         {/* RESULTADO E SALDO BANCÁRIO */}
                         <tr className="bg-amber-100/70 font-black text-amber-950 uppercase border-b border-amber-300">
-                          <td colSpan={8} className="p-1.5 pl-3">4. RESULTADO FINANCEIRO E SALDO BANCÁRIO</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">4. RESULTADO FINANCEIRO E SALDO BANCÁRIO</td>
                         </tr>
                         <tr className="bg-white font-bold border-b border-slate-300">
                           <td className="p-1.5 pl-4 text-slate-900 uppercase">Resultado Financeiro Líquido do Mês</td>
@@ -1304,13 +1316,13 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
                           {monthShortLabels.map((lbl, i) => (
                             <th key={i} className="p-2 border border-blue-800 text-right w-[85px]">{lbl}</th>
                           ))}
-                          <th className="p-2 border border-blue-800 text-right bg-blue-950 text-emerald-300 font-black w-[105px]">Acumulado Semestre</th>
+                          <th className="p-2 border border-blue-800 text-right bg-blue-950 text-emerald-300 font-black w-[105px]">{monthsList.length > 6 ? "Acumulado Ano" : "Acumulado Semestre"}</th>
                         </tr>
                       </thead>
                       <tbody>
                         {/* DADOS DEMOGRÁFICOS */}
                         <tr className="bg-blue-100/70 font-black text-blue-950 uppercase border-b border-blue-300">
-                          <td colSpan={8} className="p-1.5 pl-3">1. QUADRO DEMOGRÁFICO DO FUNDO EM CAPITALIZAÇÃO</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">1. QUADRO DEMOGRÁFICO DO FUNDO EM CAPITALIZAÇÃO</td>
                         </tr>
                         <tr className="hover:bg-blue-50/50 border-b border-slate-200">
                           <td className="p-1.5 pl-4 font-semibold text-slate-800">Servidores Ativos (Contribuintes)</td>
@@ -1340,7 +1352,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
 
                         {/* RECEITAS */}
                         <tr className="bg-blue-100/70 font-black text-blue-950 uppercase border-b border-blue-300">
-                          <td colSpan={8} className="p-1.5 pl-3">2. RECEITAS DO FUNDO EM CAPITALIZAÇÃO</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">2. RECEITAS DO FUNDO EM CAPITALIZAÇÃO</td>
                         </tr>
                         {capReceitaCats.map((cat, idx) => {
                           const totalCat = monthsList.reduce((acc, c) => acc + getVal("capitalizacao", "receita", c, cat), 0);
@@ -1373,7 +1385,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
 
                         {/* DESPESAS */}
                         <tr className="bg-blue-100/70 font-black text-blue-950 uppercase border-b border-blue-300">
-                          <td colSpan={8} className="p-1.5 pl-3">3. DESPESAS PREVIDENCIÁRIAS REALIZADAS</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">3. DESPESAS PREVIDENCIÁRIAS REALIZADAS</td>
                         </tr>
                         {capDespesaCats.map((cat, idx) => {
                           const totalCat = monthsList.reduce((acc, c) => acc + getVal("capitalizacao", "despesa", c, cat), 0);
@@ -1406,7 +1418,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
 
                         {/* RESULTADO E SALDO BANCÁRIO */}
                         <tr className="bg-blue-100/70 font-black text-blue-950 uppercase border-b border-blue-300">
-                          <td colSpan={8} className="p-1.5 pl-3">4. RESULTADO FINANCEIRO E PATRIMÔNIO ACUMULADO</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">4. RESULTADO FINANCEIRO E PATRIMÔNIO ACUMULADO</td>
                         </tr>
                         <tr className="bg-white font-bold border-b border-slate-300">
                           <td className="p-1.5 pl-4 text-slate-900 uppercase">Superávit Financeiro do Mês</td>
@@ -1509,13 +1521,13 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
                           {monthShortLabels.map((lbl, i) => (
                             <th key={i} className="p-2 border border-indigo-800 text-right w-[85px]">{lbl}</th>
                           ))}
-                          <th className="p-2 border border-indigo-800 text-right bg-indigo-950 text-indigo-200 font-black w-[105px]">Acumulado Semestre</th>
+                          <th className="p-2 border border-indigo-800 text-right bg-indigo-950 text-indigo-200 font-black w-[105px]">{monthsList.length > 6 ? "Acumulado Ano" : "Acumulado Semestre"}</th>
                         </tr>
                       </thead>
                       <tbody>
                         {/* RECEITAS */}
                         <tr className="bg-indigo-100/70 font-black text-indigo-950 uppercase border-b border-indigo-300">
-                          <td colSpan={8} className="p-1.5 pl-3">1. RECEITAS DA TAXA DE ADMINISTRAÇÃO E TRANSFERÊNCIAS</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">1. RECEITAS DA TAXA DE ADMINISTRAÇÃO E TRANSFERÊNCIAS</td>
                         </tr>
                         {orgReceitaCats.map((cat, idx) => {
                           const totalCat = monthsList.reduce((acc, c) => acc + getVal("orgaoGerenciador", "receita", c, cat), 0);
@@ -1560,7 +1572,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
 
                         {/* DESPESAS ADMINISTRATIVAS */}
                         <tr className="bg-indigo-100/70 font-black text-indigo-950 uppercase border-b border-indigo-300">
-                          <td colSpan={8} className="p-1.5 pl-3">2. DESPESAS ADMINISTRATIVAS REALIZADAS</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">2. DESPESAS ADMINISTRATIVAS REALIZADAS</td>
                         </tr>
                         {orgDespesaCats.map((cat, idx) => {
                           const totalCat = monthsList.reduce((acc, c) => acc + getVal("orgaoGerenciador", "despesa", c, cat), 0);
@@ -1593,7 +1605,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
 
                         {/* RESULTADO E SALDO BANCÁRIO */}
                         <tr className="bg-indigo-100/70 font-black text-indigo-950 uppercase border-b border-indigo-300">
-                          <td colSpan={8} className="p-1.5 pl-3">3. RESULTADO OPERACIONAL E DISPONIBILIDADE BANCÁRIA</td>
+                          <td colSpan={monthsList.length + 2} className="p-1.5 pl-3">3. RESULTADO OPERACIONAL E DISPONIBILIDADE BANCÁRIA</td>
                         </tr>
                         <tr className="bg-white font-bold border-b border-slate-300">
                           <td className="p-1.5 pl-4 text-slate-900 uppercase">Resultado Financeiro da Taxa ADM no Mês</td>
@@ -1657,7 +1669,7 @@ Maringá Previdência • Documento Oficial de Acompanhamento Estratégico
                           {monthShortLabels.map((lbl, i) => (
                             <th key={i} className="p-2 border border-slate-700 text-right w-[85px]">{lbl}</th>
                           ))}
-                          <th className="p-2 border border-slate-700 text-right bg-slate-900 text-amber-300 font-black w-[105px]">Total Semestre</th>
+                          <th className="p-2 border border-slate-700 text-right bg-slate-900 text-amber-300 font-black w-[105px]">{monthsList.length > 6 ? "Total Acumulado" : "Total Semestre"}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-800/60">

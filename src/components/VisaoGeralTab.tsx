@@ -72,15 +72,14 @@ export const VisaoGeralTab: React.FC<VisaoGeralTabProps> = ({ competence }) => {
   const totalAtivos = currentServidoresObj?.quantidadeAtivos || 0;
 
   // 6. Active CRP (get the one valid for this date)
-  // Our select competence is e.g. "2026-05" (May 2026), meaning we are in May 2026.
-  // The CRP valid in May 2026 is "987691-252301" (valid until 2026-09-07)
+  // CRP vigente: "987691-257470" (válido até 2027-03-07)
   const activeCRP = crp.find(c => c.situacao === "vigente") || crp[crp.length - 1];
 
   const [compYear, compMonth] = competence.split("-").map(Number);
   const [valYear, valMonth] = activeCRP.validade.split("-").map(Number);
 
   const validityParts = activeCRP.validade.split("-");
-  const formattedValidade = validityParts.length === 3 ? `${validityParts[2]}/${validityParts[1]}/${validityParts[0].substring(2)}` : "07/09/26";
+  const formattedValidade = validityParts.length === 3 ? `${validityParts[2]}/${validityParts[1]}/${validityParts[0].substring(2)}` : activeCRP.validade;
 
   // Calculate remaining days considering competence date (first day of selected month) and real-world today
   const valDay = Number(validityParts[2] || 7);

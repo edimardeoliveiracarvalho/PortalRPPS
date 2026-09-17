@@ -50,9 +50,10 @@ export const MetaAtuarial2Tab: React.FC<MetaAtuarial2TabProps> = ({ competence }
 
   // Dynamically compute historical data including the current year (2026) based on selected competence
   const combinedHistory = useMemo<HistoricoMetaAtuarial[]>(() => {
-    // If the selected competence is a 2026 month, use it. Otherwise, default to the latest (2026-06).
+    // If the selected competence is a 2026 month, use it. Otherwise, default to the latest available.
     const is2026 = competence && competence.startsWith("2026");
-    const targetComp = is2026 ? competence : "2026-06";
+    const latestComp = retornoMetaAtuarial[retornoMetaAtuarial.length - 1]?.competencia || "2026-08";
+    const targetComp = is2026 ? competence : latestComp;
     const current2026Month = retornoMetaAtuarial.find(g => g.competencia === targetComp);
 
     if (!current2026Month) return retornoMetaAtuarialHistorico;

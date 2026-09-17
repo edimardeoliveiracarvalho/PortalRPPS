@@ -68,6 +68,7 @@ export default function App() {
   const [showCompetenceMenu, setShowCompetenceMenu] = useState(false);
 
   const availableCompetences = [
+    { value: "2026-08", label: "Agosto / 2026" },
     { value: "2026-07", label: "Julho / 2026" },
     { value: "2026-06", label: "Junho / 2026" },
     { value: "2026-05", label: "Maio / 2026" },
