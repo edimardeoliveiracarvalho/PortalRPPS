@@ -172,5 +172,9 @@ export const beneficios: Beneficio[] = [
   {"competencia":"2026-07","fundo":"consolidado","aposentados":4188,"valorAposentados":22308123.75,"pensionistas":932,"valorPensionistas":3347821.95,"totalBeneficiarios":5120,"valorTotal":25655945.70,"novosAposentados":26,"novosPensionistas":5},
   {"competencia":"2026-08","fundo":"reparticao","aposentados":2879,"valorAposentados":15460431.21,"pensionistas":600,"valorPensionistas":2262629.69,"totalBeneficiarios":3479,"valorTotal":17723060.90,"novosAposentados":20,"novosPensionistas":4},
   {"competencia":"2026-08","fundo":"capitalizacao","aposentados":1326,"valorAposentados":6928916.90,"pensionistas":327,"valorPensionistas":1066614.38,"totalBeneficiarios":1653,"valorTotal":7995531.28,"novosAposentados":6,"novosPensionistas":0},
-  {"competencia":"2026-08","fundo":"consolidado","aposentados":4205,"valorAposentados":22389348.11,"pensionistas":927,"valorPensionistas":3329244.07,"totalBeneficiarios":5132,"valorTotal":25718592.18,"novosAposentados":26,"novosPensionistas":4}
+  {"competencia":"2026-08","fundo":"consolidado","aposentados":4205,"valorAposentados":22389348.11,"pensionistas":927,"valorPensionistas":3329244.07,"totalBeneficiarios":5132,"valorTotal":25718592.18,"novosAposentados":26,"novosPensionistas":4},
+  {"competencia":"2026-09","fundo":"reparticao","aposentados":2902,"valorAposentados":15551425.64,"pensionistas":602,"valorPensionistas":2275655.91,"totalBeneficiarios":3504,"valorTotal":17827081.55,"novosAposentados":23,"novosPensionistas":3},
+  {"competencia":"2026-09","fundo":"capitalizacao","aposentados":1326,"valorAposentados":6927056.41,"pensionistas":324,"valorPensionistas":1062642.91,"totalBeneficiarios":1650,"valorTotal":7989699.32,"novosAposentados":3,"novosPensionistas":0},
+  {"competencia":"2026-09","fundo":"consolidado","aposentados":4228,"valorAposentados":22478482.05,"pensionistas":926,"valorPensionistas":3338298.82,"totalBeneficiarios":5154,"valorTotal":25816780.87,"novosAposentados":26,"novosPensionistas":3}
 ];
+

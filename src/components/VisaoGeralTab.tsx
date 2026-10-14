@@ -225,7 +225,9 @@ export const VisaoGeralTab: React.FC<VisaoGeralTabProps> = ({ competence }) => {
         {/* Card 3: Meta Atuarial */}
         <div className="bg-white rounded shadow-sm border-l-4 border-indigo-500 p-4 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Meta Atuarial ({currentGoalObj?.metaAtuarialFormula.split(" ")[2]})</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+              Meta Atuarial ({currentGoalObj?.metaAtuarialFormula ? currentGoalObj.metaAtuarialFormula.split(" ")[2] : "IPCA+5,06%"})
+            </span>
             <div className={`p-1.5 rounded flex items-center justify-center ${currentGoalObj?.atingiuMeta ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
               {currentGoalObj?.atingiuMeta ? <CheckCircle2 className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />}
             </div>
@@ -233,13 +235,15 @@ export const VisaoGeralTab: React.FC<VisaoGeralTabProps> = ({ competence }) => {
           <div className="mt-2">
             <div className="flex items-baseline space-x-2">
               <span className="text-xl font-black text-slate-800 tracking-tight">
-                {formatPercent(currentGoalObj?.retornoPercentual)}
+                {currentGoalObj ? formatPercent(currentGoalObj.retornoPercentual) : "—"}
               </span>
-              <span className="text-[10px] text-slate-400 font-bold">vs Meta {formatPercent(currentGoalObj?.metaAtuarialPercentual)}</span>
+              <span className="text-[10px] text-slate-400 font-bold">
+                {currentGoalObj ? `vs Meta ${formatPercent(currentGoalObj.metaAtuarialPercentual)}` : "Em apuração"}
+              </span>
             </div>
             <div className="mt-1 flex items-center">
               <span className={`px-1.5 py-0.5 rounded-sm text-[9px] font-bold tracking-wider ${currentGoalObj?.atingiuMeta ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
-                {currentGoalObj?.atingiuMeta ? 'CUMPRIDA' : 'NÃO ALCANCADA'}
+                {currentGoalObj ? (currentGoalObj.atingiuMeta ? 'CUMPRIDA' : 'NÃO ALCANÇADA') : 'EM APURAÇÃO'}
               </span>
             </div>
           </div>

@@ -142,7 +142,7 @@ export const InvestimentosTab: React.FC<InvestimentosTabProps> = ({ competence }
     const trueTotalYield = goalObj ? goalObj.retornoValor : 0;
     const avgYieldPercent = goalObj ? goalObj.retornoPercentual : 0;
 
-    if (Math.abs(trueTotalBalance - sumBalance) > 0.01) {
+    if (trueTotalBalance > 0 && Math.abs(trueTotalBalance - sumBalance) > 0.01) {
       const diffBalance = trueTotalBalance - sumBalance;
       const diffYield = trueTotalYield - sumYield;
 
@@ -174,7 +174,7 @@ export const InvestimentosTab: React.FC<InvestimentosTabProps> = ({ competence }
             saldoFinal: fundDiffBalance,
             rendimentos: fundDiffYield,
             rentabilidadeMes: avgYieldPercent,
-            participacaoCarteira: fundDiffBalance / trueTotalBalance
+            participacaoCarteira: trueTotalBalance > 0 ? fundDiffBalance / trueTotalBalance : 0
           });
         }
       });
