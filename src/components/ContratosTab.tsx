@@ -84,14 +84,16 @@ export const ContratosTab: React.FC<ContratosTabProps> = () => {
     return c.valorAtualizado && c.valorAtualizado > 0 ? c.valorAtualizado : (c.valorInicialContrato || 0);
   };
 
-  // Helper to calculate days remaining until expiration (Reference Date: 2026-08-06)
+  // Helper to calculate days remaining until expiration (Abordagem Tempo Real Dinâmica: new Date())
   const getDaysRemaining = (endDateStr: string) => {
     if (!endDateStr) return 0;
-    const today = new Date(2026, 7, 6);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const [year, month, day] = endDateStr.split("-").map(Number);
     const endDate = new Date(year, month - 1, day);
+    endDate.setHours(0, 0, 0, 0);
     const diffTime = endDate.getTime() - today.getTime();
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return Math.round(diffTime / (1000 * 60 * 60 * 24));
   };
 
   // Reset filters
