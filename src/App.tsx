@@ -62,22 +62,23 @@ import {
 
 type TabId = "visao_geral" | "beneficios" | "contabil" | "compensacao" | "carteira_investimentos" | "titulos" | "meta_x_retorno" | "patrimonio" | "servidores" | "consg" | "agenda" | "contratos" | "impressao";
 
+export const availableCompetences = [
+  { value: "2026-09", label: "Setembro / 2026" },
+  { value: "2026-08", label: "Agosto / 2026" },
+  { value: "2026-07", label: "Julho / 2026" },
+  { value: "2026-06", label: "Junho / 2026" },
+  { value: "2026-05", label: "Maio / 2026" },
+  { value: "2026-04", label: "Abril / 2026" },
+  { value: "2026-03", label: "Março / 2026" },
+  { value: "2026-02", label: "Fevereiro / 2026" },
+  { value: "2026-01", label: "Janeiro / 2026" },
+];
+
 export default function App() {
-  const [competence, setCompetence] = useState<string>("2026-07"); // Default to the latest complete month
+  // Padrão automático: carrega sempre a última competência alimentada/disponível
+  const [competence, setCompetence] = useState<string>(availableCompetences[0].value);
   const [activeTab, setActiveTab] = useState<TabId>("visao_geral");
   const [showCompetenceMenu, setShowCompetenceMenu] = useState(false);
-
-  const availableCompetences = [
-    { value: "2026-09", label: "Setembro / 2026" },
-    { value: "2026-08", label: "Agosto / 2026" },
-    { value: "2026-07", label: "Julho / 2026" },
-    { value: "2026-06", label: "Junho / 2026" },
-    { value: "2026-05", label: "Maio / 2026" },
-    { value: "2026-04", label: "Abril / 2026" },
-    { value: "2026-03", label: "Março / 2026" },
-    { value: "2026-02", label: "Fevereiro / 2026" },
-    { value: "2026-01", label: "Janeiro / 2026" },
-  ];
 
   const tabs = [
     { id: "visao_geral", label: "Visão Geral", icon: Compass, component: VisaoGeralTab },

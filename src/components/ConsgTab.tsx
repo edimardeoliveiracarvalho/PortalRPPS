@@ -18,7 +18,9 @@ import {
   Lock,
   Scale,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Download,
+  FileSpreadsheet
 } from "lucide-react";
 import { 
   ResponsiveContainer, 
@@ -113,6 +115,151 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
   
   // Taxa de Cobertura do Fundo de Risco em relação ao Saldo Total da Carteira Consignada
   const coberturaCarteiraPct = saldoFinal > 0 ? (fundoSaldoFinal / saldoFinal) * 100 : 0;
+
+  // Último registro cadastrado da carteira / fundo de risco
+  const latestLoan = useMemo(() => {
+    return [...emprestimosConsignadosData].sort((a, b) => b.competencia.localeCompare(a.competencia))[0];
+  }, []);
+
+  // Handlers para download dos demonstrativos
+  const handleDownloadFundoRiscoCSV = () => {
+    const rows = [...emprestimosConsignadosData].sort((a, b) => a.competencia.localeCompare(b.competencia));
+    const header = [
+      "Competência",
+      "Mês/Ano",
+      "Saldo Inicial Fundo (R$)",
+      "Entradas/Aportes (R$)",
+      "Saídas/Sinistros (R$)",
+      "Saldo Final Fundo (R$)",
+      "Saldo Carteira Consignada (R$)",
+      "% Cobertura da Carteira"
+    ];
+    
+    const csvLines = [
+      header.join(";"),
+      ...rows.map(row => {
+        const fundo = row.fundoRisco;
+        const cobPct = row.saldoFinal > 0 ? ((fundo.saldoFinal / row.saldoFinal) * 100).toFixed(2).replace(".", ",") : "0,00";
+        return [
+          row.competencia,
+          `"${getMonthName(row.competencia)}"`,
+          fundo.saldoInicial.toFixed(2).replace(".", ","),
+          fundo.entradas.toFixed(2).replace(".", ","),
+          fundo.saidas.toFixed(2).replace(".", ","),
+          fundo.saldoFinal.toFixed(2).replace(".", ","),
+          row.saldoFinal.toFixed(2).replace(".", ","),
+          `${cobPct}%`
+        ].join(";");
+      })
+    ];
+
+    const blob = new Blob(["\uFEFF" + csvLines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `fundo_risco_consignado_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadFundoRiscoJSON = (onlyLatest = false) => {
+    const sortedDesc = [...emprestimosConsignadosData].sort((a, b) => b.competencia.localeCompare(a.competencia));
+    let exportData: unknown;
+    let filename = "";
+
+    if (onlyLatest) {
+      const latest = sortedDesc[0];
+      const fundo = latest.fundoRisco;
+      const cobPct = latest.saldoFinal > 0 ? parseFloat(((fundo.saldoFinal / latest.saldoFinal) * 100).toFixed(2)) : 0;
+      exportData = {
+        competencia: latest.competencia,
+        mesAno: getMonthName(latest.competencia),
+        fundoRisco: {
+          saldoInicial: fundo.saldoInicial,
+          entradas: fundo.entradas,
+          saidas: fundo.saidas,
+          saldoFinal: fundo.saldoFinal
+        },
+        saldoCarteiraConsignada: latest.saldoFinal,
+        percentualCobertura: cobPct
+      };
+      filename = `fundo_risco_consignado_ultima_competencia_${latest.competencia}.json`;
+    } else {
+      exportData = sortedDesc.map(row => {
+        const fundo = row.fundoRisco;
+        const cobPct = row.saldoFinal > 0 ? parseFloat(((fundo.saldoFinal / row.saldoFinal) * 100).toFixed(2)) : 0;
+        return {
+          competencia: row.competencia,
+          mesAno: getMonthName(row.competencia),
+          fundoRisco: {
+            saldoInicial: fundo.saldoInicial,
+            entradas: fundo.entradas,
+            saidas: fundo.saidas,
+            saldoFinal: fundo.saldoFinal
+          },
+          saldoCarteiraConsignada: row.saldoFinal,
+          percentualCobertura: cobPct
+        };
+      });
+      filename = `fundo_risco_consignado_historico_completo.json`;
+    }
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadCarteiraCSV = () => {
+    const rows = [...emprestimosConsignadosData].sort((a, b) => a.competencia.localeCompare(b.competencia));
+    const header = [
+      "Competência",
+      "Mês/Ano",
+      "Saldo Inicial (R$)",
+      "Valor Concedido (R$)",
+      "Valor Amortizado (R$)",
+      "Saldo Final (R$)",
+      "Fundo de Risco (R$)",
+      "Retorno Financeiro (R$)",
+      "Rentabilidade (% a.m.)",
+      "Contratos Novos",
+      "Contratos Ativos"
+    ];
+
+    const csvLines = [
+      header.join(";"),
+      ...rows.map(row => [
+        row.competencia,
+        `"${getMonthName(row.competencia)}"`,
+        row.saldoInicial.toFixed(2).replace(".", ","),
+        row.valorConcedido.toFixed(2).replace(".", ","),
+        row.valorAmortizado.toFixed(2).replace(".", ","),
+        row.saldoFinal.toFixed(2).replace(".", ","),
+        row.fundoRisco.saldoFinal.toFixed(2).replace(".", ","),
+        row.retornoFinanceiro.toFixed(2).replace(".", ","),
+        `${row.retornoPercentual.toFixed(2).replace(".", ",")}%`,
+        row.contratosNovos,
+        row.contratosAtivos
+      ].join(";"))
+    ];
+
+    const blob = new Blob(["\uFEFF" + csvLines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `carteira_consignados_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   // Horizontal bar chart data for term distribution
   const termDistributionData = useMemo(() => {
@@ -668,37 +815,84 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
         </div>
       </div>
 
-      {/* Detailed Historical Data Table Section with Tab selector */}
+      {/* Detailed Historical Data Table Section with Tab selector & Download Actions */}
       <div className="bg-white rounded border border-slate-200 overflow-hidden shadow-sm">
-        <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="p-4 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div>
-            <h4 className="text-sm font-bold text-slate-800">Demonstrativo Detalhado de Empréstimos Consignados</h4>
+            <h4 className="text-sm font-bold text-slate-800 flex items-center">
+              Demonstrativo Detalhado de Empréstimos Consignados
+              <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                Última comp.: {latestLoan.competencia}
+              </span>
+            </h4>
             <p className="text-[11px] text-slate-400">Histórico completo mensal de posições, movimentações e constituição do Fundo de Risco.</p>
           </div>
           
-          <div className="flex bg-slate-100 p-0.5 rounded-lg self-start sm:self-auto">
-            <button
-              onClick={() => setTableTab("carteira")}
-              className={`px-3 py-1 text-xs font-bold rounded-md transition-all cursor-pointer flex items-center ${
-                tableTab === "carteira"
-                  ? "bg-white text-indigo-700 shadow-xs"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <FileText className="h-3.5 w-3.5 mr-1" />
-              Movimentação da Carteira
-            </button>
-            <button
-              onClick={() => setTableTab("fundoRisco")}
-              className={`px-3 py-1 text-xs font-bold rounded-md transition-all cursor-pointer flex items-center ${
-                tableTab === "fundoRisco"
-                  ? "bg-white text-indigo-700 shadow-xs"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <ShieldCheck className="h-3.5 w-3.5 mr-1" />
-              Demonstrativo Fundo de Risco
-            </button>
+          <div className="flex flex-wrap items-center gap-2.5 self-start lg:self-auto">
+            {/* Seletor de visualização */}
+            <div className="flex bg-slate-100 p-0.5 rounded-lg">
+              <button
+                onClick={() => setTableTab("carteira")}
+                className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer flex items-center ${
+                  tableTab === "carteira"
+                    ? "bg-white text-indigo-700 shadow-xs"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <FileText className="h-3.5 w-3.5 mr-1.5" />
+                Movimentação da Carteira
+              </button>
+              <button
+                onClick={() => setTableTab("fundoRisco")}
+                className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all cursor-pointer flex items-center ${
+                  tableTab === "fundoRisco"
+                    ? "bg-white text-indigo-700 shadow-xs"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <ShieldCheck className="h-3.5 w-3.5 mr-1.5" />
+                Demonstrativo Fundo de Risco
+              </button>
+            </div>
+
+            {/* Ações de Download / Exportação */}
+            {tableTab === "fundoRisco" ? (
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={handleDownloadFundoRiscoCSV}
+                  title="Baixar planilha completa do Fundo de Risco formatada em CSV (Excel)"
+                  className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-indigo-700 hover:border-indigo-300 transition-colors flex items-center shadow-2xs cursor-pointer"
+                >
+                  <Download className="h-3.5 w-3.5 mr-1.5 text-emerald-600" />
+                  <span>Baixar CSV</span>
+                </button>
+                <button
+                  onClick={() => handleDownloadFundoRiscoJSON(true)}
+                  title={`Baixar dados da última competência (${latestLoan.competencia}) em formato JSON`}
+                  className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-indigo-200 bg-indigo-50/50 text-indigo-700 hover:bg-indigo-100 hover:border-indigo-400 transition-colors flex items-center shadow-2xs cursor-pointer"
+                >
+                  <Download className="h-3.5 w-3.5 mr-1.5 text-indigo-700" />
+                  <span>Baixar JSON (Última)</span>
+                </button>
+                <button
+                  onClick={() => handleDownloadFundoRiscoJSON(false)}
+                  title="Baixar todas as competências do Fundo de Risco em JSON"
+                  className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-800 transition-colors flex items-center shadow-2xs cursor-pointer hidden sm:flex"
+                >
+                  <Download className="h-3.5 w-3.5 mr-1.5 text-slate-400" />
+                  <span>JSON (Completo)</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleDownloadCarteiraCSV}
+                title="Baixar dados da carteira consignada em CSV"
+                className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-indigo-700 transition-colors flex items-center shadow-2xs cursor-pointer"
+              >
+                <Download className="h-3.5 w-3.5 mr-1.5 text-emerald-600" />
+                <span>Baixar CSV Carteira</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -765,8 +959,26 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
           </div>
         ) : (
           /* TABELA 2: DEMONSTRATIVO DO FUNDO DE RISCO */
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+          <div>
+            <div className="bg-indigo-50/50 px-4 py-2 border-b border-indigo-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+              <div className="flex items-center text-indigo-950 font-medium">
+                <ShieldCheck className="h-4 w-4 mr-1.5 text-indigo-600 shrink-0" />
+                <span>
+                  Última competência enviada: <strong className="text-indigo-700">{getMonthName(latestLoan.competencia)} ({latestLoan.competencia})</strong> — Saldo do Fundo: <strong className="font-mono text-indigo-950">{formatCurrency(latestLoan.fundoRisco.saldoFinal)}</strong>
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleDownloadFundoRiscoJSON(true)}
+                  className="inline-flex items-center text-[11px] font-bold text-indigo-700 hover:text-indigo-900 bg-white border border-indigo-200 px-2 py-1 rounded shadow-2xs hover:bg-indigo-50 transition-colors cursor-pointer"
+                >
+                  <Download className="h-3 w-3 mr-1 text-indigo-600" />
+                  Baixar JSON desta competência
+                </button>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                   <th className="py-3 px-4">Competência</th>
@@ -821,6 +1033,7 @@ export const ConsgTab: React.FC<ConsgTabProps> = ({ competence }) => {
               </tbody>
             </table>
           </div>
+        </div>
         )}
       </div>
     </div>
