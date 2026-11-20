@@ -63,6 +63,7 @@ import {
 type TabId = "visao_geral" | "beneficios" | "contabil" | "compensacao" | "carteira_investimentos" | "titulos" | "meta_x_retorno" | "patrimonio" | "servidores" | "consg" | "agenda" | "contratos" | "impressao";
 
 export const availableCompetences = [
+  { value: "2026-10", label: "Outubro / 2026" },
   { value: "2026-09", label: "Setembro / 2026" },
   { value: "2026-08", label: "Agosto / 2026" },
   { value: "2026-07", label: "Julho / 2026" },

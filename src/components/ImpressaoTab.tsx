@@ -59,6 +59,7 @@ export const ImpressaoTab: React.FC<ImpressaoTabProps> = ({ competence: initialC
   }, [initialCompetence]);
 
   const availableCompetences = [
+    { value: "2026-10", label: "Outubro / 2026" },
     { value: "2026-09", label: "Setembro / 2026" },
     { value: "2026-08", label: "Agosto / 2026" },
     { value: "2026-07", label: "Julho / 2026" },

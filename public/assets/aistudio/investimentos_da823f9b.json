@@ -1,0 +1,1292 @@
+{
+  "investimentos": [
+    {
+      "id": 1,
+      "nome": "FUNDO BR HOTEIS",
+      "cnpj": "15.461.076/0001-91",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "GRAPHEN",
+      "cnpjGestor": "15.403.817/0001-88",
+      "administrador": "RJI",
+      "cnpjAdministrador": "42.066.258/0001-30",
+      "enquadramento": "Art. 11",
+      "ativoEstressado": "true",
+      "segmento": "fundosImobiliarios",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IPCA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 1670477.14,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": -748.4,
+          "rentabilidadePercentual": -0.04,
+          "saldoFinal": 1669728.74,
+          "participacaoCarteiraConsolidada": 0.12
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "FUNDO LME IMA-B",
+      "cnpj": "11.784.036/0001-20",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "GRAPHEN",
+      "cnpjGestor": "15.403.817/0001-88",
+      "administrador": "RJI",
+      "cnpjAdministrador": "42.066.258/0001-30",
+      "enquadramento": "Art. 7, V",
+      "ativoEstressado": "true",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IMA-B",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 796747.19,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 7951.92,
+          "rentabilidadePercentual": 1.0,
+          "saldoFinal": 804699.11,
+          "participacaoCarteiraConsolidada": 0.06
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "nome": "FUNDO W7",
+      "cnpj": "78.074.804/0001-22",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "A5",
+      "cnpjGestor": "07.152.171/0001-85",
+      "administrador": "RJI",
+      "cnpjAdministrador": "42.066.258/0001-30",
+      "enquadramento": "Art. 10, III",
+      "ativoEstressado": "true",
+      "segmento": "estruturados",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IPCA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 1369792.88,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": -1605.09,
+          "rentabilidadePercentual": -0.12,
+          "saldoFinal": 1368187.79,
+          "participacaoCarteiraConsolidada": 0.09
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "nome": "FUNDO BRASIL FLORESTAL MULT",
+      "cnpj": "12.312.767/0001-35",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "QLZ",
+      "cnpjGestor": "07.250.864/0001-00",
+      "administrador": "BNY",
+      "cnpjAdministrador": "02.201.501/0001-61",
+      "enquadramento": "Art. 10, III",
+      "ativoEstressado": "true",
+      "segmento": "estruturados",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IPCA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 701535.27,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": -201.35,
+          "rentabilidadePercentual": -0.03,
+          "saldoFinal": 701333.92,
+          "participacaoCarteiraConsolidada": 0.05
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "nome": "FUNDO BRASIL FLORESTAL FIC",
+      "cnpj": "15.190.417/0001-31",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "QLZ",
+      "cnpjGestor": "07.250.864/0001-00",
+      "administrador": "BNY",
+      "cnpjAdministrador": "02.201.501/0001-61",
+      "enquadramento": "Art. 10, III",
+      "ativoEstressado": "true",
+      "segmento": "estruturados",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IPCA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 701580.03,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": -323.08,
+          "rentabilidadePercentual": -0.05,
+          "saldoFinal": 701256.95,
+          "participacaoCarteiraConsolidada": 0.05
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "nome": "FUNDO OSASCO",
+      "cnpj": "13.000.836/0001-38",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "CADENCE",
+      "cnpjGestor": "19.037.127/0001-03",
+      "administrador": "PLANNER",
+      "cnpjAdministrador": "00.806.535/0001-54",
+      "enquadramento": "Art. 11",
+      "ativoEstressado": "true",
+      "segmento": "fundosImobiliarios",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IPCA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 422280.26,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": -325426.53,
+          "rentabilidadePercentual": -77.06,
+          "saldoFinal": 96853.73,
+          "participacaoCarteiraConsolidada": 0.01
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "nome": "FUNDO INCENTIVO",
+      "cnpj": "13.344.834/0001-66",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "GENIAL",
+      "cnpjGestor": "22.119.959/0001-83",
+      "administrador": "RJI",
+      "cnpjAdministrador": "42.066.258/0001-30",
+      "enquadramento": "Art. 7, V",
+      "ativoEstressado": "true",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IPCA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "nome": "FUNDO GGR",
+      "cnpj": "17.013.985/0001-92",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "GRAPHEN",
+      "cnpjGestor": "15.403.817/0001-88",
+      "administrador": "BANVOX",
+      "cnpjAdministrador": "02.671.743/0001-19",
+      "enquadramento": "Art. 7, IX",
+      "ativoEstressado": "true",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IPCA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 2266531.5,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": -281043.0,
+          "rentabilidadePercentual": -12.4,
+          "saldoFinal": 1985488.5,
+          "participacaoCarteiraConsolidada": 0.14
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "nome": "FUNDO LME IPCA MULT",
+      "cnpj": "12.440.789/0001-80",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "GRAPHEN",
+      "cnpjGestor": "15.403.817/0001-88",
+      "administrador": "RJI",
+      "cnpjAdministrador": "42.066.258/0001-30",
+      "enquadramento": "Art. 7, IX",
+      "ativoEstressado": "true",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IPCA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 410221.43,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": -85779.79,
+          "rentabilidadePercentual": -20.91,
+          "saldoFinal": 324441.64,
+          "participacaoCarteiraConsolidada": 0.02
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "nome": "FUNDO CAIXA BRASIL DI",
+      "cnpj": "03.737.206/0001-97",
+      "status": "RESGATADO",
+      "fundo": "capitalizacao",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 7, V",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "nome": "FUNDO TOPAZIO",
+      "cnpj": "11.061.230/0001-87",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 7, I",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 129016268.23,
+          "aplicacoes": 270796.88,
+          "resgates": 54867639.57,
+          "rendimentos": 995429.72,
+          "rentabilidadePercentual": 1.05,
+          "saldoFinal": 75414855.26,
+          "participacaoCarteiraConsolidada": 5.23
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "nome": "FUNDO CAIXA IMA-B 5",
+      "cnpj": "11.060.913/0001-10",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 7, I",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IMA-B5",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 17182124.2,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 343102.35,
+          "rentabilidadePercentual": 2.0,
+          "saldoFinal": 17525226.55,
+          "participacaoCarteiraConsolidada": 1.22
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "nome": "FUNDO CAIXA IMA-B",
+      "cnpj": "10.740.658/0001-93",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 7, I",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IMA-B",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 1473431.6,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 46174.61,
+          "rentabilidadePercentual": 3.13,
+          "saldoFinal": 1519606.21,
+          "participacaoCarteiraConsolidada": 0.11
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "nome": "FUNDO CAIXA BOLSA AMERICANA",
+      "cnpj": "30.036.235/0001-02",
+      "status": "RESGATADO",
+      "fundo": "capitalizacao",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 10, I",
+      "ativoEstressado": "false",
+      "segmento": "estruturados",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "S&P 500",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "nome": "FUNDO CAIXA BDR",
+      "cnpj": "17.502.937/0001-68",
+      "status": "RESGATADO",
+      "fundo": "capitalizacao",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 9, III",
+      "ativoEstressado": "false",
+      "segmento": "exterior",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "GLOBAL BDRX",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "nome": "FUNDO CAIXA AÇÕES LIVRES",
+      "cnpj": "30.068.169/0001-44",
+      "status": "RESGATADO",
+      "fundo": "capitalizacao",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 8, I",
+      "ativoEstressado": "false",
+      "segmento": "variavel",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IBOVESPA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "nome": "FUNDO BB AÇÕES FATORIAL",
+      "cnpj": "07.882.792/0001-14",
+      "status": "RESGATADO",
+      "fundo": "capitalizacao",
+      "gestor": "BB GESTÃO",
+      "cnpjGestor": "30.822.936/0001-69",
+      "administrador": "BB GESTÃO",
+      "cnpjAdministrador": "30.822.936/0001-69",
+      "enquadramento": "Art. 8, I",
+      "ativoEstressado": "false",
+      "segmento": "variavel",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IBOVESPA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "nome": "FUNDO ITAÚ DUNAMIS",
+      "cnpj": "24.571.992/0001-75",
+      "status": "RESGATADO",
+      "fundo": "capitalizacao",
+      "gestor": "ITAU ASSET",
+      "cnpjGestor": "40.430.971/0001-96",
+      "administrador": "ITAU",
+      "cnpjAdministrador": "60.701.190/0001-04",
+      "enquadramento": "Art. 8, I",
+      "ativoEstressado": "false",
+      "segmento": "variavel",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "IBOVESPA",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "nome": "FUNDO ITAÚ DI",
+      "cnpj": "00.832.435/0001-00",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "ITAU ASSET",
+      "cnpjGestor": "40.430.971/0001-96",
+      "administrador": "ITAU",
+      "cnpjAdministrador": "60.701.190/0001-04",
+      "enquadramento": "Art. 7, V",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 19206419.24,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 208323.35,
+          "rentabilidadePercentual": 1.08,
+          "saldoFinal": 19414742.59,
+          "participacaoCarteiraConsolidada": 1.35
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "nome": "FUNDO BRADESCO DI",
+      "cnpj": "03.399.411/0001-90",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "BRADESCO",
+      "cnpjGestor": "60.746.948/0001-12",
+      "administrador": "BRADESCO",
+      "cnpjAdministrador": "60.746.948/0001-12",
+      "enquadramento": "Art. 7, V",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 22405295.13,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 241149.54,
+          "rentabilidadePercentual": 1.08,
+          "saldoFinal": 22646444.67,
+          "participacaoCarteiraConsolidada": 1.57
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "nome": "FUNDO SANTANDER DI",
+      "cnpj": "02.224.354/0001-45",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "SANTANDER GESTÃO",
+      "cnpjGestor": "10.231.177/0001-52",
+      "administrador": "SANTANDER DTVM",
+      "cnpjAdministrador": "03.502.968/0001-04",
+      "enquadramento": "Art. 7, V",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 12806477.09,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 136350.63,
+          "rentabilidadePercentual": 1.06,
+          "saldoFinal": 12942827.72,
+          "participacaoCarteiraConsolidada": 0.9
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "nome": "FUNDO AXA WF",
+      "cnpj": "35.002.482/0001-01",
+      "status": "RESGATADO",
+      "fundo": "capitalizacao",
+      "gestor": "XP ASSET",
+      "cnpjGestor": "37.918.829/0001-88",
+      "administrador": "BNP PARIBAS",
+      "cnpjAdministrador": "01.522.368/0001-82",
+      "enquadramento": "Art. 9, II",
+      "ativoEstressado": "false",
+      "segmento": "exterior",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "MSCI World",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "nome": "FUNDO MS GLOBAL",
+      "cnpj": "33.913.562/0001-85",
+      "status": "RESGATADO",
+      "fundo": "capitalizacao",
+      "gestor": "XP ASSET",
+      "cnpjGestor": "37.918.829/0001-88",
+      "administrador": "BNP PARIBAS",
+      "cnpjAdministrador": "01.522.368/0001-82",
+      "enquadramento": "Art. 9, II",
+      "ativoEstressado": "false",
+      "segmento": "exterior",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "MSCI World",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "nome": "FUNDO SICREDI BOLSA AMERICANA",
+      "cnpj": "24.633.818/0001-00",
+      "status": "RESGATADO",
+      "fundo": "capitalizacao",
+      "gestor": "CONF. SICREDI",
+      "cnpjGestor": "03.795.072/0001-60",
+      "administrador": "SICREDI",
+      "cnpjAdministrador": "01.181.521/0001-55",
+      "enquadramento": "Art. 10, I",
+      "ativoEstressado": "false",
+      "segmento": "estruturados",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "S&P 500",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "nome": "FUNDO SICREDI DI",
+      "cnpj": "24.634.187/0001-43",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "SICREDI ASSET",
+      "cnpjGestor": "64.786.921/0001-04",
+      "administrador": "SICREDI",
+      "cnpjAdministrador": "01.181.521/0001-55",
+      "enquadramento": "Art. 7, I",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 43397278.28,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 452466.12,
+          "rentabilidadePercentual": 1.04,
+          "saldoFinal": 43849744.4,
+          "participacaoCarteiraConsolidada": 3.04
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "nome": "FUNDO BTG DI",
+      "cnpj": "04.501.865/0001-92",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "BTG DTVM",
+      "cnpjGestor": "59.281.253/0001-23",
+      "administrador": "BTG ASSET",
+      "cnpjAdministrador": "29.650.082/0001-00",
+      "enquadramento": "Art. 7, V",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 9604295.22,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 104217.78,
+          "rentabilidadePercentual": 1.09,
+          "saldoFinal": 9708513.0,
+          "participacaoCarteiraConsolidada": 0.67
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2060",
+      "cnpj": "00.394.460/0409-50",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 50462681.65,
+          "resgates": 0.0,
+          "rendimentos": 347477.98,
+          "rentabilidadePercentual": 0.69,
+          "saldoFinal": 50810159.63,
+          "participacaoCarteiraConsolidada": 3.52
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2055",
+      "cnpj": "00.394.460/0409-50",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 353227235.28,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 2385317.15,
+          "rentabilidadePercentual": 0.68,
+          "saldoFinal": 355612552.43,
+          "participacaoCarteiraConsolidada": 24.66
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2040",
+      "cnpj": "00.394.460/0409-50",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 259595106.94,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 1783306.07,
+          "rentabilidadePercentual": 0.69,
+          "saldoFinal": 261378413.01,
+          "participacaoCarteiraConsolidada": 18.12
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2035",
+      "cnpj": "00.394.460/0409-50",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 118040214.35,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 954489.67,
+          "rentabilidadePercentual": 0.81,
+          "saldoFinal": 118994704.02,
+          "participacaoCarteiraConsolidada": 8.25
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2033",
+      "cnpj": "00.394.460/0409-50",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 39376829.65,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 316522.68,
+          "rentabilidadePercentual": 0.8,
+          "saldoFinal": 39693352.33,
+          "participacaoCarteiraConsolidada": 2.75
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2032",
+      "cnpj": "00.394.460/0409-50",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 191357983.36,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 1278096.45,
+          "rentabilidadePercentual": 0.67,
+          "saldoFinal": 192636079.81,
+          "participacaoCarteiraConsolidada": 13.36
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2030",
+      "cnpj": "00.394.460/0409-50",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 20425404.59,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 165766.97,
+          "rentabilidadePercentual": 0.81,
+          "saldoFinal": 20591171.56,
+          "participacaoCarteiraConsolidada": 1.43
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2029",
+      "cnpj": "00.394.460/0409-50",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 19310286.17,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 153037.6,
+          "rentabilidadePercentual": 0.79,
+          "saldoFinal": 19463323.77,
+          "participacaoCarteiraConsolidada": 1.35
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2028",
+      "cnpj": "00.394.460/0409-50",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 26940020.98,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 199675.57,
+          "rentabilidadePercentual": 0.74,
+          "saldoFinal": 27139696.55,
+          "participacaoCarteiraConsolidada": 1.88
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2027",
+      "cnpj": "00.394.460/0409-50",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 9352186.92,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 74071.44,
+          "rentabilidadePercentual": 0.79,
+          "saldoFinal": 9426258.36,
+          "participacaoCarteiraConsolidada": 0.65
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "nome": "TÍTULO PÚBLICO - NTN-B 2026",
+      "cnpj": "00.394.460/0409-50",
+      "status": "RESGATADO",
+      "fundo": "capitalizacao",
+      "gestor": "STN",
+      "cnpjGestor": "00.394.460/0409-50",
+      "administrador": "STN",
+      "cnpjAdministrador": "00.394.460/0409-50",
+      "enquadramento": "Art. 7, III",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Título Público",
+      "benchmark": "TÍTULO PÚBLICO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "nome": "LETRA FINANCEIRA - BTG",
+      "cnpj": "30.306.294/0001-45",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "BTG",
+      "cnpjGestor": "30.306.294/0001-45",
+      "administrador": "BTG",
+      "cnpjAdministrador": "30.306.294/0001-45",
+      "enquadramento": "Art. 7, VI",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Letra Financeira",
+      "benchmark": "TÍTULO PRIVADOS",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 54512003.03,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 180716.71,
+          "rentabilidadePercentual": 0.33,
+          "saldoFinal": 54692719.74,
+          "participacaoCarteiraConsolidada": 3.79
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "nome": "LETRA FINANCEIRA - BRADESCO",
+      "cnpj": "60.746.948/0001-12",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "BRADESCO",
+      "cnpjGestor": "60.746.948/0001-12",
+      "administrador": "BRADESCO",
+      "cnpjAdministrador": "60.746.948/0001-12",
+      "enquadramento": "Art. 7, VI",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Letra Financeira",
+      "benchmark": "TÍTULO PRIVADOS",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 8089383.42,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 61708.65,
+          "rentabilidadePercentual": 0.76,
+          "saldoFinal": 8151092.07,
+          "participacaoCarteiraConsolidada": 0.57
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "nome": "LETRA FINANCEIRA - SANTANDER",
+      "cnpj": "90.400.888/0001-42",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "SANTANDER",
+      "cnpjGestor": "90.400.888/0001-42",
+      "administrador": "SANTANDER",
+      "cnpjAdministrador": "90.400.888/0001-42",
+      "enquadramento": "Art. 7, VI",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Letra Financeira",
+      "benchmark": "TÍTULO PRIVADOS",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 7082200.52,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 22433.68,
+          "rentabilidadePercentual": 0.32,
+          "saldoFinal": 7104634.2,
+          "participacaoCarteiraConsolidada": 0.49
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "nome": "LETRA FINANCEIRA - SAFRA",
+      "cnpj": "58.160.789/0001-28",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "SAFRA",
+      "cnpjGestor": "58.160.789/0001-28",
+      "administrador": "SAFRA",
+      "cnpjAdministrador": "58.160.789/0001-28",
+      "enquadramento": "Art. 7, VI",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Letra Financeira",
+      "benchmark": "TÍTULO PRIVADOS",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 5046859.42,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 34014.8,
+          "rentabilidadePercentual": 0.67,
+          "saldoFinal": 5080874.22,
+          "participacaoCarteiraConsolidada": 0.35
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "nome": "EMPRÉSTIMO CONSIGNADO",
+      "cnpj": "78.074.804/0001-22",
+      "status": "ATIVO",
+      "fundo": "capitalizacao",
+      "gestor": "MGAPREV",
+      "cnpjGestor": "78.074.804/0001-22",
+      "administrador": "MGAPREV",
+      "cnpjAdministrador": "78.074.804/0001-22",
+      "enquadramento": "Art. 12",
+      "ativoEstressado": "false",
+      "segmento": "emprestimoConsignado",
+      "tipoAtivo": "Empréstimos Consignados",
+      "benchmark": "EMPRÉSTIMO CONSIGNADO",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 15951545.37,
+          "aplicacoes": 2789126.94,
+          "resgates": 328931.45,
+          "rendimentos": 189363.64,
+          "rentabilidadePercentual": 1.18,
+          "saldoFinal": 18411740.86,
+          "participacaoCarteiraConsolidada": 1.28
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "nome": "FUNDO CAIXA BRASIL DI",
+      "cnpj": "03.737.206/0001-97",
+      "status": "RESGATADO",
+      "fundo": "reparticao",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 7, V",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "nome": "FUNDO TOPAZIO",
+      "cnpj": "11.061.230/0001-87",
+      "status": "ATIVO",
+      "fundo": "reparticao",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 7, I",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 16849006.5,
+          "aplicacoes": 1643427.97,
+          "resgates": 251193.11,
+          "rendimentos": 183681.51,
+          "rentabilidadePercentual": 1.05,
+          "saldoFinal": 18424922.87,
+          "participacaoCarteiraConsolidada": 1.28
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "nome": "FUNDO CAIXA BRASIL DI",
+      "cnpj": "03.737.206/0001-97",
+      "status": "RESGATADO",
+      "fundo": "orgaoGerenciador",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 7, V",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 0.0,
+          "aplicacoes": 0.0,
+          "resgates": 0.0,
+          "rendimentos": 0.0,
+          "rentabilidadePercentual": 0.0,
+          "saldoFinal": 0.0,
+          "participacaoCarteiraConsolidada": 0.0
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "nome": "FUNDO TOPAZIO",
+      "cnpj": "11.061.230/0001-87",
+      "status": "ATIVO",
+      "fundo": "orgaoGerenciador",
+      "gestor": "CAIXA DTVM",
+      "cnpjGestor": "42.040.639/0001-40",
+      "administrador": "CAIXA",
+      "cnpjAdministrador": "00.360.305/0001-04",
+      "enquadramento": "Art. 7, I",
+      "ativoEstressado": "false",
+      "segmento": "rendaFixa",
+      "tipoAtivo": "Fundo de Investimento",
+      "benchmark": "CDI",
+      "historico": [
+        {
+          "competencia": "2026-09",
+          "saldoInicial": 23361364.61,
+          "aplicacoes": 2365125.91,
+          "resgates": 1992431.54,
+          "rendimentos": 236204.23,
+          "rentabilidadePercentual": 1.05,
+          "saldoFinal": 23970263.21,
+          "participacaoCarteiraConsolidada": 1.66
+        }
+      ]
+    }
+  ]
+}

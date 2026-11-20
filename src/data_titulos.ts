@@ -22,6 +22,27 @@ export interface Titulo {
 
 export const titulosData: Titulo[] = [
   {
+    "Id": 58,
+    "id": 58,
+    "categoriaTitulo": "publico",
+    "nomeTitulo": "NTN-B",
+    "vencimento": 2060,
+    "dataAplicacaoInicial": "10/09/2026",
+    "indexador": "IPCA",
+    "taxaContratada": "7,3215 a.a.",
+    "marcacao": "Curva",
+    "custodiante": "XP Investimentos",
+    "quantidadeTitulos": 12586,
+    "PUCompra": 4009.4297,
+    "valorCompra": 50462681.65,
+    "valorNaCurva": 51392468.3,
+    "valorMercado": 50134254.96,
+    "valorContabil": 51392468.3,
+    "cupomRecebidoAcumulado": 0,
+    "cupomSemestral": true,
+    "competencia": "2026-10"
+  },
+  {
     "Id": 1,
     "id": 1,
     "categoriaTitulo": "publico",
@@ -35,12 +56,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 428,
     "PUCompra": 3886.7635,
     "valorCompra": 1663534.79,
-    "valorNaCurva": 2019635.82,
-    "valorMercado": 1736882.5,
-    "valorContabil": 2019635.82,
+    "valorNaCurva": 2055267.84,
+    "valorMercado": 1752802.73,
+    "valorContabil": 2055267.84,
     "cupomRecebidoAcumulado": 388193.59,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 2,
@@ -56,12 +77,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1766,
     "PUCompra": 3849.9116,
     "valorCompra": 6798943.82,
-    "valorNaCurva": 8082722.93,
-    "valorMercado": 7166669.4,
-    "valorContabil": 8082722.93,
+    "valorNaCurva": 8228417,
+    "valorMercado": 7232358.91,
+    "valorContabil": 8228417,
     "cupomRecebidoAcumulado": 1601752.1,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 3,
@@ -77,12 +98,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 7752,
     "PUCompra": 3869.9137,
     "valorCompra": 29999570.67,
-    "valorNaCurva": 35243473.9,
-    "valorMercado": 31458675.64,
-    "valorContabil": 35243473.9,
+    "valorNaCurva": 35881720.76,
+    "valorMercado": 31747025.07,
+    "valorContabil": 35881720.76,
     "cupomRecebidoAcumulado": 7031020.55,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 4,
@@ -98,12 +119,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 5530,
     "PUCompra": 3887.5863,
     "valorCompra": 21498352.48,
-    "valorNaCurva": 25219143.45,
-    "valorMercado": 22441495.91,
-    "valorContabil": 25219143.45,
+    "valorNaCurva": 25674869.71,
+    "valorMercado": 22647194.09,
+    "valorContabil": 25674869.71,
     "cupomRecebidoAcumulado": 5015679.01,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 5,
@@ -119,12 +140,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1735,
     "PUCompra": 4263.6124,
     "valorCompra": 7397367.55,
-    "valorNaCurva": 8443515.39,
-    "valorMercado": 7040867.16,
-    "valorContabil": 8443515.39,
+    "valorNaCurva": 8589274.79,
+    "valorMercado": 7105403.57,
+    "valorContabil": 8589274.79,
     "cupomRecebidoAcumulado": 1573635.29,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 6,
@@ -140,12 +161,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1618,
     "PUCompra": 4511.1259,
     "valorCompra": 7299001.72,
-    "valorNaCurva": 8446077.31,
-    "valorMercado": 6566065.17,
-    "valorContabil": 8446077.31,
+    "valorNaCurva": 8584778.38,
+    "valorMercado": 6626249.56,
+    "valorContabil": 8584778.38,
     "cupomRecebidoAcumulado": 1270511.68,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 7,
@@ -161,12 +182,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 11310,
     "PUCompra": 4472.9347,
     "valorCompra": 50588891.26,
-    "valorNaCurva": 58527257.23,
-    "valorMercado": 45897525.99,
-    "valorContabil": 58527257.23,
+    "valorNaCurva": 59494416.88,
+    "valorMercado": 46318221.56,
+    "valorContabil": 59494416.88,
     "cupomRecebidoAcumulado": 8881017.9,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 8,
@@ -182,12 +203,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 4520,
     "PUCompra": 4424.3512,
     "valorCompra": 19998067.58,
-    "valorNaCurva": 22883131.92,
-    "valorMercado": 18342777.85,
-    "valorContabil": 22883131.92,
+    "valorNaCurva": 23267257.42,
+    "valorMercado": 18510907.29,
+    "valorContabil": 23267257.42,
     "cupomRecebidoAcumulado": 3549266.21,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 9,
@@ -203,12 +224,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 2835,
     "PUCompra": 4407.9416,
     "valorCompra": 12496514.47,
-    "valorNaCurva": 14266423.8,
-    "valorMercado": 11504817.52,
-    "valorContabil": 14266423.8,
+    "valorNaCurva": 14506923.13,
+    "valorMercado": 11610270.39,
+    "valorContabil": 14506923.13,
     "cupomRecebidoAcumulado": 2226143.74,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 10,
@@ -224,12 +245,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1751,
     "PUCompra": 4282.2141,
     "valorCompra": 7498156.82,
-    "valorNaCurva": 8534234.68,
-    "valorMercado": 7105797.35,
-    "valorContabil": 8534234.68,
+    "valorNaCurva": 8681409.47,
+    "valorMercado": 7170928.91,
+    "valorContabil": 8681409.47,
     "cupomRecebidoAcumulado": 1371750.54,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 11,
@@ -245,12 +266,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 5716,
     "PUCompra": 4320.7702,
     "valorCompra": 24697522.4,
-    "valorNaCurva": 27938080.32,
-    "valorMercado": 23196309.33,
-    "valorContabil": 27938080.32,
+    "valorNaCurva": 28418892.4,
+    "valorMercado": 23408926.12,
+    "valorContabil": 28418892.4,
     "cupomRecebidoAcumulado": 4488408.35,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 12,
@@ -260,18 +281,18 @@ export const titulosData: Titulo[] = [
     "vencimento": 2055,
     "dataAplicacaoInicial": "08/11/2023",
     "indexador": "IPCA",
-    "taxaContratada": "5,9000 a.a.",
+    "taxaContratada": "5,9000a.a.",
     "marcacao": "Curva",
     "custodiante": "XP Investimentos",
     "quantidadeTitulos": 1725,
     "PUCompra": 4346.0592,
     "valorCompra": 7496952.18,
-    "valorNaCurva": 8464611.29,
-    "valorMercado": 7000285.79,
-    "valorContabil": 8464611.29,
+    "valorNaCurva": 8609880.27,
+    "valorMercado": 7064450.24,
+    "valorContabil": 8609880.27,
     "cupomRecebidoAcumulado": 1357729.4,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 13,
@@ -287,12 +308,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 7742,
     "PUCompra": 4359.2059,
     "valorCompra": 33748971.85,
-    "valorNaCurva": 38918049.06,
-    "valorMercado": 31418094.27,
-    "valorContabil": 38918049.06,
+    "valorNaCurva": 39574619.17,
+    "valorMercado": 31706071.73,
+    "valorContabil": 39574619.17,
     "cupomRecebidoAcumulado": 5127179.89,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 14,
@@ -302,18 +323,18 @@ export const titulosData: Titulo[] = [
     "vencimento": 2055,
     "dataAplicacaoInicial": "09/01/2024",
     "indexador": "IPCA",
-    "taxaContratada": "5,5565 a.a.",
+    "taxaContratada": "5,5565a.a.",
     "marcacao": "Curva",
     "custodiante": "XP Investimentos",
     "quantidadeTitulos": 3322,
     "PUCompra": 4514.426,
     "valorCompra": 14996923.17,
-    "valorNaCurva": 17065511.69,
-    "valorMercado": 13481130.09,
-    "valorContabil": 17065511.69,
+    "valorNaCurva": 17348998.64,
+    "valorMercado": 13604697.79,
+    "valorContabil": 17348998.64,
     "cupomRecebidoAcumulado": 2200011.83,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 15,
@@ -323,18 +344,18 @@ export const titulosData: Titulo[] = [
     "vencimento": 2055,
     "dataAplicacaoInicial": "02/02/2024",
     "indexador": "IPCA",
-    "taxaContratada": "5,6630 a.a.",
+    "taxaContratada": "5,6630a.a.",
     "marcacao": "Curva",
     "custodiante": "XP Investimentos",
     "quantidadeTitulos": 1671,
     "PUCompra": 4483.4961,
     "valorCompra": 7491922.01,
-    "valorNaCurva": 8461942.44,
-    "valorMercado": 6781146.41,
-    "valorContabil": 8461942.44,
+    "valorNaCurva": 8603958.94,
+    "valorMercado": 6843302.23,
+    "valorContabil": 8603958.94,
     "cupomRecebidoAcumulado": 1106628.46,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 16,
@@ -344,18 +365,18 @@ export const titulosData: Titulo[] = [
     "vencimento": 2055,
     "dataAplicacaoInicial": "14/03/2024",
     "indexador": "IPCA",
-    "taxaContratada": "5,7500 a.a.",
+    "taxaContratada": "5,7500a.a.",
     "marcacao": "Curva",
     "custodiante": "XP Investimentos",
     "quantidadeTitulos": 2792,
     "PUCompra": 4502.0349,
     "valorCompra": 12569681.46,
-    "valorNaCurva": 13984582.33,
-    "valorMercado": 11330317.64,
-    "valorContabil": 13984582.33,
+    "valorNaCurva": 14221116.77,
+    "valorMercado": 11434171.05,
+    "valorContabil": 14221116.77,
     "cupomRecebidoAcumulado": 1849016.57,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 17,
@@ -365,18 +386,18 @@ export const titulosData: Titulo[] = [
     "vencimento": 2055,
     "dataAplicacaoInicial": "18/04/2024",
     "indexador": "IPCA",
-    "taxaContratada": "6,0700 a.a.",
+    "taxaContratada": "6,0700a.a.",
     "marcacao": "Curva",
     "custodiante": "XP Investimentos",
     "quantidadeTitulos": 3684,
     "PUCompra": 4342.9538,
     "valorCompra": 15999441.74,
-    "valorNaCurva": 17679865.21,
-    "valorMercado": 14950175.57,
-    "valorContabil": 17679865.21,
+    "valorNaCurva": 17988097.83,
+    "valorMercado": 15087208.51,
+    "valorContabil": 17988097.83,
     "cupomRecebidoAcumulado": 2439748.22,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 18,
@@ -386,18 +407,18 @@ export const titulosData: Titulo[] = [
     "vencimento": 2055,
     "dataAplicacaoInicial": "07/05/2024",
     "indexador": "IPCA",
-    "taxaContratada": "6,1500 a.a.",
+    "taxaContratada": "6,1500a.a.",
     "marcacao": "Curva",
     "custodiante": "XP Investimentos",
     "quantidadeTitulos": 2108,
     "PUCompra": 4316.0077,
     "valorCompra": 9098144.32,
-    "valorNaCurva": 10008278.51,
-    "valorMercado": 8554552.15,
-    "valorContabil": 10008278.51,
+    "valorNaCurva": 10184091.38,
+    "valorMercado": 8632962.96,
+    "valorContabil": 10184091.38,
     "cupomRecebidoAcumulado": 1396034,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 19,
@@ -407,18 +428,18 @@ export const titulosData: Titulo[] = [
     "vencimento": 2055,
     "dataAplicacaoInicial": "06/06/2024",
     "indexador": "IPCA",
-    "taxaContratada": "6,1800 a.a.",
+    "taxaContratada": "6,1800a.a.",
     "marcacao": "Curva",
     "custodiante": "XP Investimentos",
     "quantidadeTitulos": 2040,
     "PUCompra": 4215.4905,
     "valorCompra": 8599600.61,
-    "valorNaCurva": 9656726.07,
-    "valorMercado": 8278598.85,
-    "valorContabil": 9656726.07,
+    "valorNaCurva": 9826720.69,
+    "valorMercado": 8354480.28,
+    "valorContabil": 9826720.69,
     "cupomRecebidoAcumulado": 1093452.83,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 20,
@@ -428,18 +449,18 @@ export const titulosData: Titulo[] = [
     "vencimento": 2055,
     "dataAplicacaoInicial": "05/08/2024",
     "indexador": "IPCA",
-    "taxaContratada": "6,0400 a.a.",
+    "taxaContratada": "6,0400a.a.",
     "marcacao": "Curva",
     "custodiante": "XP Investimentos",
     "quantidadeTitulos": 1948,
     "PUCompra": 4361.8739,
     "valorCompra": 8496930.36,
-    "valorNaCurva": 9383971.93,
-    "valorMercado": 7905250.28,
-    "valorContabil": 9383971.93,
+    "valorNaCurva": 9547147.36,
+    "valorMercado": 7977709.6,
+    "valorContabil": 9547147.36,
     "cupomRecebidoAcumulado": 1044140.24,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 21,
@@ -455,12 +476,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 13639,
     "PUCompra": 4193.5585,
     "valorCompra": 57195944.41,
-    "valorNaCurva": 67234076.88,
-    "valorMercado": 56164834.22,
-    "valorContabil": 67234076.88,
+    "valorNaCurva": 68358484.13,
+    "valorMercado": 57022413.09,
+    "valorContabil": 68358484.13,
     "cupomRecebidoAcumulado": 15704461.12,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 22,
@@ -476,12 +497,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 2940,
     "PUCompra": 4081.5219,
     "valorCompra": 11999674.33,
-    "valorNaCurva": 13974636.61,
-    "valorMercado": 12106797.61,
-    "valorContabil": 13974636.61,
+    "valorNaCurva": 14217268.58,
+    "valorMercado": 12291655.88,
+    "valorContabil": 14217268.58,
     "cupomRecebidoAcumulado": 3385227.36,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 23,
@@ -497,12 +518,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 803,
     "PUCompra": 4061.6369,
     "valorCompra": 3261494.4,
-    "valorNaCurva": 3892304.89,
-    "valorMercado": 3306720.57,
-    "valorContabil": 3892304.89,
+    "valorNaCurva": 3958542,
+    "valorMercado": 3357210.77,
+    "valorContabil": 3958542,
     "cupomRecebidoAcumulado": 830332.34,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 24,
@@ -518,12 +539,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 7730,
     "PUCompra": 3880.6053,
     "valorCompra": 29997078.8,
-    "valorNaCurva": 35328956.85,
-    "valorMercado": 31831818.21,
-    "valorContabil": 35328956.85,
+    "valorNaCurva": 35966929.42,
+    "valorMercado": 32317857.12,
+    "valorContabil": 35966929.42,
     "cupomRecebidoAcumulado": 7071958.42,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 25,
@@ -539,12 +560,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 5532,
     "PUCompra": 3886.1636,
     "valorCompra": 21498257.21,
-    "valorNaCurva": 25285092.32,
-    "valorMercado": 22780545.71,
-    "valorContabil": 25285092.32,
+    "valorNaCurva": 25741673.04,
+    "valorMercado": 23128381.06,
+    "valorContabil": 25741673.04,
     "cupomRecebidoAcumulado": 5061070.39,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 26,
@@ -560,12 +581,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 13187,
     "PUCompra": 4011.334,
     "valorCompra": 52897461.62,
-    "valorNaCurva": 61501200.17,
-    "valorMercado": 54303517.04,
-    "valorContabil": 61501200.17,
+    "valorNaCurva": 62589652.48,
+    "valorMercado": 55132675.52,
+    "valorContabil": 62589652.48,
     "cupomRecebidoAcumulado": 12064413.42,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 27,
@@ -581,12 +602,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 5626,
     "PUCompra": 4088.415,
     "valorCompra": 23001422.87,
-    "valorNaCurva": 26556382.81,
-    "valorMercado": 23167633.8,
-    "valorContabil": 26556382.81,
+    "valorNaCurva": 27020744.37,
+    "valorMercado": 23521379.58,
+    "valorContabil": 27020744.37,
     "cupomRecebidoAcumulado": 5147068.31,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 28,
@@ -602,12 +623,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 3620,
     "PUCompra": 4289.3261,
     "valorCompra": 15527360.53,
-    "valorNaCurva": 17607879.59,
-    "valorMercado": 14907009.3,
-    "valorContabil": 17607879.59,
+    "valorNaCurva": 17906456.04,
+    "valorMercado": 15134623.9,
+    "valorContabil": 17906456.04,
     "cupomRecebidoAcumulado": 3311835.64,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 29,
@@ -623,12 +644,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1650,
     "PUCompra": 4423.3343,
     "valorCompra": 7298501.55,
-    "valorNaCurva": 8214576.82,
-    "valorMercado": 6794631.31,
-    "valorContabil": 8214576.82,
+    "valorNaCurva": 8350532.14,
+    "valorMercado": 6898378.3,
+    "valorContabil": 8350532.14,
     "cupomRecebidoAcumulado": 1509538.34,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 30,
@@ -644,12 +665,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 8604,
     "PUCompra": 3983.1183,
     "valorCompra": 34270749.68,
-    "valorNaCurva": 37459867.38,
-    "valorMercado": 36826499.4,
-    "valorContabil": 37459867.38,
+    "valorNaCurva": 38207578.41,
+    "valorMercado": 37554563.39,
+    "valorContabil": 38207578.41,
     "cupomRecebidoAcumulado": 3503325.58,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 31,
@@ -665,12 +686,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 14675,
     "PUCompra": 4292.9333,
     "valorCompra": 62998796.5,
-    "valorNaCurva": 64847074.1,
-    "valorMercado": 62811352.71,
-    "valorContabil": 64847074.1,
+    "valorNaCurva": 66116854.15,
+    "valorMercado": 64053140.13,
+    "valorContabil": 66116854.15,
     "cupomRecebidoAcumulado": 2041016.58,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 32,
@@ -686,12 +707,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 3722,
     "PUCompra": 4161.4461,
     "valorCompra": 15488902.33,
-    "valorNaCurva": 15733272.87,
-    "valorMercado": 15930756.71,
-    "valorContabil": 15733272.87,
+    "valorNaCurva": 16059249.36,
+    "valorMercado": 16245709.54,
+    "valorContabil": 16059249.36,
     "cupomRecebidoAcumulado": 0,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 33,
@@ -707,12 +728,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 2767,
     "PUCompra": 4172.4805,
     "valorCompra": 11545253.56,
-    "valorNaCurva": 12405582.5,
-    "valorMercado": 12032698.85,
-    "valorContabil": 12405582.5,
+    "valorNaCurva": 12648993.16,
+    "valorMercado": 12361947.84,
+    "valorContabil": 12648993.16,
     "cupomRecebidoAcumulado": 758002.17,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 34,
@@ -728,12 +749,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 6054,
     "PUCompra": 4186.8908,
     "valorCompra": 25347437.2,
-    "valorNaCurva": 26971247.15,
-    "valorMercado": 26326692.75,
-    "valorContabil": 26971247.15,
+    "valorNaCurva": 27505793.64,
+    "valorMercado": 27047066.21,
+    "valorContabil": 27505793.64,
     "cupomRecebidoAcumulado": 1658455.07,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 35,
@@ -749,12 +770,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 10309,
     "PUCompra": 4151.3688,
     "valorCompra": 42796461.17,
-    "valorNaCurva": 50046334.91,
-    "valorMercado": 44446951.21,
-    "valorContabil": 50046334.91,
+    "valorNaCurva": 50879263.53,
+    "valorMercado": 45670762.23,
+    "valorContabil": 50879263.53,
     "cupomRecebidoAcumulado": 10784587.32,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 36,
@@ -770,12 +791,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1942,
     "PUCompra": 4119.0135,
     "valorCompra": 7999124.29,
-    "valorNaCurva": 9359152.22,
-    "valorMercado": 8372876.05,
-    "valorContabil": 9359152.22,
+    "valorNaCurva": 9517194.65,
+    "valorMercado": 8603416.46,
+    "valorContabil": 9517194.65,
     "cupomRecebidoAcumulado": 3702511.02,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 37,
@@ -791,12 +812,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 2161,
     "PUCompra": 4042.3827,
     "valorCompra": 8735588.96,
-    "valorNaCurva": 10391149.51,
-    "valorMercado": 9317088.13,
-    "valorContabil": 10391149.51,
+    "valorNaCurva": 10567406,
+    "valorMercado": 9573626.65,
+    "valorContabil": 10567406,
     "cupomRecebidoAcumulado": 2234555.63,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 38,
@@ -812,12 +833,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 3607,
     "PUCompra": 4019.7144,
     "valorCompra": 14499109.86,
-    "valorNaCurva": 17275844.1,
-    "valorMercado": 15551474.73,
-    "valorContabil": 17275844.1,
+    "valorNaCurva": 17571162.75,
+    "valorMercado": 15979672.07,
+    "valorContabil": 17571162.75,
     "cupomRecebidoAcumulado": 3729774.27,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 39,
@@ -833,12 +854,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 13717,
     "PUCompra": 4009.6174,
     "valorCompra": 54999921.95,
-    "valorNaCurva": 65555160.51,
-    "valorMercado": 59140443.28,
-    "valorContabil": 65555160.51,
+    "valorNaCurva": 66680556.27,
+    "valorMercado": 60768827.77,
+    "valorContabil": 66680556.27,
     "cupomRecebidoAcumulado": 12674886.01,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 40,
@@ -854,12 +875,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1592,
     "PUCompra": 4080.8665,
     "valorCompra": 6496739.45,
-    "valorNaCurva": 7693315,
-    "valorMercado": 6863861.32,
-    "valorContabil": 7693315,
+    "valorNaCurva": 7822529.4,
+    "valorMercado": 7052852.21,
+    "valorContabil": 7822529.4,
     "cupomRecebidoAcumulado": 1662626.96,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 41,
@@ -875,12 +896,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1600,
     "PUCompra": 4060.354,
     "valorCompra": 6496566.4,
-    "valorNaCurva": 7665639.16,
-    "valorMercado": 6898353.08,
-    "valorContabil": 7665639.16,
+    "valorNaCurva": 7796593.98,
+    "valorMercado": 7088293.68,
+    "valorContabil": 7796593.98,
     "cupomRecebidoAcumulado": 1697051.96,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 42,
@@ -896,12 +917,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1724,
     "PUCompra": 4059.444,
     "valorCompra": 6998481.46,
-    "valorNaCurva": 8206971.9,
-    "valorMercado": 7432975.45,
-    "valorContabil": 8206971.9,
+    "valorNaCurva": 8348939.17,
+    "valorMercado": 7637636.44,
+    "valorContabil": 8348939.17,
     "cupomRecebidoAcumulado": 2851828,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 43,
@@ -917,12 +938,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 3200,
     "PUCompra": 4062.4993,
     "valorCompra": 12999997.68,
-    "valorNaCurva": 15164416.05,
-    "valorMercado": 13796706.17,
-    "valorContabil": 15164416.05,
+    "valorNaCurva": 15429045.76,
+    "valorMercado": 14176587.36,
+    "valorContabil": 15429045.76,
     "cupomRecebidoAcumulado": 3308920.88,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 44,
@@ -938,12 +959,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 4532,
     "PUCompra": 4257.2819,
     "valorCompra": 19294001.71,
-    "valorNaCurva": 20425404.59,
-    "valorMercado": 20100439.55,
-    "valorContabil": 20425404.59,
+    "valorNaCurva": 20832145.3,
+    "valorMercado": 20638257.52,
+    "valorContabil": 20832145.3,
     "cupomRecebidoAcumulado": 1251775.62,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 45,
@@ -959,12 +980,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1949,
     "PUCompra": 4359.1158,
     "valorCompra": 8495916.78,
-    "valorNaCurva": 9223938.83,
-    "valorMercado": 8987984.73,
-    "valorContabil": 9223938.83,
+    "valorNaCurva": 9396100.01,
+    "valorMercado": 9195289.41,
+    "valorContabil": 9396100.01,
     "cupomRecebidoAcumulado": 1044676.24,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 46,
@@ -980,12 +1001,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 2183,
     "PUCompra": 4122.3637,
     "valorCompra": 8999120,
-    "valorNaCurva": 10086347.34,
-    "valorMercado": 10067096.29,
-    "valorContabil": 10086347.34,
+    "valorNaCurva": 10291280.13,
+    "valorMercado": 10299290.3,
+    "valorContabil": 10291280.13,
     "cupomRecebidoAcumulado": 888860.97,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 47,
@@ -1001,12 +1022,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 5743,
     "PUCompra": 4265.6979,
     "valorCompra": 24497902.99,
-    "valorNaCurva": 26940020.98,
-    "valorMercado": 26382215.23,
-    "valorContabil": 26940020.98,
+    "valorNaCurva": 27438151.7,
+    "valorMercado": 27013923.42,
+    "valorContabil": 27438151.7,
     "cupomRecebidoAcumulado": 3105061.02,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 48,
@@ -1022,12 +1043,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 1957,
     "PUCompra": 4343.3565,
     "valorCompra": 8499948.69,
-    "valorNaCurva": 9352186.92,
-    "valorMercado": 9393348.55,
-    "valorContabil": 9352186.92,
+    "valorNaCurva": 9534714.93,
+    "valorMercado": 9661095.06,
+    "valorContabil": 9534714.93,
     "cupomRecebidoAcumulado": 796839.61,
     "cupomSemestral": true,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 51,
@@ -1043,12 +1064,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 230,
     "PUCompra": 50000,
     "valorCompra": 11500000,
-    "valorNaCurva": 15164737.09,
-    "valorMercado": 15164737.09,
-    "valorContabil": 15164737.09,
+    "valorNaCurva": 15352342.55,
+    "valorMercado": 15352342.55,
+    "valorContabil": 15352342.55,
     "cupomRecebidoAcumulado": 0,
     "cupomSemestral": false,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 52,
@@ -1064,12 +1085,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 270,
     "PUCompra": 50000,
     "valorCompra": 13500000,
-    "valorNaCurva": 17700493.33,
-    "valorMercado": 17700493.33,
-    "valorContabil": 17700493.33,
+    "valorNaCurva": 17981372.92,
+    "valorMercado": 17981372.92,
+    "valorContabil": 17981372.92,
     "cupomRecebidoAcumulado": 0,
     "cupomSemestral": false,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 53,
@@ -1085,12 +1106,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 168,
     "PUCompra": 50000,
     "valorCompra": 8400000,
-    "valorNaCurva": 10835160.1,
-    "valorMercado": 10835160.1,
-    "valorContabil": 10835160.1,
+    "valorNaCurva": 10992124.31,
+    "valorMercado": 10992124.31,
+    "valorContabil": 10992124.31,
     "cupomRecebidoAcumulado": 0,
     "cupomSemestral": false,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 54,
@@ -1106,12 +1127,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 168,
     "PUCompra": 50000,
     "valorCompra": 8400000,
-    "valorNaCurva": 10811612.51,
-    "valorMercado": 10811612.51,
-    "valorContabil": 10811612.51,
+    "valorNaCurva": 10989673.46,
+    "valorMercado": 10989673.46,
+    "valorContabil": 10989673.46,
     "cupomRecebidoAcumulado": 0,
     "cupomSemestral": false,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 55,
@@ -1127,12 +1148,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 144,
     "PUCompra": 50000,
     "valorCompra": 7200000,
-    "valorNaCurva": 8089383.42,
-    "valorMercado": 8089383.42,
-    "valorContabil": 8089383.42,
+    "valorNaCurva": 8252513.33,
+    "valorMercado": 8252513.33,
+    "valorContabil": 8252513.33,
     "cupomRecebidoAcumulado": 0,
     "cupomSemestral": false,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 56,
@@ -1148,12 +1169,12 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 126,
     "PUCompra": 50000,
     "valorCompra": 6300000,
-    "valorNaCurva": 7082200.52,
-    "valorMercado": 7082200.52,
-    "valorContabil": 7082200.52,
+    "valorNaCurva": 7208642.29,
+    "valorMercado": 7208642.29,
+    "valorContabil": 7208642.29,
     "cupomRecebidoAcumulado": 0,
     "cupomSemestral": false,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   },
   {
     "Id": 57,
@@ -1169,11 +1190,11 @@ export const titulosData: Titulo[] = [
     "quantidadeTitulos": 90,
     "PUCompra": 50000,
     "valorCompra": 4500000,
-    "valorNaCurva": 5046859.42,
-    "valorMercado": 5046859.42,
-    "valorContabil": 5046859.42,
+    "valorNaCurva": 5145505.42,
+    "valorMercado": 5145505.42,
+    "valorContabil": 5145505.42,
     "cupomRecebidoAcumulado": 0,
     "cupomSemestral": false,
-    "competencia": "2026-08"
+    "competencia": "2026-10"
   }
 ];

@@ -1,0 +1,40 @@
+{
+    "beneficios": [
+        {
+            "competencia": "2026-10",
+            "fundo": "reparticao",
+            "aposentados": 2911,
+            "valorAposentados": 16699355.36,
+            "pensionistas": 606,
+            "valorPensionistas": 2298084.51,
+            "totalBeneficiarios": 3517,
+            "valorTotal":  18997439.87,
+            "novosAposentados": 16,
+            "novosPensionistas": 4
+        },
+        {
+            "competencia": "2026-10",
+            "fundo": "capitalizacao",
+            "aposentados": 1329,
+            "valorAposentados": 7391767.01,
+            "pensionistas": 322,
+            "valorPensionistas": 1057130.26,
+            "totalBeneficiarios": 1651,
+            "valorTotal": 8448897.27,
+            "novosAposentados": 3,
+            "novosPensionistas": 0
+        },
+        {
+            "competencia": "2026-10",
+            "fundo": "consolidado",
+            "aposentados": 4240,
+            "valorAposentados": 24091122.37,
+            "pensionistas": 928,
+            "valorPensionistas": 3355214.77,
+            "totalBeneficiarios": 5168,
+            "valorTotal":   27446337.14,
+            "novosAposentados": 19,
+            "novosPensionistas": 4
+        }
+    ]
+}

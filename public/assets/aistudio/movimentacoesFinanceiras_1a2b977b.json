@@ -1,0 +1,256 @@
+{
+  "movimentacoesFinanceiras": [
+    {
+      "tipo": "receita",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Contribuição Patronal",
+      "valor": 4442304.70
+    },
+    {
+      "tipo": "receita",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Contribuição do Servidor",
+      "valor": 4425850.16
+    },
+    {
+      "tipo": "receita",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Contribuição de Inativos e Pensionistas",
+      "valor": 344954.45
+    },
+    {
+      "tipo": "receita",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Rendimento de Aplicação",
+      "valor": 198236.89
+    },
+    {
+      "tipo": "receita",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Compensação Previdenciária",
+      "valor": 1914650.59
+    },
+    {
+      "tipo": "receita",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Outras Receitas",
+      "valor": 0.0
+    },
+    {
+      "tipo": "receita",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Contribuição Patronal",
+      "valor": 2983144.68
+    },
+    {
+      "tipo": "receita",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Contribuição do Servidor",
+      "valor": 2979068.62
+    },
+    {
+      "tipo": "receita",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Contribuição de Inativos e Pensionistas",
+      "valor": 155145.50
+    },
+    {
+      "tipo": "receita",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Rendimento de Aplicação",
+      "valor": 13341806.66
+    },
+    {
+      "tipo": "receita",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Juros de Empréstimos Consignados",
+      "valor": 289584.72
+    },
+    {
+      "tipo": "receita",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Compensação Previdenciária",
+      "valor": 24988.46
+    },
+    {
+      "tipo": "receita",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Parcelamentos",
+      "valor": 41273.14
+    },
+    {
+      "tipo": "receita",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Outras Receitas",
+      "valor": 3944.85
+    },
+    {
+      "tipo": "receita",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Taxa de Administração",
+      "valor": 890988.55
+    },
+    {
+      "tipo": "receita",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Rendimento de Aplicação",
+      "valor": 239916.70
+    },
+    {
+      "tipo": "receita",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Outras Receitas",
+      "valor": 207599.20
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Aposentadorias",
+      "valor": 16699355.36
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Pensões",
+      "valor": 2298084.51
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Compensação Previdenciária",
+      "valor": 225644.26
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Outras Despesas",
+      "valor": 0.0
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Aposentadorias",
+      "valor": 7391767.01
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Pensões",
+      "valor": 1057130.26
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Compensação Previdenciária",
+      "valor": 283.79
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "capitalizacao",
+      "competencia": "2026-10",
+      "categoria": "Outras Despesas",
+      "valor": 0.0
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Folha de Pagamento",
+      "valor": 258244.64
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "SAMA",
+      "valor": 735039.63
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "PASEP",
+      "valor": 11908.98
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Pessoa Física",
+      "valor": 69372.97
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Pessoa Jurídica",
+      "valor": 198098.34
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Previdência Complementar",
+      "valor": 11837.72
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Bens Permanentes",
+      "valor": 0.0
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Auxílio Social para Aposentados e Pensionistas",
+      "valor": 745550.00
+    },
+    {
+      "tipo": "despesa",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Outras Despesas",
+      "valor": 36866.80
+    },
+    {
+      "tipo": "transferenciaRecebida",
+      "fundo": "reparticao",
+      "competencia": "2026-10",
+      "categoria": "Aporte por Insuficiência Financeira",
+      "valor": 6900000.0
+    },
+    {
+      "tipo": "transferenciaRecebida",
+      "fundo": "orgaoGerenciador",
+      "competencia": "2026-10",
+      "categoria": "Interferência Financeira",
+      "valor": 1450000.0
+    }
+  ]
+}

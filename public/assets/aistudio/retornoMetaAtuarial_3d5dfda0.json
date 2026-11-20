@@ -1,0 +1,14 @@
+{
+  "retornoMetaAtuarial": [
+    {
+      "competencia": "2026-10",
+      "metaAtuarialFormula": "IPCA + 5.92%",
+      "retornoValor":  15018353.81,
+      "retornoPercentual": 1.24,
+      "metaAtuarialPercentual": 0.62,
+      "retornoAcumulado": 11.12,
+      "metaAcumulada": 9.21,
+      "atingiuMeta": true
+    }
+  ]
+}
